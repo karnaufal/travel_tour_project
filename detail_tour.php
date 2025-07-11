@@ -78,19 +78,19 @@ include 'config.php'; // Panggil file koneksi database kita
 
                             <div class="form-group">
                                 <label for="customer_name">Nama Lengkap:</label>
-                                <input type="text" id="customer_name" name="customer_name" required>
+                                <input type="text" id="customer_name" name="customer_name" 
                             </div>
                             <div class="form-group">
                                 <label for="customer_email">Email:</label>
-                                <input type="email" id="customer_email" name="customer_email" required>
+                                <input type="email" id="customer_email" name="customer_email" 
                             </div>
                             <div class="form-group">
                                 <label for="num_participants">Jumlah Peserta:</label>
-                                <input type="number" id="num_participants" name="num_participants" min="1" value="1" required>
+                                <input type="number" id="num_participants" name="num_participants" min="1" value="1" 
                             </div>
                             <div class="form-group">
                                 <label for="booking_date">Tanggal Keberangkatan (Contoh: DD/MM/YYYY):</label>
-                                <input type="date" id="booking_date" name="booking_date" required>
+                                <input type="date" id="booking_date" name="booking_date" 
                             </div>
                             <button type="submit" class="btn-submit">Konfirmasi Pemesanan</button>
                         </form>
@@ -112,7 +112,96 @@ include 'config.php'; // Panggil file koneksi database kita
         ?>
         <a href="index.php" class="btn-back-list">Kembali ke Daftar Tur</a>
     </main>
+</main>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const bookingForm = document.querySelector('.booking-form'); // Ambil form pemesanan
 
+            if (bookingForm) { // Pastikan formnya ada
+                bookingForm.addEventListener('submit', function(event) {
+                    // Ambil elemen input
+                    const customerNameInput = document.getElementById('customer_name');
+                    const customerEmailInput = document.getElementById('customer_email');
+                    const numParticipantsInput = document.getElementById('num_participants');
+                    const bookingDateInput = document.getElementById('booking_date');
+
+                    // Ambil nilai input
+                    const customerName = customerNameInput.value.trim();
+                    const customerEmail = customerEmailInput.value.trim();
+                    const numParticipants = parseInt(numParticipantsInput.value);
+                    const bookingDate = bookingDateInput.value; // Format YYYY-MM-DD dari input type="date"
+
+                    let isValid = true;
+                    let messages = []; // Untuk mengumpulkan pesan error
+
+                    // Reset styling error sebelumnya
+                    customerNameInput.classList.remove('input-error');
+                    customerEmailInput.classList.remove('input-error');
+                    numParticipantsInput.classList.remove('input-error');
+                    bookingDateInput.classList.remove('input-error');
+
+                    // Validasi Nama Lengkap
+                    if (customerName === '') {
+                        messages.push('Nama Lengkap wajib diisi.');
+                        customerNameInput.classList.add('input-error');
+                        isValid = false;
+                    }
+
+                    // Validasi Email
+                    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    if (customerEmail === '') {
+                        messages.push('Email wajib diisi.');
+                        customerEmailInput.classList.add('input-error');
+                        isValid = false;
+                    } else if (!emailPattern.test(customerEmail)) {
+                        messages.push('Format email tidak valid.');
+                        customerEmailInput.classList.add('input-error');
+                        isValid = false;
+                    }
+
+                    // Validasi Jumlah Peserta
+                    if (isNaN(numParticipants) || numParticipants <= 0) {
+                        messages.push('Jumlah peserta harus angka positif.');
+                        numParticipantsInput.classList.add('input-error');
+                        isValid = false;
+                    }
+
+                    // Validasi Tanggal Keberangkatan
+                    if (bookingDate === '') {
+                        messages.push('Tanggal keberangkatan wajib diisi.');
+                        bookingDateInput.classList.add('input-error');
+                        isValid = false;
+                    } else {
+                        // Opsional: Validasi tanggal tidak boleh di masa lalu
+                        const today = new Date();
+                        today.setHours(0,0,0,0); // Set to start of today
+                        const selectedDate = new Date(bookingDate); // date from input is YYYY-MM-DD
+                        selectedDate.setHours(0,0,0,0);
+
+                        if (selectedDate < today) {
+                            messages.push('Tanggal keberangkatan tidak boleh di masa lalu.');
+                            bookingDateInput.classList.add('input-error');
+                            isValid = false;
+                        }
+                    }
+
+                    // Jika tidak valid, cegah pengiriman form dan tampilkan pesan
+                    if (!isValid) {
+                        event.preventDefault(); // Mencegah form terkirim
+                        alert('Mohon perbaiki kesalahan berikut:\n\n' + messages.join('\n'));
+                        // Atau bisa tampilkan pesan error di dalam div khusus di HTML
+                        // Contoh: tampilkanError(messages.join('<br>'));
+                    }
+                });
+            }
+        });
+    </script>
+
+    <footer>
+        <p>&copy; <?php echo date("Y"); ?> Travel Tour Gokil. Dijamin anti-bosan!</p>
+    </footer>
+</body>
+</html>
     <footer>
         <p>&copy; <?php echo date("Y"); ?> Travel Tour Gokil. Dijamin anti-bosan!</p>
     </footer>
