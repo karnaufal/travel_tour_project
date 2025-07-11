@@ -1,0 +1,26 @@
+# Composer
+/vendor/
+/composer.lock
+
+# PHP-specific
+*.phar
+*.log
+*.ini
+*.swp
+*.bak
+*.tmp
+*.swo
+/.idea/          # For PhpStorm/IntelliJ IDEA
+.env             # Environment variables (often sensitive)
+.env.*
+/.vscode/        # VS Code settings (optional, sometimes useful to share)
+/tmp/
+/cache/
+/logs/
+/node_modules/   # If you ever use Node.js for frontend assets
+/web/uploads/    # Example: If you have an uploads folder for user files
+/storage/        # Common storage directory for frameworks
+
+# Thumbnails or auto-generated files
+*.DS_Store       # macOS specific
+Thumbs.db        # Windows specific
