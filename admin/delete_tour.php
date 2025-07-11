@@ -1,4 +1,17 @@
 <?php
+session_start();
+
+if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== true) {
+    header("Location: login.php");
+    exit();
+}
+
+ob_start(); // Kalau kamu pakai ob_start()
+include '../config.php';
+// ... sisa kode edit_tour.php ...
+?>
+
+<?php
 include '../config.php'; // Koneksi database
 
 // Pastikan request method-nya GET dan ada ID yang dikirim

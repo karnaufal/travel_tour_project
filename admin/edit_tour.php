@@ -1,4 +1,15 @@
 <?php
+session_start();
+
+if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== true) {
+    header("Location: login.php");
+    exit();
+}
+
+ob_start(); // Kalau kamu pakai ob_start()
+include '../config.php';
+// ... sisa kode edit_tour.php ...
+
 // PASTIKAN BARIS INI ADALAH BARIS PERTAMA DAN TIDAK ADA SPASI/KARAKTER LAIN DI DEPANNYA
 ob_start(); // Mulai output buffering. Ini penting untuk mencegah masalah header redirect.
 

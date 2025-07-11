@@ -1,4 +1,15 @@
 <?php
+session_start();
+
+if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== true) {
+    header("Location: login.php");
+    exit();
+}
+
+ob_start(); // Kalau kamu pakai ob_start()
+include '../config.php';
+// ... sisa kode add_tour.php ...
+
 include '../config.php'; // Koneksi database
 
 $message = ''; // Untuk pesan sukses/error

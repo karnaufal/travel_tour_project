@@ -60,45 +60,42 @@ include 'config.php'; // Panggil file koneksi database kita
                 $tour = $stmt->fetch(PDO::FETCH_ASSOC);
 
                 if ($tour) {
-                    echo '<div class="tour-detail-card">';
-                    echo '<img src="' . htmlspecialchars($tour['image_url']) . '" alt="' . htmlspecialchars($tour['tour_name']) . '" class="detail-img">';
-                    echo '<h2>' . htmlspecialchars($tour['tour_name']) . '</h2>';
-                    echo '<p class="detail-price">Harga: Rp ' . number_format($tour['price'], 0, ',', '.') . '</p>';
-                    echo '<p class="detail-duration">Durasi: ' . htmlspecialchars($tour['duration']) . '</p>';
-                    echo '<h3>Deskripsi Lengkap:</h3>';
-                    echo '<p class="detail-description">' . nl2br(htmlspecialchars($tour['description'])) . '</p>';
-                    echo '<a href="index.php" class="btn-back">⬅️ Kembali ke Daftar Tur</a>';
-                    echo '</div>';
+                    ?>
+                    <div class="tour-detail-card">
+                        <img src="<?php echo htmlspecialchars($tour['image_url']); ?>" alt="<?php echo htmlspecialchars($tour['tour_name']); ?>" class="detail-img">
+                        <h2><?php echo htmlspecialchars($tour['tour_name']); ?></h2>
+                        <p class="detail-price">Harga: Rp <?php echo number_format($tour['price'], 0, ',', '.'); ?></p>
+                        <p class="detail-duration">Durasi: <?php echo htmlspecialchars($tour['duration']); ?></p>
+                        <h3>Deskripsi Lengkap:</h3>
+                        <p class="detail-description"><?php echo nl2br(htmlspecialchars($tour['description'])); ?></p>
+                    </div>
 
-                    // >>>>>>>>>>>>> KODE FORM PEMESANAN <<<<<<<<<<<<<
-        ?>
-                    <div class="booking-form-container">
-                        <h2>Pesan Tur Ini Sekarang!</h2>
+                    <section class="booking-section">
+                        <h2>Pesan Tur Ini!</h2>
                         <form action="process_booking.php" method="POST" class="booking-form">
                             <input type="hidden" name="tour_id" value="<?php echo htmlspecialchars($tour['id']); ?>">
                             <input type="hidden" name="tour_name" value="<?php echo htmlspecialchars($tour['tour_name']); ?>">
 
                             <div class="form-group">
-                                <label for="name">Nama Lengkap:</label>
-                                <input type="text" id="name" name="customer_name" required>
+                                <label for="customer_name">Nama Lengkap:</label>
+                                <input type="text" id="customer_name" name="customer_name" required>
                             </div>
-
                             <div class="form-group">
-                                <label for="email">Email:</label>
-                                <input type="email" id="email" name="customer_email" required>
+                                <label for="customer_email">Email:</label>
+                                <input type="email" id="customer_email" name="customer_email" required>
                             </div>
-
                             <div class="form-group">
-                                <label for="participants">Jumlah Peserta:</label>
-                                <input type="number" id="participants" name="num_participants" min="1" value="1" required>
+                                <label for="num_participants">Jumlah Peserta:</label>
+                                <input type="number" id="num_participants" name="num_participants" min="1" value="1" required>
                             </div>
-
-                            <button type="submit" class="btn-submit-booking">Konfirmasi Pemesanan</button>
+                            <div class="form-group">
+                                <label for="booking_date">Tanggal Keberangkatan (Contoh: DD/MM/YYYY):</label>
+                                <input type="date" id="booking_date" name="booking_date" required>
+                            </div>
+                            <button type="submit" class="btn-submit">Konfirmasi Pemesanan</button>
                         </form>
-                    </div>
-        <?php
-                    // >>>>>>>>>>>>> AKHIR KODE FORM <<<<<<<<<<<<<
-
+                    </section>
+                    <?php
                 } else {
                     echo '<div class="error-message">';
                     echo '<h2>Tur yang kamu cari tidak ditemukan. 😔</h2>';
@@ -113,6 +110,7 @@ include 'config.php'; // Panggil file koneksi database kita
             }
         }
         ?>
+        <a href="index.php" class="btn-back-list">Kembali ke Daftar Tur</a>
     </main>
 
     <footer>
