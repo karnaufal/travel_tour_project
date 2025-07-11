@@ -1,20 +1,18 @@
 <?php
+// Konfigurasi Database
+$host = 'localhost'; // Biasanya localhost untuk development
+$dbname = 'db_travel_tour'; // Nama database yang kamu buat di phpMyAdmin
+$user = 'root'; // User default XAMPP/Laragon
+$password = ''; // Password default XAMPP/Laragon (kosong)
 
-// Rahasia Ilahi untuk Koneksi Database Kita!
-$host = 'localhost'; // Server database kita, biasanya ini
-$db_name = 'db_travel_tour'; // Nama database yang tadi kita buat di phpMyAdmin (ini harus sama persis!)
-$username = 'root'; // Username default Laragon (kalau kamu gak ganti)
-$password = ''; // Password default Laragon (kosong kalau kamu gak set)
-
-// Coba konekin ke database pake PDO, biar lebih aman dan modern!
+// Buat koneksi PDO (PHP Data Objects)
 try {
-    $pdo = new PDO("mysql:host=$host;dbname=$db_name;charset=utf8", $username, $password);
-    // Set mode error, biar kalau ada salah, PHP-nya teriak!
+    $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $user, $password);
+    // Set mode error PDO ke Exception agar error bisa ditangkap
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    // echo "Koneksi ke database sukses, Bosku! 😎"; // Kalau mau ngecek, bisa diuncomment ini
+    // echo "Koneksi database berhasil!"; // Pesan ini bisa dihapus setelah testing
 } catch (PDOException $e) {
-    // Kalau gagal, kita tampilkan pesan error yang jelas, jangan sampai user ngira server down!
-    die("Koneksi database gagal total: " . $e->getMessage() . " 😭");
+    // Jika koneksi gagal, tampilkan pesan error dan hentikan eksekusi script
+    die("Koneksi database gagal: " . $e->getMessage());
 }
-
 ?>
