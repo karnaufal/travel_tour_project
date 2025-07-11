@@ -7,13 +7,13 @@ if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== tru
 }
 
 ob_start(); // Kalau kamu pakai ob_start()
-include '../config.php';
+include_once '../config.php';
 // ... sisa kode edit_tour.php ...
 
 // PASTIKAN BARIS INI ADALAH BARIS PERTAMA DAN TIDAK ADA SPASI/KARAKTER LAIN DI DEPANNYA
 ob_start(); // Mulai output buffering. Ini penting untuk mencegah masalah header redirect.
 
-include '../config.php'; // Koneksi database
+include_once '../config.php'; // Koneksi database
 
 error_reporting(E_ALL); // Aktifkan semua laporan error
 ini_set('display_errors', 1); // Tampilkan error di browser (untuk debugging)

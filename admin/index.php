@@ -1,6 +1,6 @@
 <?php
-session_start(); // Wajib ada di awal setiap file yang menggunakan session
-ob_start(); // Mulai output buffering
+session_start();
+ob_start();
 
 // Cek apakah admin sudah login
 if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== true) {
@@ -8,15 +8,39 @@ if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== tru
     exit();
 }
 
-include '../config.php'; // Koneksi database
+include_once '../config.php'; // Koneksi database
 
-// Ambil semua data tur dari database
+// Inisialisasi variabel untuk paginasi
+$limit = 5; // Jumlah tur per halaman
+$page = isset($_GET['page']) && is_numeric($_GET['page']) ? (int)$_GET['page'] : 1;
+$offset = ($page - 1) * $limit;
+
+// Ambil total jumlah tur untuk paginasi
 try {
-    $stmt = $pdo->query("SELECT * FROM tours ORDER BY id DESC"); // Urutkan dari ID terbaru
+    $total_tours_stmt = $pdo->query("SELECT COUNT(*) FROM tours");
+    $total_tours_count = $total_tours_stmt->fetchColumn(); // Nama variabel diubah agar tidak bentrok dengan $total_tours statistik
+    $total_pages = ceil($total_tours_count / $limit);
+
+    // Ambil semua data tur dari database dengan paginasi
+    $stmt = $pdo->prepare("SELECT * FROM tours ORDER BY id DESC LIMIT :limit OFFSET :offset");
+    $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
+    $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
+    $stmt->execute();
     $tours = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    // Ambil total jumlah tur (statistik)
+    $total_tours = $total_tours_count; // Menggunakan hasil count dari atas
+
+    // Ambil total jumlah pemesanan (statistik)
+    $total_bookings_stmt = $pdo->query("SELECT COUNT(*) FROM bookings");
+    $total_bookings = $total_bookings_stmt->fetchColumn();
+
 } catch (PDOException $e) {
     echo "Error: " . htmlspecialchars($e->getMessage()); // Sanitasi pesan error
-    $tours = [];
+    $tours = []; // Pastikan $tours kosong jika ada error
+    $total_tours = 0; // Default jika error
+    $total_bookings = 0; // Default jika error
+    $total_pages = 1; // Default jika error
 }
 ?>
 
@@ -27,136 +51,103 @@ try {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin - Kelola Tur</title>
     <link rel="stylesheet" href="../css/style.css">
-    <style>
-        /* CSS tambahan untuk merapikan layout admin action */
-        .admin-actions {
-            display: flex;
-            gap: 10px; /* Jarak antar tombol */
-            justify-content: flex-end; /* Taruh tombol ke kanan */
-            margin-top: 15px; /* Jarak dari teks di atasnya */
-        }
-        .admin-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-        .btn-admin { /* Ini dari bookings.php, kita pakai juga di sini */
-            display: inline-block;
-            padding: 8px 15px;
-            border-radius: 5px;
-            text-decoration: none;
-            color: white;
-            font-weight: bold;
-            transition: background-color 0.3s ease;
-            text-align: center;
-        }
-        .btn-admin.btn-primary {
-            background-color: #007bff; /* Biru */
-        }
-        .btn-admin.btn-primary:hover {
-            background-color: #0056b3;
-        }
-        .btn-cancel-admin { /* Warna merah untuk Logout */
-            background-color: #dc3545;
-            color: white;
-            padding: 8px 15px;
-            border-radius: 5px;
-            text-decoration: none;
-            transition: background-color 0.3s ease;
-            font-weight: bold;
-        }
-        .btn-cancel-admin:hover {
-            background-color: #c82333;
-        }
-        .btn-add-tour { /* Warna hijau untuk Tambah Tur Baru */
-            background-color: #28a745;
-            color: white;
-            padding: 10px 20px;
-            border-radius: 5px;
-            text-decoration: none;
-            font-weight: bold;
-            transition: background-color 0.3s ease;
-        }
-        .btn-add-tour:hover {
-            background-color: #218838;
-        }
-        .status-message {
-            padding: 15px;
-            margin-bottom: 20px;
-            border-radius: 5px;
-            font-size: 1em;
-            text-align: center;
-        }
-        .status-message.success {
-            background-color: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
-        }
-        .status-message.error {
-            background-color: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
-        }
-
-    </style>
-</head>
+    </head>
 <body>
     <header>
-        <h1>Panel Admin Travel Tour Gokil! ⚙️</h1>
-        <p>Kelola semua tur dengan mudah.</p>
-        <div class="admin-actions">
-            <a href="add_tour.php" class="btn-add-tour">➕ Tambah Tur Baru</a>
-            <a href="bookings.php" class="btn-admin btn-primary">Lihat Pemesanan</a>
-            <a href="logout.php" class="btn-cancel-admin">Logout</a>
-        </div>
+        <h1>Panel Admin</h1>
     </header>
 
     <main class="admin-container">
-        <div class="admin-header">
-            <h2>Daftar Tur</h2> 
-        </div>
-
         <?php
-        // Tampilkan pesan status jika ada (dari add/edit/delete)
+        // >>>>>>>>> KODE UNTUK MENAMPILKAN PESAN STATUS (dari add/edit/delete) <<<<<<<<<
         if (isset($_GET['status'])) {
-            $status_class = ($_GET['status'] == 'success') ? 'success' : 'error';
-            $message = htmlspecialchars($_GET['message'] ?? 'Operasi berhasil.');
-            echo '<div class="status-message ' . $status_class . '">' . $message . '</div>';
+            if ($_GET['status'] == 'success') {
+                $message = htmlspecialchars($_GET['message'] ?? 'Operasi berhasil!');
+                echo '<div class="status-message success">' . $message . '</div>';
+            } elseif ($_GET['status'] == 'error' || $_GET['status'] == 'error_validation' || $_GET['status'] == 'error_auth') {
+                $message = htmlspecialchars($_GET['message'] ?? 'Terjadi kesalahan tidak dikenal.');
+                echo '<div class="status-message error">' . $message . '</div>';
+            }
         }
+        // >>>>>>>>> AKHIR KODE UNTUK MENAMPILKAN PESAN STATUS <<<<<<<<<
         ?>
 
-        <?php if (!empty($tours)): ?>
-        <table class="admin-table">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Gambar</th>
-                    <th>Nama Tur</th>
-                    <th>Harga</th>
-                    <th>Durasi</th>
-                    <th>Aksi</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach ($tours as $tour): ?>
-                <tr>
-                    <td data-label="ID"><?php echo htmlspecialchars($tour['id']); ?></td>
-                    <td data-label="Gambar"><img src="../<?php echo htmlspecialchars($tour['image_url']); ?>" alt="<?php echo htmlspecialchars($tour['tour_name']); ?>"></td>
-                    <td data-label="Nama Tur"><?php echo htmlspecialchars($tour['tour_name']); ?></td>
-                    <td data-label="Harga">Rp <?php echo number_format($tour['price'], 0, ',', '.'); ?></td>
-                    <td data-label="Durasi"><?php echo htmlspecialchars($tour['duration']); ?></td>
-                    <td class="actions" data-label="Aksi">
-                        <a href="edit_tour.php?id=<?php echo htmlspecialchars($tour['id']); ?>" class="btn-edit">Edit</a>
-                        <a href="delete_tour.php?id=<?php echo htmlspecialchars($tour['id']); ?>" class="btn-delete" onclick="return confirm('Apakah Anda yakin ingin menghapus tur <?php echo htmlspecialchars($tour['tour_name']); ?>?');">Hapus</a>
-                    </td>
-                </tr>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
-        <?php else: ?>
-            <p class="no-tours-message">Belum ada tur yang terdaftar. Yuk, <a href="add_tour.php">tambah tur baru</a>!</p>
-        <?php endif; ?>
+        <div class="admin-navigation-top"> <h2>Kelola Tur <span class="subtitle">Daftar tur yang terdaftar</span></h2>
+            <div class="admin-actions-group">
+                <a href="bookings.php" class="btn-admin btn-primary">Lihat Pemesanan</a>
+                <a href="logout.php" class="btn-admin btn-cancel">Logout</a>
+            </div>
+        </div>
+
+        <div class="admin-stats">
+            <div class="stat-card">
+                <h3>Total Tur</h3>
+                <p><?php echo $total_tours; ?></p>
+            </div>
+            <div class="stat-card">
+                <h3>Total Pemesanan</h3>
+                <p><?php echo $total_bookings; ?></p>
+            </div>
+        </div>
+
+        <div class="admin-section-header"> <h2>Daftar Tur</h2>
+            <a href="add_tour.php" class="btn-add-tour">Tambah Tur Baru</a>
+        </div>
+        
+        <div class="admin-table-wrapper"> <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Gambar</th>
+                        <th>Nama Tur</th>
+                        <th>Harga</th>
+                        <th>Durasi</th>
+                        <th>Deskripsi Singkat</th> <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php if (!empty($tours)): ?>
+                        <?php foreach ($tours as $tour): ?>
+                        <tr>
+                            <td data-label="ID"><?php echo htmlspecialchars($tour['id']); ?></td>
+                            <td data-label="Gambar"><img src="<?php echo htmlspecialchars($tour['image_url']); ?>" alt="<?php echo htmlspecialchars($tour['tour_name']); ?>"></td>
+                            <td data-label="Nama Tur"><?php echo htmlspecialchars($tour['tour_name']); ?></td>
+                            <td data-label="Harga">Rp <?php echo number_format($tour['price'], 0, ',', '.'); ?></td>
+                            <td data-label="Durasi"><?php echo htmlspecialchars($tour['duration']); ?></td>
+                            <td data-label="Deskripsi Singkat"><?php echo nl2br(htmlspecialchars(substr($tour['description'], 0, 80))) . (strlen($tour['description']) > 80 ? '...' : ''); ?></td>
+                            <td data-label="Aksi" class="actions">
+                                <a href="edit_tour.php?id=<?php echo htmlspecialchars($tour['id']); ?>" class="btn-edit">Edit</a>
+                                <a href="delete_tour.php?id=<?php echo htmlspecialchars($tour['id']); ?>" class="btn-delete" onclick="return confirm('Yakin ingin menghapus tur <?php echo htmlspecialchars($tour['tour_name']); ?>?');">Hapus</a>
+                            </td>
+                        </tr>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <tr>
+                            <td colspan="7" class="text-center">Belum ada tur yang ditambahkan. Yuk, <a href="add_tour.php">tambah tur baru</a>!</td>
+                        </tr>
+                    <?php endif; ?>
+                </tbody>
+            </table>
+        </div>
+
+        <?php // Pagination ?>
+        <div class="pagination">
+            <?php if ($page > 1): ?>
+                <a href="?page=<?php echo $page - 1; ?>" class="pagination-btn">Sebelumnya</a>
+            <?php endif; ?>
+            <?php for ($i = 1; $i <= $total_pages; $i++): ?>
+                <span <?php if ($i == $page) echo 'class="current-page"'; ?>>
+                    <?php if ($i == $page): ?>
+                        <?php echo $i; ?>
+                    <?php else: ?>
+                        <a href="?page=<?php echo $i; ?>" class="pagination-btn"><?php echo $i; ?></a>
+                    <?php endif; ?>
+                </span>
+            <?php endfor; ?>
+            <?php if ($page < $total_pages): ?>
+                <a href="?page=<?php echo $page + 1; ?>" class="pagination-btn">Berikutnya</a>
+            <?php endif; ?>
+        </div>
     </main>
 
     <footer>
@@ -165,5 +156,5 @@ try {
 </body>
 </html>
 <?php
-ob_end_flush(); // Akhiri output buffering
+ob_end_flush();
 ?>

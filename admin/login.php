@@ -2,7 +2,7 @@
 session_start(); // Mulai sesi untuk manajemen login
 ob_start(); // Mulai output buffering
 
-include '../config.php'; // Koneksi database
+include_once '../config.php'; // Koneksi database
 
 $message = ''; // Untuk pesan error/sukses
 $status_class = ''; // Untuk styling pesan

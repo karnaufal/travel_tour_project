@@ -8,7 +8,7 @@ if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== tru
     exit();
 }
 
-include '../config.php'; // Koneksi database
+include_once '../config.php'; // Koneksi database
 
 $message = '';
 $status_class = '';

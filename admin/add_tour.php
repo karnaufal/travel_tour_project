@@ -7,10 +7,10 @@ if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== tru
 }
 
 ob_start(); // Kalau kamu pakai ob_start()
-include '../config.php';
+include_once '../config.php';
 // ... sisa kode add_tour.php ...
 
-include '../config.php'; // Koneksi database
+include_once '../config.php'; // Koneksi database
 
 $message = ''; // Untuk pesan sukses/error
 $status_class = ''; // Untuk styling pesan

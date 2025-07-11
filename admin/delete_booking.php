@@ -8,7 +8,7 @@ if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== tru
     exit();
 }
 
-include '../config.php'; // Koneksi database
+include_once '../config.php'; // Koneksi database
 
 if (isset($_GET['id']) && !empty($_GET['id'])) {
     $booking_id = filter_var($_GET['id'], FILTER_SANITIZE_NUMBER_INT);

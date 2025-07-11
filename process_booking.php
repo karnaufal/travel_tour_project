@@ -1,6 +1,6 @@
 <?php
 ob_start(); // Mulai output buffering untuk menghindari "headers already sent"
-include 'config.php'; // Panggil file koneksi database kita
+include_once 'config.php'; // Panggil file koneksi database kita
 
 // Cek apakah request datang dari metode POST
 if ($_SERVER["REQUEST_METHOD"] == "POST") {

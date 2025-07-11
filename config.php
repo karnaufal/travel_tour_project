@@ -11,6 +11,8 @@ try {
     // Set mode error PDO ke Exception agar error bisa ditangkap
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     // echo "Koneksi database berhasil!"; // Pesan ini bisa dihapus setelah testing
+    // Konfigurasi Pagination
+    define('ITEMS_PER_PAGE', 6); // Jumlah tur yang ditampilkan per halaman
 } catch (PDOException $e) {
     // Jika koneksi gagal, tampilkan pesan error dan hentikan eksekusi script
     die("Koneksi database gagal: " . $e->getMessage());
