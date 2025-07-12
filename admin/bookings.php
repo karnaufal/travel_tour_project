@@ -1,14 +1,14 @@
 <?php
-session_start();
-ob_start();
+session_start(); // Mulai sesi untuk memeriksa login
+ob_start(); // Mulai output buffering
 
-// Cek apakah admin sudah login
+// Cek apakah user sudah login
 if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== true) {
-    header("Location: login.php");
+    header("Location: login.php"); // Redirect ke halaman login jika belum login
     exit();
 }
 
-include_once '../config.php'; // Koneksi database
+include_once '../config.php'; // Pastikan path ini benar untuk koneksi DB (menggunakan PDO)
 
 $message = '';
 $status_class = '';
@@ -109,58 +109,68 @@ try {
     </style>
 </head>
 <body>
-    <header>
-        <h1>Kelola Pemesanan 📝</h1>
-        <p>Daftar semua pemesanan tur yang masuk.</p>
-        <div class="admin-actions">
-             <a href="index.php" class="btn-admin btn-primary">⬅️ Kelola Tur</a>
-            <a href="logout.php" class="btn-admin btn-danger">Logout</a>
+    <header class="admin-header">
+        <div class="admin-navigation-top">
+            <h2>Panel Admin Travel Tour Gokil! <span class="subtitle">Kelola semua pemesanan.</span></h2>
+            <div class="admin-actions-group">
+                <a href="index.php" class="btn-admin btn-primary">Kelola Tur</a>
+                <a href="add_tour.php" class="btn-admin btn-primary">Tambah Tur</a>
+                <a href="logout.php" class="btn-admin btn-cancel">Logout</a>
+            </div>
         </div>
     </header>
 
     <main>
-        <?php if (!empty($message)): ?>
-            <div class="message-status <?php echo $status_class; ?>">
-                <?php echo $message; ?>
-            </div>
-        <?php endif; ?>
+        <div class="admin-container">
+            <h1>Kelola Pemesanan <span class="subtitle">Daftar semua pemesanan tur yang masuk</span></h1>
 
-        <?php if (!empty($bookings)): ?>
-            <table class="admin-table">
-                <thead>
-                    <tr>
-                        <th>ID Pemesanan</th>
-                        <th>Nama Pelanggan</th>
-                        <th>Email</th>
-                        <th>Nama Tur</th>
-                        <th>Harga Tur</th>
-                        <th>Jumlah Peserta</th>
-                        <th>Tanggal Keberangkatan</th>
-                        <th>Waktu Pemesanan</th>
-                        <th>Aksi</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php foreach ($bookings as $booking): ?>
-                        <tr>
-                            <td><?php echo htmlspecialchars($booking['id']); ?></td>
-                            <td><?php echo htmlspecialchars($booking['customer_name']); ?></td>
-                            <td><?php echo htmlspecialchars($booking['customer_email']); ?></td>
-                            <td><?php echo htmlspecialchars($booking['tour_name']); ?></td>
-                            <td>Rp <?php echo number_format($booking['price'], 0, ',', '.'); ?></td>
-                            <td><?php echo htmlspecialchars($booking['num_participants']); ?></td>
-                            <td><?php echo htmlspecialchars($booking['booking_date']); ?></td>
-                            <td><?php echo htmlspecialchars($booking['created_at']); ?></td>
-                            <td>
-                                <a href="delete_booking.php?id=<?php echo htmlspecialchars($booking['id']); ?>" class="btn-admin btn-danger" onclick="return confirm('Apakah Anda yakin ingin menghapus pemesanan ID #<?php echo htmlspecialchars($booking['id']); ?> dari <?php echo htmlspecialchars($booking['customer_name']); ?>?');">Hapus</a>
-                            </td>
-                        </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
-        <?php else: ?>
-            <p>Belum ada pemesanan yang masuk saat ini. Mari sebarkan tur-tur menarikmu!</p>
-        <?php endif; ?>
+            <?php if (!empty($message)): ?>
+                <div class="message-status <?php echo $status_class; ?>">
+                    <?php echo $message; ?>
+                </div>
+            <?php endif; ?>
+
+            <div class="admin-table-wrapper">
+                <?php if (!empty($bookings)): ?>
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>ID Pemesanan</th>
+                                <th>Nama Pelanggan</th>
+                                <th>Email</th>
+                                <th>Nama Tur</th>
+                                <th>Harga Tur</th>
+                                <th>Jumlah Peserta</th>
+                                <th>Tanggal Keberangkatan</th>
+                                <th>Waktu Pemesanan</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($bookings as $booking): ?>
+                                <tr>
+                                    <td><?php echo htmlspecialchars($booking['id']); ?></td>
+                                    <td><?php echo htmlspecialchars($booking['customer_name']); ?></td>
+                                    <td><?php echo htmlspecialchars($booking['customer_email']); ?></td>
+                                    <td><?php echo htmlspecialchars($booking['tour_name']); ?></td>
+                                    <td>Rp <?php echo number_format($booking['price'], 0, ',', '.'); ?></td>
+                                    <td><?php echo htmlspecialchars($booking['num_participants']); ?></td>
+                                    <td><?php echo htmlspecialchars($booking['booking_date']); ?></td>
+                                    <td><?php echo htmlspecialchars($booking['created_at']); ?></td>
+                                    <td>
+                                        <a href="delete_booking.php?id=<?php echo htmlspecialchars($booking['id']); ?>" class="btn-admin btn-danger" onclick="return confirm('Apakah Anda yakin ingin menghapus pemesanan ID #<?php echo htmlspecialchars($booking['id']); ?> dari <?php echo htmlspecialchars($booking['customer_name']); ?>?');">Hapus</a>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                <?php else: ?>
+                    <div class="no-tours-message">
+                        <p>Belum ada pemesanan yang masuk saat ini. Mari sebarkan tur-tur menarikmu!</p>
+                    </div>
+                <?php endif; ?>
+            </div>
+        </div>
     </main>
 
     <footer>

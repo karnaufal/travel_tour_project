@@ -1,43 +1,44 @@
 <?php
 session_start();
+ob_start();
+
+include_once '../config.php'; // Koneksi database PDO
 
 if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== true) {
     header("Location: login.php");
     exit();
 }
 
-ob_start(); // Kalau kamu pakai ob_start()
-include_once '../config.php';
-// ... sisa kode edit_tour.php ...
-?>
+if (isset($_GET['id'])) {
+    $tour_id = intval($_GET['id']);
+    $upload_dir = '../uploads/';
 
-<?php
-include_once '../config.php'; // Koneksi database
+    try {
+        // Ambil nama file gambar tur sebelum dihapus dari database
+        $stmt_get_image = $pdo->prepare("SELECT image FROM tours WHERE id = ?");
+        $stmt_get_image->execute([$tour_id]);
+        $tour_data = $stmt_get_image->fetch(PDO::FETCH_ASSOC);
 
-// Pastikan request method-nya GET dan ada ID yang dikirim
-if (isset($_GET['id']) && !empty($_GET['id'])) {
-    $tour_id = filter_var($_GET['id'], FILTER_SANITIZE_NUMBER_INT);
+        $image_to_delete = $tour_data['image'] ?? null; // Dapatkan nama file gambar
 
-    // Validasi ID yang lebih kuat
-    if ($tour_id > 0) {
-        try {
-            $stmt = $pdo->prepare("DELETE FROM tours WHERE id = :id");
-            $stmt->bindParam(':id', $tour_id, PDO::PARAM_INT);
-            $stmt->execute();
+        // Hapus tur dari database
+        $stmt_delete_tour = $pdo->prepare("DELETE FROM tours WHERE id = ?");
+        $stmt_delete_tour->execute([$tour_id]);
 
-            header("Location: index.php?status=success&message=" . urlencode("Tur berhasil dihapus!"));
-            exit();
-
-        } catch (PDOException $e) {
-            header("Location: index.php?status=error&message=" . urlencode("Error saat menghapus tur: " . htmlspecialchars($e->getMessage())));
-            exit();
+        // Jika tur berhasil dihapus dan ada gambar, hapus file gambarnya
+        if ($stmt_delete_tour->rowCount() > 0 && !empty($image_to_delete) && file_exists($upload_dir . $image_to_delete)) {
+            unlink($upload_dir . $image_to_delete);
         }
-    } else {
-        header("Location: index.php?status=error&message=" . urlencode("ID tur tidak valid untuk dihapus."));
+
+        header("Location: index.php?status=success&message=Tur berhasil dihapus!");
+        exit();
+    } catch (PDOException $e) {
+        header("Location: index.php?status=error&message=Gagal menghapus tur: " . urlencode($e->getMessage()));
         exit();
     }
 } else {
-    header("Location: index.php?status=error&message=" . urlencode("ID tur tidak ditemukan untuk dihapus."));
+    header("Location: index.php?status=error&message=ID tur tidak ditemukan.");
     exit();
 }
+ob_end_flush();
 ?>
