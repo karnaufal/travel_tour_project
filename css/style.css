@@ -168,7 +168,6 @@ main {
 
 /* Styling untuk halaman detail_tour.php */
 .tour-detail-container {
-    /* Ganti .tour-detail-card jadi .tour-detail-container untuk konsistensi */
     max-width: 900px;
     /* Lebar maksimum kontainer detail tur */
     margin: 40px auto;
@@ -180,14 +179,19 @@ main {
     /* Teks konten detail tur rata kiri */
 }
 
-.tour-detail-container img {
+.tour-detail-card img {
+    /* ----- PERBAIKAN UTAMA DI SINI ----- */
     width: 100%;
+    /* Pastikan gambar selalu mengisi lebar container-nya */
     height: auto;
-    max-width: 800px;
-    /* Batasi lebar gambar */
+    /* Pertahankan rasio aspek gambar */
+    max-width: 100%;
+    /* Ini kunci! Gambar tidak akan melebihi lebar container induknya */
     max-height: 450px;
-    /* Batasi tinggi gambar agar tidak terlalu besar */
+    /* Batasi tinggi gambar agar tidak terlalu besar, tetap responsif */
     object-fit: cover;
+    /* Memastikan gambar mengisi area, bisa memotong bagian tepi jika rasio beda */
+    /* ----------------------------------- */
     border-radius: 10px;
     margin-bottom: 30px;
     display: block;
@@ -257,15 +261,15 @@ main {
     transform: translateY(-2px);
 }
 
-/* Styling untuk Error/Success Message di Halaman Detail */
+/* Styling untuk Error/Success Message di Halaman Detail dan Admin */
 .message-container {
     max-width: 800px;
     margin: 20px auto;
     padding: 0 20px;
+    /* Tambahkan padding horizontal */
 }
 
 .status-message {
-    /* Digunakan untuk semua pesan status */
     text-align: center;
     padding: 20px;
     border-radius: 8px;
@@ -332,8 +336,15 @@ main {
     font-weight: 600;
 }
 
-.booking-form .form-group {
-    margin-bottom: 20px;
+/* Untuk form di detail_tour.php */
+.tour-detail-card h3 {
+    margin-top: 30px;
+    margin-bottom: 15px;
+    color: #333;
+    font-size: 1.8em;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 10px;
+    text-align: left;
 }
 
 .booking-form label {
@@ -381,7 +392,7 @@ main {
     margin: 0;
 }
 
-.btn-submit-booking {
+.btn-confirm-booking {
     display: block;
     width: 100%;
     padding: 18px;
@@ -400,7 +411,7 @@ main {
     box-shadow: 0 4px 10px rgba(40, 167, 69, 0.2);
 }
 
-.btn-submit-booking:hover {
+.btn-confirm-booking:hover {
     background-color: #218838;
     transform: translateY(-2px);
 }
@@ -693,9 +704,6 @@ main {
     transform: translateY(-1px);
 }
 
-/* Pesan status dari CRUD di halaman admin/index.php (dulu .status-message) */
-/* Sudah digabung di atas dengan .status-message */
-
 
 /* Styling untuk Form Admin (add_tour.php, edit_tour.php, login.php) */
 .admin-form-container {
@@ -786,7 +794,6 @@ main {
     transform: translateY(-2px);
 }
 
-/* .btn-cancel-admin sudah ada di reusable buttons (.btn-admin .btn-cancel) */
 .btn-cancel-form {
     /* Untuk tombol cancel di form add/edit admin */
     padding: 14px 30px;
@@ -806,9 +813,6 @@ main {
     background-color: #5a6268;
     transform: translateY(-2px);
 }
-
-/* Styling untuk pesan status di form (add_tour.php, edit_tour.php) */
-/* Sudah digabung di atas dengan .status-message */
 
 
 /* Login Form Specific Styles */
@@ -891,9 +895,6 @@ main {
     margin-bottom: 20px;
     font-weight: 500;
 }
-
-/* Booking Section (Ini duplikasi, sudah ada di booking-form-container) */
-/* Menghapus ini karena sudah ada .booking-form-container */
 
 /* Pagination Styles */
 .pagination {
@@ -1179,7 +1180,7 @@ footer {
         /* Adjust for padding */
     }
 
-    .btn-submit-booking,
+    .btn-confirm-booking,
     .btn-login {
         padding: 14px;
         font-size: 1.1em;
