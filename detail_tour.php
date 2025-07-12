@@ -1,14 +1,16 @@
 <?php
-include 'db_connect.php'; // Path ke koneksi database (sesuaikan jika kamu pakai config.php dengan PDO)
+include_once 'config.php'; // Koneksi database PDO
 
 $tour = null;
 if (isset($_GET['id'])) {
     $tour_id = intval($_GET['id']);
-    $sql = "SELECT * FROM tours WHERE id = $tour_id";
-    $result = $conn->query($sql);
-
-    if ($result->num_rows > 0) {
-        $tour = $result->fetch_assoc();
+    try {
+        $stmt = $pdo->prepare("SELECT * FROM tours WHERE id = ?");
+        $stmt->execute([$tour_id]);
+        $tour = $stmt->fetch(PDO::FETCH_ASSOC);
+    } catch (PDOException $e) {
+        // Handle error database, misalnya redirect ke halaman error atau tampilkan pesan
+        // error_log("Error fetching tour detail: " . $e->getMessage());
     }
 }
 ?>
@@ -19,55 +21,85 @@ if (isset($_GET['id'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Detail Tur Kita! 🗺️</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        /* Perbaikan CSS untuk gambar agar responsif */
-        .tour-detail-card img {
-            max-width: 100%; /* Gambar akan mengikuti lebar parent */
-            height: auto; /* Tinggi akan menyesuaikan secara proporsional */
-            display: block; /* Menghilangkan spasi ekstra di bawah gambar */
-            border-radius: 8px; /* Sudut membulat */
-            margin-bottom: 20px; /* Jarak bawah gambar */
+        /* Style khusus detail_tour.php */
+        body {
+            padding-top: 70px; /* Offset untuk fixed header */
         }
         .tour-detail-card {
             background-color: #fff;
-            padding: 25px;
+            padding: 30px;
             border-radius: 8px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
             max-width: 800px;
             margin: 30px auto;
             text-align: left;
         }
-        .tour-detail-card h2 {
-            color: #333;
-            margin-bottom: 10px;
+        .tour-detail-card img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            border-radius: 8px;
+            margin-bottom: 25px;
         }
-        .tour-detail-card p {
-            color: #555;
-            line-height: 1.6;
+        .tour-detail-card h2 {
+            color: #007bff;
+            font-size: 2.2em;
             margin-bottom: 10px;
         }
         .tour-detail-card .price {
-            font-size: 1.5em;
+            font-size: 1.6em;
             font-weight: bold;
-            color: #007bff;
+            color: #28a745;
             margin-bottom: 10px;
         }
         .tour-detail-card .duration {
+            font-size: 1.1em;
             font-style: italic;
             color: #777;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
+        }
+        .tour-detail-card .duration i {
+            margin-right: 5px;
+            color: #007bff;
+        }
+        .tour-detail-card h3 {
+            color: #333;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            font-size: 1.6em;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+        }
+        .tour-detail-card p {
+            color: #555;
+            line-height: 1.7;
+            margin-bottom: 15px;
+        }
+
+        .booking-form {
+            background-color: #f9f9f9;
+            padding: 25px;
+            border-radius: 8px;
+            border: 1px solid #eee;
+            margin-top: 30px;
         }
         .booking-form h3 {
-            color: #333;
-            margin-bottom: 20px;
+            text-align: center;
+            margin-bottom: 25px;
+            color: #007bff;
+            font-size: 1.8em;
+            border-bottom: none;
+            padding-bottom: 0;
         }
         .booking-form .form-group {
-            margin-bottom: 15px;
+            margin-bottom: 20px;
         }
         .booking-form label {
             display: block;
-            margin-bottom: 5px;
+            margin-bottom: 8px;
             font-weight: bold;
             color: #444;
         }
@@ -75,15 +107,15 @@ if (isset($_GET['id'])) {
         .booking-form input[type="email"],
         .booking-form input[type="number"],
         .booking-form input[type="date"] {
-            width: calc(100% - 20px);
-            padding: 10px;
+            width: calc(100% - 22px); /* Sesuaikan untuk padding/border */
+            padding: 12px;
             border: 1px solid #ddd;
-            border-radius: 4px;
+            border-radius: 5px;
             font-size: 1em;
             box-sizing: border-box;
         }
         .booking-form button {
-            background-color: #28a745; /* Warna hijau */
+            background-color: #28a745;
             color: white;
             padding: 12px 25px;
             border: none;
@@ -92,6 +124,9 @@ if (isset($_GET['id'])) {
             cursor: pointer;
             transition: background-color 0.3s ease;
             margin-top: 20px;
+            display: block;
+            width: 100%;
+            text-align: center;
         }
         .booking-form button:hover {
             background-color: #218838;
@@ -113,30 +148,55 @@ if (isset($_GET['id'])) {
             color: #721c24;
             border: 1px solid #f5c6cb;
         }
+        .btn-back-to-list {
+            display: inline-block;
+            margin-top: 30px;
+            padding: 12px 25px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+        .btn-back-to-list:hover {
+            background-color: #0056b3;
+        }
     </style>
 </head>
 <body>
-    <header>
-        <h1>Detail Tur Kita! 🗺️</h1>
-        <p>Selami lebih dalam petualangan impianmu!</p>
+    <header class="main-header">
+        <div class="container header-content">
+            <div class="logo">
+                <a href="index.php">JalanJalan Kuy!</a>
+            </div>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="index.php">Home</a></li>
+                    <li><a href="index.php#paket-tur">Paket Tur</a></li>
+                    <li><a href="index.php#tentang-kami">Tentang Kami</a></li>
+                    <li><a href="index.php#kontak">Kontak</a></li>
+                    <li><a href="admin/login.php" class="btn-login-admin">Login Admin</a></li>
+                </ul>
+            </nav>
+        </div>
     </header>
 
-    <main>
+    <main class="container">
         <?php if ($tour) : ?>
             <div class="tour-detail-card">
                 <?php if (!empty($tour['image']) && file_exists('uploads/' . $tour['image'])): ?>
                     <img src="uploads/<?php echo htmlspecialchars($tour['image']); ?>" alt="<?php echo htmlspecialchars($tour['tour_name']); ?>">
                 <?php else: ?>
-                    <p style="text-align: center; color: #999;">Gambar tidak tersedia.</p>
+                    <img src="images/placeholder.jpg" alt="No Image Available">
                 <?php endif; ?>
 
                 <h2><?php echo htmlspecialchars($tour['tour_name']); ?></h2>
                 <p class="price">Harga: Rp <?php echo number_format($tour['price'], 0, ',', '.'); ?></p>
-                <p class="duration">Durasi: <?php echo htmlspecialchars($tour['duration']); ?></p>
+                <p class="duration"><i class="far fa-clock"></i> Durasi: <?php echo htmlspecialchars($tour['duration']); ?></p>
                 <h3>Deskripsi:</h3>
                 <p><?php echo nl2br(htmlspecialchars($tour['description'])); ?></p>
 
-                <hr>
+                <hr style="margin: 40px 0; border: 0; border-top: 1px solid #eee;">
 
                 <div class="booking-form">
                     <h3>Pesan Tur Ini!</h3>
@@ -174,27 +234,27 @@ if (isset($_GET['id'])) {
                             <input type="number" id="num_participants" name="num_participants" min="1" required>
                         </div>
                         <div class="form-group">
-                            <label for="booking_date">Tanggal Keberangkatan (YYYY-MM-DD):</label>
+                            <label for="booking_date">Tanggal Keberangkatan:</label>
                             <input type="date" id="booking_date" name="booking_date" required>
                         </div>
-                        <button type="submit">Konfirmasi Pemesanan</button>
+                        <button type="submit" class="btn">Konfirmasi Pemesanan</button>
                     </form>
                 </div>
             </div>
         <?php else : ?>
-            <div class="status-message error">
+            <div class="status-message error tour-not-found">
                 <h2>Oops! Tur tidak ditemukan. 😔</h2>
                 <p>Sepertinya kamu nyasar atau ID tur-nya gak valid. Yuk, kembali ke halaman <a href="index.php">Daftar Tur</a>.</p>
             </div>
         <?php endif; ?>
 
-        <p style="text-align: center; margin-top: 30px;">
-            <a href="index.php" class="btn-back">Kembali Ke Daftar Tur</a>
-        </p>
+        <div style="text-align: center; margin-bottom: 50px;">
+            <a href="index.php" class="btn-back-to-list">Kembali Ke Daftar Tur</a>
+        </div>
     </main>
 
     <footer>
-        <p>&copy; <?php echo date("Y"); ?> Travel Tour Gokil. Dijamin anti-bosan!</p>
+        <p>&copy; <?php echo date("Y"); ?> JalanJalan Kuy!. All rights reserved.</p>
     </footer>
 </body>
 </html>

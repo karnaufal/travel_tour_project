@@ -1,115 +1,115 @@
 <?php
 session_start();
+ob_start();
 
+// Cek apakah admin sudah login
 if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== true) {
     header("Location: login.php");
     exit();
 }
 
-ob_start(); // Kalau kamu pakai ob_start()
-include_once '../config.php';
-// ... sisa kode edit_tour.php ...
+include_once '../config.php'; // Koneksi database PDO
 
-// PASTIKAN BARIS INI ADALAH BARIS PERTAMA DAN TIDAK ADA SPASI/KARAKTER LAIN DI DEPANNYA
-ob_start(); // Mulai output buffering. Ini penting untuk mencegah masalah header redirect.
+$message = '';
+$status_class = '';
+$tour_data = null; // Variabel untuk menyimpan data tur yang akan diedit
 
-include_once '../config.php'; // Koneksi database
-
-error_reporting(E_ALL); // Aktifkan semua laporan error
-ini_set('display_errors', 1); // Tampilkan error di browser (untuk debugging)
-
-$message = ''; // Untuk pesan sukses/error
-$status_class = ''; // Untuk styling pesan
-$tour = null; // Data tur yang akan diedit
-$current_tour_id = 0; // Inisialisasi variabel untuk ID tur yang sedang diedit
-
-// Tentukan ID tur yang sedang diedit, baik dari GET (saat pertama kali buka)
-// atau dari POST (saat form disubmit)
-if (isset($_GET['id']) && !empty($_GET['id'])) {
-    $current_tour_id = filter_var($_GET['id'], FILTER_SANITIZE_NUMBER_INT);
-} elseif (isset($_POST['id']) && !empty($_POST['id'])) {
-    $current_tour_id = filter_var($_POST['id'], FILTER_SANITIZE_NUMBER_INT);
-}
-
-// Jika tidak ada ID yang valid, redirect atau tampilkan error
-if ($current_tour_id <= 0) {
-    header("Location: index.php?status=error&message=" . urlencode("ID tur tidak valid atau tidak ditemukan."));
-    exit();
-}
-
-// Ambil data tur dari database HANYA JIKA INI BUKAN SUBMIT FORM DENGAN ERROR VALIDASI
-// Atau jika ini adalah request GET awal
-if ($_SERVER["REQUEST_METHOD"] == "GET" || ($_SERVER["REQUEST_METHOD"] == "POST" && $status_class == '')) { // Jika GET atau POST tapi belum ada error validasi
+// Ambil data tur yang akan diedit
+if (isset($_GET['id'])) {
+    $tour_id = intval($_GET['id']);
     try {
-        $stmt = $pdo->prepare("SELECT * FROM tours WHERE id = :id");
-        $stmt->bindParam(':id', $current_tour_id, PDO::PARAM_INT);
-        $stmt->execute();
-        $tour = $stmt->fetch(PDO::FETCH_ASSOC);
+        $stmt = $pdo->prepare("SELECT * FROM tours WHERE id = ?");
+        $stmt->execute([$tour_id]);
+        $tour_data = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        if (!$tour) {
-            header("Location: index.php?status=error&message=" . urlencode("Tur dengan ID {$current_tour_id} tidak ditemukan."));
+        if (!$tour_data) {
+            header("Location: index.php?status=error&message=" . urlencode("Tur tidak ditemukan."));
             exit();
         }
     } catch (PDOException $e) {
-        header("Location: index.php?status=error&message=" . urlencode("Error saat mengambil data tur: " . htmlspecialchars($e->getMessage())));
+        header("Location: index.php?status=error&message=" . urlencode("Error saat mengambil data tur: " . $e->getMessage()));
         exit();
     }
+} else {
+    header("Location: index.php?status=error&message=" . urlencode("ID tur tidak ditemukan untuk diedit."));
+    exit();
 }
 
-// Proses form jika ada data yang dikirim (saat user klik 'Simpan Perubahan')
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Ambil dan sanitasi data dari form (termasuk dari POST)
-    $tour_name = filter_var($_POST['tour_name'] ?? '', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-    $description = filter_var($_POST['description'] ?? '', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-    $price = filter_var($_POST['price'] ?? '', FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
-    $duration = filter_var($_POST['duration'] ?? '', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-    $image_url = filter_var($_POST['image_url'] ?? '', FILTER_SANITIZE_URL);
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $tour_name = trim($_POST['tour_name']);
+    $description = trim($_POST['description']);
+    $price = str_replace(['Rp', '.', ','], '', trim($_POST['price']));
+    $duration = trim($_POST['duration']);
+    $current_image = $_POST['current_image'] ?? ''; // Nama gambar yang sudah ada
 
-    // Validasi sederhana
-    $errors = [];
-    if (empty($tour_name)) $errors[] = "Nama Tur wajib diisi.";
-    if (empty($description)) $errors[] = "Deskripsi wajib diisi.";
-    if (empty($price) || !is_numeric($price) || $price <= 0) $errors[] = "Harga tidak valid atau kosong.";
-    if (empty($duration)) $errors[] = "Durasi wajib diisi.";
-    if (empty($image_url)) $errors[] = "URL Gambar wajib diisi.";
-    if (!empty($image_url) && !filter_var($image_url, FILTER_VALIDATE_URL) && !preg_match('/^images\//', $image_url)) {
-        $errors[] = "URL Gambar tidak valid. Harus URL lengkap (contoh: http://...) atau path relatif dari folder 'images/' (contoh: images/nama_gambar.jpg).";
-    }
-
-    if (empty($errors)) {
-        try {
-            $stmt = $pdo->prepare("UPDATE tours SET tour_name = :tour_name, description = :description, price = :price, duration = :duration, image_url = :image_url WHERE id = :id");
-
-            $stmt->bindParam(':tour_name', $tour_name);
-            $stmt->bindParam(':description', $description);
-            $stmt->bindParam(':price', $price);
-            $stmt->bindParam(':duration', $duration);
-            $stmt->bindParam(':image_url', $image_url);
-            $stmt->bindParam(':id', $current_tour_id, PDO::PARAM_INT); // Gunakan $current_tour_id di sini
-
-            $stmt->execute();
-
-            // Redirect ke halaman admin/index.php dengan pesan sukses
-            header("Location: index.php?status=success&message=" . urlencode("Tur '{$tour_name}' berhasil diperbarui!"));
-            exit();
-
-        } catch (PDOException $e) {
-            $message = "Error saat menyimpan perubahan tur: " . htmlspecialchars($e->getMessage());
-            $status_class = 'error';
-        }
-    } else {
-        $message = "Validasi Gagal: <br>" . implode("<br>", $errors);
+    // Validasi input dasar
+    if (empty($tour_name) || empty($description) || empty($price) || empty($duration)) {
+        $message = "Semua field harus diisi!";
         $status_class = 'error';
-        // Jika ada error validasi, isi kembali $tour dengan data POST agar form tidak kosong
-        // Ini penting agar data yang diinput user tidak hilang jika ada error
-        $tour = [
-            'id' => $current_tour_id, // Pastikan ID tetap mengacu pada yang dari POST/GET
-            'tour_name' => $tour_name,
-            'description' => $description,
-            'price' => $price,
-            'duration' => $duration,
-            'image_url' => $image_url
-        ];
+    } elseif (!is_numeric($price) || $price <= 0) {
+        $message = "Harga harus berupa angka positif.";
+        $status_class = 'error';
+    } else {
+        $new_image_name = $current_image; // Defaultnya tetap gambar lama
+
+        // LOGIKA UPLOAD GAMBAR BARU (JIKA ADA)
+        if (isset($_FILES['tour_image']) && $_FILES['tour_image']['error'] == UPLOAD_ERR_OK) {
+            $file_tmp = $_FILES['tour_image']['tmp_name'];
+            $file_name = $_FILES['tour_image']['name'];
+            $file_size = $_FILES['tour_image']['size'];
+            $file_type = $_FILES['tour_image']['type'];
+            $file_ext = strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
+
+            $allowed_extensions = ['jpg', 'jpeg', 'png', 'gif'];
+            $max_file_size = 5 * 1024 * 1024; // 5 MB
+
+            if (!in_array($file_ext, $allowed_extensions)) {
+                $message = "Ekstensi file tidak diizinkan. Hanya JPG, JPEG, PNG, GIF yang diperbolehkan.";
+                $status_class = 'error';
+            } elseif ($file_size > $max_file_size) {
+                $message = "Ukuran file terlalu besar. Maksimal 5MB.";
+                $status_class = 'error';
+            } else {
+                $upload_dir = '../uploads/';
+                $new_image_name = uniqid('tour_') . '.' . $file_ext;
+                $upload_path = $upload_dir . $new_image_name;
+
+                if (move_uploaded_file($file_tmp, $upload_path)) {
+                    // Berhasil upload gambar baru, hapus gambar lama jika ada
+                    if (!empty($current_image) && file_exists($upload_dir . $current_image)) {
+                        unlink($upload_dir . $current_image);
+                    }
+                } else {
+                    $message = "Gagal mengupload gambar baru. Cek izin folder 'uploads'.";
+                    $status_class = 'error';
+                }
+            }
+        }
+
+        // Lanjutkan update ke database hanya jika tidak ada error upload dan validasi input berhasil
+        if ($status_class == '') {
+            try {
+                $stmt = $pdo->prepare("UPDATE tours SET tour_name = ?, description = ?, price = ?, duration = ?, image = ? WHERE id = ?");
+                $stmt->execute([$tour_name, $description, $price, $duration, $new_image_name, $tour_id]);
+
+                $message = "Tur berhasil diperbarui! ✨";
+                $status_class = 'success';
+                // Update tour_data agar form menampilkan data terbaru
+                $tour_data['tour_name'] = $tour_name;
+                $tour_data['description'] = $description;
+                $tour_data['price'] = $price;
+                $tour_data['duration'] = $duration;
+                $tour_data['image'] = $new_image_name;
+
+            } catch (PDOException $e) {
+                $message = "Error saat memperbarui tur: " . htmlspecialchars($e->getMessage());
+                $status_class = 'error';
+                // Jika update database gagal tapi gambar baru sudah terupload, hapus gambar baru tersebut (rollback)
+                if (!empty($new_image_name) && $new_image_name != $current_image && file_exists($upload_path)) {
+                    unlink($upload_path);
+                }
+            }
+        }
     }
 }
 ?>
@@ -119,58 +119,89 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin - Edit Tur</title>
+    <title>Edit Tur - Admin Panel</title>
     <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
-    <header>
-        <h1>Panel Admin Travel Tour Gokil! ⚙️</h1>
-        <p>Edit Tur</p>
+    <header class="admin-header">
+        <div class="admin-navigation-top">
+            <h2>Panel Admin Travel Tour Gokil! <span class="subtitle">Edit Tur.</span></h2>
+            <div class="admin-actions-group">
+                <a href="index.php" class="btn-admin btn-primary">Kelola Tur</a>
+                <a href="bookings.php" class="btn-admin btn-primary">Kelola Pemesanan</a>
+                <a href="logout.php" class="btn-admin btn-cancel">Logout</a>
+            </div>
+        </div>
     </header>
 
-    <main class="admin-form-container">
-        <h1>Edit Tur</h1>
+    <main>
+        <div class="form-container">
+            <h1>Edit Tur: <?php echo htmlspecialchars($tour_data['tour_name'] ?? 'Tur Tidak Ditemukan'); ?></h1>
 
-        <?php if (!empty($message)): ?>
-            <div class="form-status-message <?php echo $status_class; ?>">
-                <?php echo $message; ?>
-            </div>
-        <?php endif; ?>
+            <?php if (!empty($message)) : ?>
+                <div class="status-message <?php echo $status_class; ?>">
+                    <?php echo $message; ?>
+                </div>
+            <?php endif; ?>
 
-        <form action="edit_tour.php" method="POST">
-            <input type="hidden" name="id" value="<?php echo htmlspecialchars($tour['id'] ?? ''); ?>">
-            <div class="form-group">
-                <label for="tour_name">Nama Tur:</label>
-                <input type="text" id="tour_name" name="tour_name" required value="<?php echo htmlspecialchars($tour['tour_name'] ?? ''); ?>">
-            </div>
-            <div class="form-group">
-                <label for="description">Deskripsi:</label>
-                <textarea id="description" name="description" required><?php echo htmlspecialchars($tour['description'] ?? ''); ?></textarea>
-            </div>
-            <div class="form-group">
-                <label for="price">Harga (Rp):</label>
-                <input type="number" id="price" name="price" step="any" required value="<?php echo htmlspecialchars($tour['price'] ?? ''); ?>">
-            </div>
-            <div class="form-group">
-                <label for="duration">Durasi (contoh: 3 Hari 2 Malam):</label>
-                <input type="text" id="duration" name="duration" required value="<?php echo htmlspecialchars($tour['duration'] ?? ''); ?>">
-            </div>
-            <div class="form-group">
-                <label for="image_url">URL Gambar (contoh: images/komodo.jpg atau https://example.com/image.jpg):</label>
-                <input type="text" id="image_url" name="image_url" required value="<?php echo htmlspecialchars($tour['image_url'] ?? ''); ?>">
-            </div>
-            <div class="form-actions">
-                <button type="submit" class="btn-submit-admin">Simpan Perubahan</button>
-                <a href="index.php" class="btn-cancel-admin">Batal</a>
-            </div>
-        </form>
+            <?php if ($tour_data) : ?>
+            <form action="edit_tour.php?id=<?php echo htmlspecialchars($tour_data['id']); ?>" method="POST" enctype="multipart/form-data">
+                <input type="hidden" name="current_image" value="<?php echo htmlspecialchars($tour_data['image'] ?? ''); ?>">
+
+                <div class="form-group">
+                    <label for="tour_name">Nama Tur:</label>
+                    <input type="text" id="tour_name" name="tour_name" required value="<?php echo htmlspecialchars($tour_data['tour_name'] ?? ''); ?>">
+                </div>
+                <div class="form-group">
+                    <label for="description">Deskripsi:</label>
+                    <textarea id="description" name="description" required><?php echo htmlspecialchars($tour_data['description'] ?? ''); ?></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="price">Harga (Rp):</label>
+                    <input type="text" id="price" name="price" required value="<?php echo number_format($tour_data['price'] ?? 0, 0, ',', '.'); ?>" placeholder="Contoh: 1.500.000">
+                </div>
+                <div class="form-group">
+                    <label for="duration">Durasi (Contoh: 3 Hari 2 Malam):</label>
+                    <input type="text" id="duration" name="duration" required value="<?php echo htmlspecialchars($tour_data['duration'] ?? ''); ?>">
+                </div>
+                <div class="form-group">
+                    <label for="tour_image">Gambar Tur Saat Ini:</label>
+                    <?php if (!empty($tour_data['image']) && file_exists('../uploads/' . $tour_data['image'])): ?>
+                        <img src="../uploads/<?php echo htmlspecialchars($tour_data['image']); ?>" alt="Gambar Tur" style="max-width: 200px; height: auto; display: block; margin-bottom: 10px; border-radius: 5px;">
+                    <?php else: ?>
+                        <p>Belum ada gambar tur.</p>
+                    <?php endif; ?>
+                    <label for="tour_image" style="margin-top: 15px;">Ubah Gambar Tur (Biarkan kosong jika tidak diubah):</label>
+                    <input type="file" id="tour_image" name="tour_image" accept="image/*">
+                    <small>Maksimal 5MB (JPG, JPEG, PNG, GIF)</small>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn-submit">Perbarui Tur</button>
+                    <a href="index.php" class="btn-admin btn-cancel">Batal</a>
+                </div>
+            </form>
+            <?php endif; ?>
+        </div>
     </main>
 
     <footer>
         <p>&copy; <?php echo date("Y"); ?> Travel Tour Gokil. Admin Panel.</p>
     </footer>
+
+    <script>
+        // Script untuk format harga (opsional, bisa dipindahkan ke file JS terpisah)
+        document.addEventListener('DOMContentLoaded', function() {
+            var priceInput = document.getElementById('price');
+            priceInput.addEventListener('input', function(e) {
+                var value = e.target.value.replace(/\D/g, ''); // Hapus semua non-digit
+                if (value) {
+                    e.target.value = new Intl.NumberFormat('id-ID').format(value); // Format sebagai mata uang ID
+                }
+            });
+        });
+    </script>
 </body>
 </html>
 <?php
-ob_end_flush(); // Akhiri output buffering
+ob_end_flush();
 ?>

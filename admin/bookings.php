@@ -43,70 +43,6 @@ try {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kelola Pemesanan - Admin Panel</title>
     <link rel="stylesheet" href="../css/style.css">
-    <style>
-        /* Tambahan style khusus untuk halaman ini jika diperlukan */
-        .admin-table th, .admin-table td {
-            padding: 12px;
-            border: 1px solid #ddd;
-            text-align: left;
-        }
-        .admin-table th {
-            background-color: #f2f2f2;
-            font-weight: bold;
-        }
-        .admin-table tr:nth-child(even) {
-            background-color: #f9f9f9;
-        }
-        .admin-table tr:hover {
-            background-color: #f1f1f1;
-        }
-        .admin-actions {
-            margin-bottom: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 10px;
-        }
-        .btn-admin {
-            display: inline-block;
-            padding: 8px 15px;
-            border-radius: 5px;
-            text-decoration: none;
-            color: white;
-            font-weight: bold;
-            transition: background-color 0.3s ease;
-            text-align: center;
-        }
-        .btn-admin.btn-primary {
-            background-color: #007bff;
-        }
-        .btn-admin.btn-primary:hover {
-            background-color: #0056b3;
-        }
-        .btn-admin.btn-danger {
-            background-color: #dc3545;
-        }
-        .btn-admin.btn-danger:hover {
-            background-color: #c82333;
-        }
-        .message-status {
-            padding: 15px;
-            margin-bottom: 20px;
-            border-radius: 5px;
-            font-size: 1em;
-            text-align: center;
-        }
-        .message-status.success {
-            background-color: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
-        }
-        .message-status.error {
-            background-color: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
-        }
-    </style>
 </head>
 <body>
     <header class="admin-header">
@@ -149,15 +85,15 @@ try {
                         <tbody>
                             <?php foreach ($bookings as $booking): ?>
                                 <tr>
-                                    <td><?php echo htmlspecialchars($booking['id']); ?></td>
-                                    <td><?php echo htmlspecialchars($booking['customer_name']); ?></td>
-                                    <td><?php echo htmlspecialchars($booking['customer_email']); ?></td>
-                                    <td><?php echo htmlspecialchars($booking['tour_name']); ?></td>
-                                    <td>Rp <?php echo number_format($booking['price'], 0, ',', '.'); ?></td>
-                                    <td><?php echo htmlspecialchars($booking['num_participants']); ?></td>
-                                    <td><?php echo htmlspecialchars($booking['booking_date']); ?></td>
-                                    <td><?php echo htmlspecialchars($booking['created_at']); ?></td>
-                                    <td>
+                                    <td data-label="ID Pemesanan"><?php echo htmlspecialchars($booking['id']); ?></td>
+                                    <td data-label="Nama Pelanggan"><?php echo htmlspecialchars($booking['customer_name']); ?></td>
+                                    <td data-label="Email"><?php echo htmlspecialchars($booking['customer_email']); ?></td>
+                                    <td data-label="Nama Tur"><?php echo htmlspecialchars($booking['tour_name']); ?></td>
+                                    <td data-label="Harga Tur">Rp <?php echo number_format($booking['price'], 0, ',', '.'); ?></td>
+                                    <td data-label="Jumlah Peserta"><?php echo htmlspecialchars($booking['num_participants']); ?></td>
+                                    <td data-label="Tanggal Keberangkatan"><?php echo htmlspecialchars($booking['booking_date']); ?></td>
+                                    <td data-label="Waktu Pemesanan"><?php echo htmlspecialchars($booking['created_at']); ?></td>
+                                    <td data-label="Aksi">
                                         <a href="delete_booking.php?id=<?php echo htmlspecialchars($booking['id']); ?>" class="btn-admin btn-danger" onclick="return confirm('Apakah Anda yakin ingin menghapus pemesanan ID #<?php echo htmlspecialchars($booking['id']); ?> dari <?php echo htmlspecialchars($booking['customer_name']); ?>?');">Hapus</a>
                                     </td>
                                 </tr>

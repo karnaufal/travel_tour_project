@@ -43,89 +43,6 @@ try {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kelola Tur - Admin Panel</title>
     <link rel="stylesheet" href="../css/style.css">
-    <style>
-        /* Tambahan style khusus untuk halaman ini */
-        .admin-table th, .admin-table td {
-            padding: 12px;
-            border: 1px solid #ddd;
-            text-align: left;
-        }
-        .admin-table th {
-            background-color: #f2f2f2;
-            font-weight: bold;
-        }
-        .admin-table tr:nth-child(even) {
-            background-color: #f9f9f9;
-        }
-        .admin-table tr:hover {
-            background-color: #f1f1f1;
-        }
-        .admin-actions {
-            margin-bottom: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 10px;
-        }
-        .btn-admin {
-            display: inline-block;
-            padding: 8px 15px;
-            border-radius: 5px;
-            text-decoration: none;
-            color: white;
-            font-weight: bold;
-            transition: background-color 0.3s ease;
-            text-align: center;
-        }
-        .btn-admin.btn-primary {
-            background-color: #007bff;
-        }
-        .btn-admin.btn-primary:hover {
-            background-color: #0056b3;
-        }
-        .btn-admin.btn-warning {
-            background-color: #ffc107;
-            color: #333;
-        }
-        .btn-admin.btn-warning:hover {
-            background-color: #e0a800;
-        }
-        .btn-admin.btn-danger {
-            background-color: #dc3545;
-        }
-        .btn-admin.btn-danger:hover {
-            background-color: #c82333;
-        }
-        .btn-admin.btn-cancel { /* Untuk logout */
-            background-color: #6c757d;
-        }
-        .btn-admin.btn-cancel:hover {
-            background-color: #5a6268;
-        }
-        .message-status {
-            padding: 15px;
-            margin-bottom: 20px;
-            border-radius: 5px;
-            font-size: 1em;
-            text-align: center;
-        }
-        .message-status.success {
-            background-color: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
-        }
-        .message-status.error {
-            background-color: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
-        }
-        .tour-image-thumb {
-            width: 80px; /* Atur lebar thumbnail */
-            height: 60px; /* Atur tinggi thumbnail */
-            object-fit: cover; /* Pastikan gambar tidak terdistorsi */
-            border-radius: 4px;
-        }
-    </style>
 </head>
 <body>
     <header class="admin-header">
@@ -166,19 +83,19 @@ try {
                         <tbody>
                             <?php foreach ($tours as $tour): ?>
                                 <tr>
-                                    <td><?php echo htmlspecialchars($tour['id']); ?></td>
-                                    <td>
+                                    <td data-label="ID"><?php echo htmlspecialchars($tour['id']); ?></td>
+                                    <td data-label="Gambar">
                                         <?php if (!empty($tour['image']) && file_exists('../uploads/' . $tour['image'])): ?>
                                             <img src="../uploads/<?php echo htmlspecialchars($tour['image']); ?>" alt="<?php echo htmlspecialchars($tour['tour_name']); ?>" class="tour-image-thumb">
                                         <?php else: ?>
                                             <span style="color: #666; font-size: 0.8em;">No Image</span>
                                         <?php endif; ?>
                                     </td>
-                                    <td><?php echo htmlspecialchars($tour['tour_name']); ?></td>
-                                    <td>Rp <?php echo number_format($tour['price'], 0, ',', '.'); ?></td>
-                                    <td><?php echo htmlspecialchars($tour['duration']); ?></td>
-                                    <td><?php echo htmlspecialchars(substr($tour['description'], 0, 50)); ?>...</td>
-                                    <td class="actions">
+                                    <td data-label="Nama Tur"><?php echo htmlspecialchars($tour['tour_name']); ?></td>
+                                    <td data-label="Harga">Rp <?php echo number_format($tour['price'], 0, ',', '.'); ?></td>
+                                    <td data-label="Durasi"><?php echo htmlspecialchars($tour['duration']); ?></td>
+                                    <td data-label="Deskripsi Singkat"><?php echo htmlspecialchars(substr($tour['description'], 0, 50)); ?>...</td>
+                                    <td data-label="Aksi" class="actions">
                                         <a href="edit_tour.php?id=<?php echo htmlspecialchars($tour['id']); ?>" class="btn-admin btn-warning">Edit</a>
                                         <a href="delete_tour.php?id=<?php echo htmlspecialchars($tour['id']); ?>" class="btn-admin btn-danger" onclick="return confirm('Apakah Anda yakin ingin menghapus tur <?php echo htmlspecialchars($tour['tour_name']); ?>?');">Hapus</a>
                                     </td>

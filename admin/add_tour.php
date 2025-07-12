@@ -65,8 +65,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 }
             }
         } else {
-            // Jika tidak ada file di-upload, ini bisa jadi error atau memang tidak wajib (tergantung kebutuhan)
-            // Untuk saat ini, kita anggap kalau error_ok berarti ada file yg diupload.
+            // Jika tidak ada file di-upload atau ada error upload, bisa di set gambar default atau beri pesan error
+            // Untuk saat ini, kita biarkan image_name kosong jika tidak ada upload valid
             // Jika gambar wajib, bisa di tambahkan:
             // $message = "Gambar tur wajib diupload.";
             // $status_class = 'error';
@@ -103,93 +103,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tambah Tur Baru - Admin Panel</title>
     <link rel="stylesheet" href="../css/style.css">
-    <style>
-        /* Tambahan style khusus untuk form jika diperlukan */
-        .form-container {
-            background-color: #fff;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            max-width: 600px;
-            margin: 30px auto;
-        }
-        .form-container h1 {
-            text-align: center;
-            color: #333;
-            margin-bottom: 25px;
-        }
-        .form-group {
-            margin-bottom: 20px;
-        }
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: bold;
-            color: #555;
-        }
-        .form-group input[type="text"],
-        .form-group textarea,
-        .form-group input[type="number"],
-        .form-group input[type="file"] { /* Tambahkan input[type="file"] */
-            width: calc(100% - 20px); /* Sesuaikan padding */
-            padding: 12px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 1em;
-            box-sizing: border-box; /* Penting agar padding tidak menambah lebar */
-        }
-        .form-group textarea {
-            resize: vertical;
-            min-height: 100px;
-        }
-        .form-actions {
-            display: flex;
-            justify-content: flex-end;
-            gap: 10px;
-            margin-top: 25px;
-        }
-        .btn-submit, .btn-cancel {
-            padding: 12px 25px;
-            border: none;
-            border-radius: 5px;
-            font-size: 1em;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-            text-decoration: none; /* Untuk btn-cancel */
-            text-align: center;
-        }
-        .btn-submit {
-            background-color: #007bff;
-            color: white;
-        }
-        .btn-submit:hover {
-            background-color: #0056b3;
-        }
-        .btn-cancel {
-            background-color: #6c757d;
-            color: white;
-        }
-        .btn-cancel:hover {
-            background-color: #5a6268;
-        }
-        .status-message {
-            padding: 15px;
-            margin-bottom: 20px;
-            border-radius: 5px;
-            font-size: 1em;
-            text-align: center;
-        }
-        .status-message.success {
-            background-color: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
-        }
-        .status-message.error {
-            background-color: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
-        }
-    </style>
 </head>
 <body>
     <header class="admin-header">
@@ -237,7 +150,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 </div>
                 <div class="form-actions">
                     <button type="submit" class="btn-submit">Simpan Tur</button>
-                    <a href="index.php" class="btn-cancel">Batal</a>
+                    <a href="index.php" class="btn-admin btn-cancel">Batal</a>
                 </div>
             </form>
         </div>

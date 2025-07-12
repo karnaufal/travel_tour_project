@@ -1,727 +1,602 @@
-/* General Body & Container */
+/* General Body Styles */
 body {
-    font-family: 'Poppins', sans-serif;
-    /* Menggunakan Poppins untuk sentuhan modern */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f0f2f5;
-    /* Warna latar belakang yang lebih modern */
+    background-color: #f4f4f4;
     color: #333;
     line-height: 1.6;
 }
 
+/* Container for Centering Content */
 .container {
     max-width: 1200px;
-    margin: 20px auto;
+    margin: 0 auto;
     padding: 0 20px;
 }
 
-/* Header Styling (untuk halaman utama seperti index.php) */
-header {
-    background: linear-gradient(135deg, #007bff, #0056b3);
-    /* Gradient biru yang menarik */
+/* --- Header Section --- */
+.main-header {
+    background-color: #007bff;
+    /* Warna biru sesuai gambar */
     color: white;
-    padding: 30px 0;
-    text-align: center;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-    position: relative;
-    /* Untuk efek tambahan jika diperlukan */
-    overflow: hidden;
-    /* Penting untuk menjaga efek di dalam header */
+    padding: 15px 0;
+    position: fixed;
+    /* Header fixed di atas */
+    width: 100%;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    /* Pastikan di atas konten lain */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-header h1 {
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo a {
+    color: white;
+    text-decoration: none;
+    font-size: 1.8em;
+    font-weight: bold;
+}
+
+.main-nav ul {
+    list-style: none;
     margin: 0;
-    font-size: 3em;
-    /* Ukuran font lebih besar */
-    letter-spacing: 1.5px;
-    font-weight: 700;
-    /* Lebih tebal */
-    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+    padding: 0;
+    display: flex;
+    gap: 25px;
+    /* Jarak antar menu */
+    align-items: center;
 }
 
-header p {
-    margin: 10px 0 0;
-    font-size: 1.2em;
-    opacity: 0.9;
+.main-nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-weight: 600;
+    padding: 5px 0;
+    transition: color 0.3s ease;
 }
 
-/* Main Content Area */
-main {
+.main-nav ul li a:hover {
+    color: #e0e0e0;
+    /* Warna sedikit lebih terang saat hover */
+}
+
+.btn-login-admin {
+    background-color: #28a745;
+    /* Warna hijau */
+    color: white;
+    padding: 8px 15px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: background-color 0.3s ease;
+}
+
+.btn-login-admin:hover {
+    background-color: #218838;
+    /* Hijau lebih gelap saat hover */
+}
+
+
+/* --- Hero Section --- */
+.hero-section {
+    position: relative;
+    width: 100%;
+    height: 600px;
+    /* Tinggi hero section */
+    background: url('../images/hero-bg.jpg') no-repeat center center/cover;
+    /* Path gambar background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: white;
+    margin-top: 70px;
+    /* Sesuaikan dengan tinggi header fixed */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+    /* Overlay gelap untuk teks lebih jelas */
+    z-index: 1;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
     padding: 20px;
-    max-width: 1200px;
-    margin: 20px auto;
-    background-color: #fff;
-    border-radius: 12px;
-    /* Border radius lebih besar */
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.08);
-    /* Shadow lebih lembut */
+    max-width: 800px;
 }
 
-/* Tour List / Grid Styling */
-.tour-list {
+.hero-content h1 {
+    font-size: 3.5em;
+    margin-bottom: 15px;
+    font-weight: bold;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.hero-content p {
+    font-size: 1.3em;
+    margin-bottom: 30px;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.btn {
+    display: inline-block;
+    padding: 15px 30px;
+    border-radius: 50px;
+    /* Bentuk tombol pill/oval */
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    cursor: pointer;
+    border: none;
+}
+
+.btn-primary {
+    background-color: #28a745;
+    /* Warna hijau untuk tombol utama */
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: #218838;
+    transform: translateY(-2px);
+    /* Efek hover sedikit naik */
+}
+
+.btn-secondary {
+    /* Untuk tombol Load More */
+    background-color: #6c757d;
+    color: white;
+}
+
+.btn-secondary:hover {
+    background-color: #5a6268;
+    transform: translateY(-2px);
+}
+
+/* --- Tour Listing Section --- */
+.tour-listing-section {
+    padding: 60px 0;
+    text-align: center;
+}
+
+.section-title {
+    font-size: 2.5em;
+    color: #333;
+    margin-bottom: 10px;
+    position: relative;
+    display: inline-block;
+}
+
+.section-title::after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 3px;
+    background-color: #007bff;
+    margin: 10px auto 0;
+    border-radius: 2px;
+}
+
+.section-subtitle {
+    font-size: 1.1em;
+    color: #666;
+    margin-bottom: 40px;
+}
+
+.tour-cards-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    /* Responsif, min 300px per card */
     gap: 30px;
-    /* Jarak antar kartu lebih besar */
-    padding: 20px 0;
+    margin-bottom: 40px;
 }
 
 .tour-card {
-    border: 1px solid #e0e0e0;
-    /* Border lebih terang */
+    background-color: white;
     border-radius: 10px;
-    /* Radius lebih besar */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     overflow: hidden;
-    background-color: #fff;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-    /* Shadow lebih kuat dan modern */
-    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease;
-    display: flex;
-    flex-direction: column;
+    /* Penting agar gambar tidak keluar dari radius */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    text-align: left;
 }
 
 .tour-card:hover {
     transform: translateY(-8px);
-    /* Efek hover lebih kentara */
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
 }
 
 .tour-card img {
     width: 100%;
     height: 220px;
-    /* Tinggi gambar sedikit lebih besar */
+    /* Tinggi gambar card */
     object-fit: cover;
+    /* Penting untuk menjaga rasio dan mengisi area */
     display: block;
-    border-bottom: 1px solid #f0f0f0;
-    /* Garis pemisah gambar dan konten */
 }
 
-.tour-content {
-    flex-grow: 1;
+.tour-card .card-content {
     padding: 20px;
-    /* Padding lebih besar */
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
 }
 
 .tour-card h3 {
-    margin-top: 0;
-    margin-bottom: 8px;
+    font-size: 1.5em;
     color: #007bff;
-    font-size: 1.4em;
-    /* Ukuran judul lebih besar */
-    font-weight: 600;
+    margin-top: 0;
+    margin-bottom: 10px;
 }
 
-.tour-description-short {
+.tour-card .duration {
     font-size: 0.95em;
-    /* Ukuran font sedikit lebih besar */
     color: #666;
-    line-height: 1.6;
-    margin-bottom: 15px;
-    /* Jarak lebih besar */
-    min-height: 4.8em;
-    /* Minimal tinggi untuk 3 baris */
-    overflow: hidden;
+    margin-bottom: 8px;
+}
+
+.tour-card .duration i {
+    margin-right: 5px;
+    color: #007bff;
 }
 
 .tour-card .price {
     font-size: 1.2em;
-    /* Ukuran harga lebih besar */
     font-weight: bold;
     color: #28a745;
-    /* Warna hijau yang konsisten */
-    margin-bottom: 8px;
+    /* Harga hijau */
+    margin-bottom: 15px;
 }
 
-.tour-card .duration {
-    font-size: 0.9em;
-    color: #888;
+.tour-card .description {
+    font-size: 0.95em;
+    color: #777;
     margin-bottom: 20px;
-    /* Jarak lebih besar */
+    min-height: 40px;
+    /* Pastikan deskripsi punya tinggi minimum */
 }
 
-.btn-detail {
+.tour-card .btn-detail {
     display: block;
     width: 100%;
-    /* Penuh lebar kartu */
-    padding: 12px;
-    /* Padding lebih besar */
+    padding: 10px;
     background-color: #007bff;
     color: white;
     text-align: center;
+    border-radius: 5px;
     text-decoration: none;
-    border-radius: 8px;
-    /* Radius lebih besar */
-    transition: background-color 0.3s ease, transform 0.2s ease;
-    margin-top: auto;
-    font-weight: 600;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
 }
 
-.btn-detail:hover {
+.tour-card .btn-detail:hover {
     background-color: #0056b3;
-    transform: translateY(-2px);
-    /* Efek hover ringan */
 }
 
-/* Styling untuk halaman detail_tour.php */
-.tour-detail-container {
-    max-width: 900px;
-    /* Lebar maksimum kontainer detail tur */
-    margin: 40px auto;
-    background-color: #fff;
-    border-radius: 12px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    padding: 30px;
-    text-align: left;
-    /* Teks konten detail tur rata kiri */
-}
-
-.tour-detail-card img {
-    /* ----- PERBAIKAN UTAMA DI SINI ----- */
-    width: 100%;
-    /* Pastikan gambar selalu mengisi lebar container-nya */
-    height: auto;
-    /* Pertahankan rasio aspek gambar */
-    max-width: 100%;
-    /* Ini kunci! Gambar tidak akan melebihi lebar container induknya */
-    max-height: 450px;
-    /* Batasi tinggi gambar agar tidak terlalu besar, tetap responsif */
-    object-fit: cover;
-    /* Memastikan gambar mengisi area, bisa memotong bagian tepi jika rasio beda */
-    /* ----------------------------------- */
-    border-radius: 10px;
-    margin-bottom: 30px;
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-.tour-detail-container h2 {
-    color: #007bff;
-    font-size: 2.5em;
-    /* Ukuran judul lebih besar */
-    margin-bottom: 15px;
+.load-more-container {
     text-align: center;
-    /* Judul tetap di tengah */
-}
-
-.tour-detail-container .detail-meta {
-    display: flex;
-    justify-content: center;
-    /* Tengahkan info harga & durasi */
-    gap: 30px;
-    margin-bottom: 25px;
-    font-size: 1.15em;
-    color: #555;
-    flex-wrap: wrap;
-    /* Agar responsif */
-}
-
-.tour-detail-container .detail-price {
-    font-weight: bold;
-    color: #28a745;
-}
-
-.tour-detail-container h3 {
-    /* Untuk "Deskripsi Tur" */
     margin-top: 30px;
-    margin-bottom: 15px;
-    color: #333;
-    font-size: 1.8em;
-    border-bottom: 2px solid #eee;
-    padding-bottom: 10px;
-    text-align: left;
 }
 
-.tour-detail-container .detail-description {
-    font-size: 1.1em;
-    line-height: 1.8;
-    color: #444;
-    text-align: justify;
-    margin-bottom: 30px;
-}
-
-.btn-back {
-    display: inline-block;
-    padding: 12px 25px;
-    background-color: #6c757d;
-    color: white;
-    text-decoration: none;
-    border-radius: 8px;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-    font-weight: 600;
-}
-
-.btn-back:hover {
-    background-color: #5a6268;
-    transform: translateY(-2px);
-}
-
-/* Styling untuk Error/Success Message di Halaman Detail dan Admin */
-.message-container {
-    max-width: 800px;
-    margin: 20px auto;
-    padding: 0 20px;
-    /* Tambahkan padding horizontal */
-}
-
-.status-message {
+/* --- About Section --- */
+.about-section,
+.contact-section {
+    padding: 60px 0;
     text-align: center;
-    padding: 20px;
-    border-radius: 8px;
-    margin-bottom: 25px;
-    font-weight: 600;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-}
-
-.status-message.success {
-    background-color: #d4edda;
-    border: 1px solid #c3e6cb;
-    color: #155724;
-}
-
-.status-message.error {
-    background-color: #f8d7da;
-    border: 1px solid #f5c6cb;
-    color: #721c24;
-}
-
-.status-message h2 {
-    margin-top: 0;
-    margin-bottom: 10px;
-    font-size: 1.5em;
-}
-
-.status-message p {
-    font-size: 1em;
-    line-height: 1.5;
-}
-
-.status-message a {
-    color: #007bff;
-    text-decoration: none;
-    font-weight: bold;
-}
-
-.status-message a:hover {
-    text-decoration: underline;
-}
-
-
-/* Styling untuk Form Pemesanan */
-.booking-form-container {
-    max-width: 650px;
-    /* Lebar form sedikit lebih besar */
-    margin: 40px auto;
-    padding: 35px;
-    /* Padding lebih besar */
     background-color: #f9f9f9;
-    border-radius: 10px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    text-align: left;
-    /* Biarkan teks rata kiri */
+    border-top: 1px solid #eee;
 }
 
-.booking-form-container h2 {
-    color: #007bff;
-    margin-bottom: 30px;
-    /* Jarak lebih besar */
-    font-size: 2.2em;
-    /* Ukuran judul lebih besar */
-    text-align: center;
-    font-weight: 600;
+.about-section p,
+.contact-section p {
+    max-width: 800px;
+    margin: 15px auto;
+    color: #555;
 }
 
-/* Untuk form di detail_tour.php */
-.tour-detail-card h3 {
+.contact-info {
     margin-top: 30px;
-    margin-bottom: 15px;
-    color: #333;
-    font-size: 1.8em;
-    border-bottom: 2px solid #eee;
-    padding-bottom: 10px;
+    margin-bottom: 40px;
+}
+
+.contact-info p {
+    font-size: 1.1em;
+    margin-bottom: 10px;
+}
+
+.contact-info i {
+    color: #007bff;
+    margin-right: 10px;
+}
+
+.contact-form {
+    max-width: 600px;
+    margin: 0 auto;
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
     text-align: left;
 }
 
-.booking-form label {
+.contact-form .form-group {
+    margin-bottom: 20px;
+}
+
+.contact-form label {
     display: block;
     margin-bottom: 8px;
     font-weight: bold;
-    color: #555;
+    color: #444;
 }
 
-.booking-form input[type="text"],
-.booking-form input[type="email"],
-.booking-form input[type="number"],
-.booking-form input[type="date"] {
-    /* Tambahkan input type date */
-    width: calc(100% - 24px);
-    /* Sesuaikan untuk padding dan border */
+.contact-form input[type="text"],
+.contact-form input[type="email"],
+.contact-form textarea {
+    width: calc(100% - 22px);
+    /* Sesuaikan untuk padding/border */
     padding: 12px;
-    /* Padding lebih besar */
     border: 1px solid #ddd;
-    /* Border lebih terang */
-    border-radius: 6px;
-    /* Radius lebih besar */
+    border-radius: 5px;
     font-size: 1em;
     box-sizing: border-box;
-    transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-.booking-form input[type="text"]:focus,
-.booking-form input[type="email"]:focus,
-.booking-form input[type="number"]:focus,
-.booking-form input[type="date"]:focus {
-    border-color: #007bff;
-    outline: none;
-    box-shadow: 0 0 8px rgba(0, 123, 255, 0.2);
+.contact-form textarea {
+    resize: vertical;
+    min-height: 120px;
 }
 
-.booking-form input[type="number"] {
-    -moz-appearance: textfield;
-    /* Untuk Firefox */
-}
-
-.booking-form input::-webkit-outer-spin-button,
-.booking-form input::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-}
-
-.btn-confirm-booking {
-    display: block;
-    width: 100%;
-    padding: 18px;
-    /* Padding lebih besar */
-    background-color: #28a745;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    /* Radius lebih besar */
-    font-size: 1.2em;
-    /* Ukuran font lebih besar */
-    cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-    margin-top: 30px;
-    font-weight: 600;
-    box-shadow: 0 4px 10px rgba(40, 167, 69, 0.2);
-}
-
-.btn-confirm-booking:hover {
-    background-color: #218838;
-    transform: translateY(-2px);
-}
-
-.btn-back-list {
-    /* Digunakan di halaman success/error booking */
-    display: block;
-    width: fit-content;
-    margin: 30px auto 0;
-    padding: 12px 25px;
+.contact-form button {
+    display: inline-block;
     background-color: #007bff;
     color: white;
-    text-decoration: none;
-    border-radius: 8px;
-    text-align: center;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-    font-weight: 600;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
-.btn-back-list:hover {
+.contact-form button:hover {
     background-color: #0056b3;
-    transform: translateY(-2px);
 }
 
-/* ADMIN PANEL CSS */
-.admin-container {
-    max-width: 1200px;
-    /* Lebar maksimum lebih besar untuk admin */
-    margin: 30px auto;
-    padding: 30px;
-    /* Padding lebih besar */
-    background-color: #ffffff;
-    border-radius: 12px;
-    /* Radius lebih besar */
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-    /* Shadow lebih kuat */
+
+/* --- Footer --- */
+footer {
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 25px 0;
+    margin-top: 50px;
+    font-size: 0.9em;
 }
 
-/* Admin Navigation Top (pengganti admin-header lama) */
+/* Admin Panel Specific Styles (Keep these or adjust if you have a separate admin CSS) */
+.admin-header {
+    background-color: #343a40;
+    color: white;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    margin-bottom: 30px;
+}
+
 .admin-navigation-top {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 30px;
-    padding-bottom: 15px;
-    border-bottom: 1px solid #eee;
-    flex-wrap: wrap;
-    /* Agar responsif */
-    gap: 15px;
-    /* Jarak antar elemen jika wrap */
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
-.admin-navigation-top h2 {
-    font-size: 1.8em;
-    color: #333;
+.admin-header h2 {
     margin: 0;
-    display: flex;
-    align-items: center;
+    font-size: 1.8em;
+    font-weight: 300;
 }
 
-.admin-navigation-top h2 .subtitle {
+.admin-header h2 .subtitle {
+    display: block;
+    font-size: 0.7em;
+    color: #bbb;
+    margin-top: 5px;
+}
+
+.admin-actions-group .btn-admin {
+    margin-left: 10px;
+    padding: 10px 20px;
+    font-size: 0.9em;
+}
+
+.admin-container {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.admin-container h1 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 25px;
+    font-size: 2em;
+}
+
+.admin-container h1 .subtitle {
+    display: block;
     font-size: 0.6em;
     color: #777;
-    margin-left: 10px;
-    font-weight: normal;
+    margin-top: 5px;
 }
 
-.admin-actions-group {
-    display: flex;
-    gap: 15px;
-    /* Jarak antar tombol */
-    flex-wrap: wrap;
-    /* Agar responsif */
-}
-
-/* Reusable Buttons */
-.btn-primary {
-    background-color: #007bff;
-    color: white;
-}
-
-.btn-primary:hover {
-    background-color: #0056b3;
-}
-
-.btn-cancel {
-    background-color: #dc3545;
-    /* Merah */
-    color: white;
-}
-
-.btn-cancel:hover {
-    background-color: #c82333;
-}
-
-.btn-admin {
-    /* Kelas dasar untuk tombol di admin navigation top */
-    display: inline-block;
-    padding: 10px 20px;
-    border-radius: 8px;
-    text-decoration: none;
-    font-weight: bold;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-    text-align: center;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.btn-admin:hover {
-    transform: translateY(-2px);
-}
-
-
-.admin-stats {
-    display: flex;
-    justify-content: space-around;
-    margin-bottom: 40px;
-    gap: 25px;
-    /* Jarak antar kartu statistik */
-    flex-wrap: wrap;
-}
-
-.stat-card {
-    background-color: #f8f9fa;
-    border: 1px solid #e9ecef;
-    border-radius: 12px;
-    padding: 30px;
-    /* Padding lebih besar */
-    text-align: center;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-    flex: 1;
-    min-width: 280px;
-    /* Lebar minimum lebih besar */
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.stat-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
-}
-
-.stat-card h3 {
-    margin-top: 0;
-    color: #555;
-    font-size: 1.4em;
-    margin-bottom: 12px;
-}
-
-.stat-card p {
-    font-size: 3.5em;
-    /* Ukuran angka lebih besar */
-    font-weight: bold;
-    color: #007bff;
-    /* Warna biru konsisten */
-    margin: 0;
-}
-
-.admin-section-header {
-    /* Untuk "Daftar Tur" dan tombol Tambah Tur */
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 25px;
-    padding-bottom: 15px;
-    border-bottom: 1px solid #eee;
-    flex-wrap: wrap;
-    /* Agar responsif */
-    gap: 15px;
-}
-
-.admin-section-header h2 {
-    margin: 0;
-    font-size: 1.8em;
-    color: #444;
-}
-
-.btn-add-tour {
-    background-color: #28a745;
-    color: white;
-    padding: 12px 25px;
-    border-radius: 8px;
-    text-decoration: none;
-    font-weight: 600;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-.btn-add-tour:hover {
-    background-color: #218838;
-    transform: translateY(-2px);
-}
-
-/* Tabel Admin */
 .admin-table-wrapper {
     overflow-x: auto;
-    /* Untuk membuat tabel responsif di layar kecil */
-    margin-bottom: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-    /* Shadow pada wrapper tabel */
+    /* Untuk tabel responsif */
 }
 
 .admin-table {
     width: 100%;
     border-collapse: collapse;
-    background-color: #ffffff;
-    border-radius: 8px;
-    overflow: hidden;
-    /* Penting untuk border-radius di tabel */
+    margin-top: 20px;
 }
 
 .admin-table th,
 .admin-table td {
-    padding: 14px 18px;
-    /* Padding lebih besar */
+    padding: 12px;
+    border: 1px solid #ddd;
     text-align: left;
-    border-bottom: 1px solid #e5e5e5;
-    /* Border lebih terang */
 }
 
 .admin-table th {
-    background-color: #f7f7f7;
-    /* Latar belakang header tabel */
-    color: #444;
+    background-color: #f2f2f2;
     font-weight: bold;
-    text-transform: uppercase;
-    font-size: 0.95em;
-    letter-spacing: 0.5px;
+    color: #555;
 }
 
-.admin-table tbody tr:nth-child(even) {
-    background-color: #fdfdfd;
+.admin-table tr:nth-child(even) {
+    background-color: #f9f9f9;
 }
 
-.admin-table tbody tr:hover {
-    background-color: #f2f7fc;
-    /* Warna hover lebih lembut */
+.admin-table tr:hover {
+    background-color: #f1f1f1;
 }
 
-.admin-table img {
-    width: 60px;
-    /* Ukuran gambar di tabel admin */
-    height: 60px;
-    object-fit: cover;
-    border-radius: 5px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+.admin-table .actions a {
+    margin-right: 5px;
 }
 
-/* Tombol Aksi dalam Tabel */
-.admin-table .actions {
-    display: flex;
-    gap: 10px;
-    /* Jarak antar tombol edit/delete */
-    flex-wrap: wrap;
-    justify-content: flex-start;
-    /* Rata kiri */
-}
-
-.btn-edit,
-.btn-delete {
+/* Utility classes for buttons in admin */
+.btn-admin {
     display: inline-block;
     padding: 8px 15px;
-    /* Padding lebih besar */
-    border-radius: 6px;
-    /* Radius lebih besar */
+    border-radius: 5px;
     text-decoration: none;
     color: white;
-    font-weight: 600;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-    font-size: 0.9em;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-}
-
-.btn-edit {
-    background-color: #ffc107;
-    /* Kuning */
-}
-
-.btn-edit:hover {
-    background-color: #e0a800;
-    transform: translateY(-1px);
-}
-
-.btn-delete {
-    background-color: #dc3545;
-    /* Merah */
-}
-
-.btn-delete:hover {
-    background-color: #c82333;
-    transform: translateY(-1px);
-}
-
-
-/* Styling untuk Form Admin (add_tour.php, edit_tour.php, login.php) */
-.admin-form-container {
-    max-width: 750px;
-    /* Lebar maksimum form admin */
-    margin: 40px auto;
-    padding: 35px;
-    background-color: #fff;
-    border-radius: 12px;
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
-}
-
-.admin-form-container h1 {
-    color: #007bff;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
     text-align: center;
-    margin-bottom: 35px;
-    font-size: 2.5em;
-    font-weight: 700;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-admin.btn-primary {
+    background-color: #007bff;
+}
+
+.btn-admin.btn-primary:hover {
+    background-color: #0056b3;
+}
+
+.btn-admin.btn-warning {
+    background-color: #ffc107;
+    color: #333;
+}
+
+.btn-admin.btn-warning:hover {
+    background-color: #e0a800;
+}
+
+.btn-admin.btn-danger {
+    background-color: #dc3545;
+}
+
+.btn-admin.btn-danger:hover {
+    background-color: #c82333;
+}
+
+.btn-admin.btn-cancel {
+    background-color: #6c757d;
+}
+
+.btn-admin.btn-cancel:hover {
+    background-color: #5a6268;
+}
+
+.tour-image-thumb {
+    width: 80px;
+    /* Atur lebar thumbnail */
+    height: 60px;
+    /* Atur tinggi thumbnail */
+    object-fit: cover;
+    /* Pastikan gambar tidak terdistorsi */
+    border-radius: 4px;
+}
+
+.message-status {
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    font-size: 1em;
+    text-align: center;
+}
+
+.message-status.success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.message-status.error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+.no-tours-message,
+.no-tour-message {
+    text-align: center;
+    padding: 30px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    color: #555;
+    font-size: 1.2em;
+    margin-top: 40px;
+}
+
+.no-tours-message a,
+.no-tour-message a {
+    color: #007bff;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.no-tours-message a:hover,
+.no-tour-message a:hover {
+    text-decoration: underline;
+}
+
+/* Form container specific styles (for add_tour.php, edit_tour.php, login.php) */
+.form-container {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    margin: 30px auto;
+}
+
+.form-container h1 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 25px;
 }
 
 .form-group {
@@ -731,361 +606,107 @@ main {
 .form-group label {
     display: block;
     margin-bottom: 8px;
-    font-weight: 600;
+    font-weight: bold;
     color: #555;
-    font-size: 1.05em;
 }
 
 .form-group input[type="text"],
+.form-group textarea,
 .form-group input[type="number"],
 .form-group input[type="file"],
-/* Tambahkan input type file */
-.form-group textarea {
-    width: calc(100% - 24px);
-    /* Sesuaikan untuk padding dan border */
+.form-group input[type="password"],
+.form-group input[type="email"],
+.form-group input[type="date"] {
+    width: calc(100% - 22px);
+    /* Sesuaikan padding/border */
     padding: 12px;
     border: 1px solid #ddd;
-    border-radius: 6px;
+    border-radius: 5px;
     font-size: 1em;
     box-sizing: border-box;
-    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    /* Penting agar padding tidak menambah lebar */
 }
 
 .form-group textarea {
     resize: vertical;
-    min-height: 120px;
-    /* Tinggi textarea lebih besar */
-}
-
-.form-group input[type="text"]:focus,
-.form-group input[type="number"]:focus,
-.form-group input[type="file"]:focus,
-.form-group textarea:focus {
-    border-color: #007bff;
-    outline: none;
-    box-shadow: 0 0 8px rgba(0, 123, 255, 0.2);
+    min-height: 100px;
 }
 
 .form-actions {
     display: flex;
-    justify-content: space-between;
-    margin-top: 35px;
-    gap: 15px;
-    /* Jarak antar tombol */
-    flex-wrap: wrap;
-}
-
-.btn-submit-admin {
-    padding: 14px 30px;
-    /* Padding lebih besar */
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-size: 1.15em;
-    cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-    font-weight: 600;
-    box-shadow: 0 4px 10px rgba(0, 123, 255, 0.2);
-}
-
-.btn-submit-admin:hover {
-    background-color: #0056b3;
-    transform: translateY(-2px);
-}
-
-.btn-cancel-form {
-    /* Untuk tombol cancel di form add/edit admin */
-    padding: 14px 30px;
-    background-color: #6c757d;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-size: 1.15em;
-    cursor: pointer;
-    text-decoration: none;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-    font-weight: 600;
-    box-shadow: 0 4px 10px rgba(108, 117, 125, 0.2);
-}
-
-.btn-cancel-form:hover {
-    background-color: #5a6268;
-    transform: translateY(-2px);
-}
-
-
-/* Login Form Specific Styles */
-.login-container {
-    max-width: 450px;
-    margin: 80px auto;
-    padding: 40px;
-    background-color: #fff;
-    border-radius: 12px;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-    text-align: center;
-}
-
-.login-container h1 {
-    color: #007bff;
-    margin-bottom: 30px;
-    font-size: 2.8em;
-    font-weight: 700;
-}
-
-.login-form .form-group {
-    margin-bottom: 25px;
-    text-align: left;
-}
-
-.login-form label {
-    display: block;
-    margin-bottom: 10px;
-    font-weight: 600;
-    color: #555;
-    font-size: 1.1em;
-}
-
-.login-form input[type="text"],
-.login-form input[type="password"] {
-    width: calc(100% - 24px);
-    padding: 14px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    font-size: 1.05em;
-    box-sizing: border-box;
-    transition: border-color 0.3s ease, box-shadow 0.3s ease;
-}
-
-.login-form input[type="text"]:focus,
-.login-form input[type="password"]:focus {
-    border-color: #007bff;
-    outline: none;
-    box-shadow: 0 0 10px rgba(0, 123, 255, 0.25);
-}
-
-.btn-login {
-    width: 100%;
-    padding: 16px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-size: 1.25em;
-    cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-    margin-top: 30px;
-    font-weight: 700;
-    box-shadow: 0 6px 15px rgba(0, 123, 255, 0.3);
-}
-
-.btn-login:hover {
-    background-color: #0056b3;
-    transform: translateY(-3px);
-}
-
-.login-error-message {
-    /* Pesan error di login.php */
-    text-align: center;
-    padding: 15px;
-    background-color: #f8d7da;
-    border: 1px solid #f5c6cb;
-    border-radius: 8px;
-    color: #721c24;
-    margin-bottom: 20px;
-    font-weight: 500;
-}
-
-/* Pagination Styles */
-.pagination {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 12px;
-    /* Jarak antar tombol paginasi */
-    margin-top: 30px;
-    padding: 10px;
-    background-color: #f9f9f9;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-}
-
-.pagination .pagination-btn {
-    display: inline-block;
-    padding: 10px 18px;
-    /* Padding lebih besar */
-    border: 1px solid #007bff;
-    border-radius: 6px;
-    text-decoration: none;
-    color: #007bff;
-    transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease;
-    font-weight: 600;
-}
-
-.pagination .pagination-btn:hover {
-    background-color: #007bff;
-    color: white;
-    transform: translateY(-2px);
-}
-
-.pagination .current-page {
-    background-color: #007bff;
-    color: white;
-    padding: 10px 18px;
-    border-radius: 6px;
-    font-weight: bold;
-    cursor: default;
-    box-shadow: 0 2px 5px rgba(0, 123, 255, 0.3);
-}
-
-/* Pesan "Belum ada tur" */
-.no-tours-message {
-    text-align: center;
-    padding: 30px;
-    background-color: #f0f0f0;
-    border-radius: 10px;
+    justify-content: flex-end;
+    gap: 10px;
     margin-top: 25px;
-    color: #555;
-    font-size: 1.15em;
-    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
-.no-tours-message a {
-    color: #007bff;
-    text-decoration: underline;
-    font-weight: bold;
-}
-
-/* Footer */
-footer {
+.btn-submit {
+    background-color: #007bff;
+    color: white;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    text-decoration: none;
     text-align: center;
-    padding: 30px 20px;
-    margin-top: 50px;
-    background-color: #333;
-    color: #f4f4f4;
-    font-size: 0.9em;
-    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
 }
 
-/* Validation Error Input */
-.input-error {
-    border: 2px solid #dc3545 !important;
-    /* Merah */
-    box-shadow: 0 0 8px rgba(220, 53, 69, 0.3) !important;
+.btn-submit:hover {
+    background-color: #0056b3;
 }
 
-.error-text {
-    color: #dc3545;
-    font-size: 0.85em;
-    margin-top: 5px;
-    display: block;
-}
-
-
-/* Responsive adjustments for smaller screens */
-@media (max-width: 992px) {
-
-    /* Medium devices (tablet landscape) */
-    .admin-container,
-    .tour-detail-container {
-        margin: 20px auto;
-        padding: 25px;
-    }
-
-    header h1 {
-        font-size: 2.5em;
-    }
-
-    .tour-detail-container h2 {
-        font-size: 2em;
-    }
-}
-
+/* Responsive Adjustments */
 @media (max-width: 768px) {
-
-    /* Small devices (tablet portrait, mobile landscape) */
-    .container,
-    main {
-        margin: 15px auto;
-        padding: 15px;
-    }
-
-    header {
-        padding: 20px 0;
-    }
-
-    header h1 {
-        font-size: 2em;
-    }
-
-    header p {
-        font-size: 1em;
-    }
-
-    .tour-list {
-        grid-template-columns: 1fr;
-        /* Satu kolom untuk mobile */
-        gap: 20px;
-    }
-
-    .tour-card img {
-        height: 180px;
-    }
-
-    .tour-detail-container,
-    .booking-form-container,
-    .admin-container,
-    .admin-form-container,
-    .login-container {
-        margin: 15px auto;
-        padding: 20px;
-    }
-
-    .tour-detail-container h2 {
-        font-size: 1.8em;
-    }
-
-    .tour-detail-container .detail-meta {
-        flex-direction: column;
-        gap: 10px;
-    }
-
-    .admin-navigation-top,
-    .admin-section-header {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 10px;
-    }
-
-    .admin-actions-group {
-        width: 100%;
-        justify-content: space-around;
-    }
-
-    .btn-admin {
-        flex: 1;
-        /* Agar tombol mengisi lebar */
-        padding: 10px 15px;
-    }
-
-    .admin-section-header .btn-add-tour {
-        width: 100%;
-        text-align: center;
-        padding: 10px 15px;
-    }
-
-    .admin-stats {
+    .header-content {
         flex-direction: column;
         gap: 15px;
     }
 
-    .stat-card {
-        min-width: unset;
-        /* Hapus min-width */
-        width: 100%;
+    .main-nav ul {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 15px;
     }
 
-    /* Responsif Tabel untuk Mobile (Card-like view) */
+    .hero-section {
+        height: 450px;
+        margin-top: 100px;
+        /* Sesuaikan untuk fixed header */
+    }
+
+    .hero-content h1 {
+        font-size: 2.5em;
+    }
+
+    .hero-content p {
+        font-size: 1em;
+    }
+
+    .tour-cards-grid {
+        grid-template-columns: 1fr;
+        /* Satu kolom di layar kecil */
+    }
+
+    .section-title {
+        font-size: 2em;
+    }
+
+    .admin-navigation-top {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .admin-actions-group {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .admin-table thead {
+        display: none;
+        /* Hide table headers on small screens */
+    }
+
     .admin-table,
     .admin-table tbody,
     .admin-table tr,
@@ -1094,39 +715,25 @@ footer {
         width: 100%;
     }
 
-    .admin-table thead {
-        display: none;
-        /* Sembunyikan header tabel asli */
-    }
-
     .admin-table tr {
         margin-bottom: 15px;
         border: 1px solid #ddd;
         border-radius: 8px;
+        overflow: hidden;
         box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-        padding: 10px 0;
-        /* Tambahkan padding vertikal untuk tr */
     }
 
     .admin-table td {
         text-align: right;
         padding-left: 50%;
-        /* Sisakan ruang untuk data-label */
         position: relative;
-        border-bottom: none;
-        /* Hapus border antar sel */
-        padding-top: 8px;
-        /* Sesuaikan padding agar tidak terlalu rapat */
-        padding-bottom: 8px;
-        /* Sesuaikan padding agar tidak terlalu rapat */
     }
 
     .admin-table td::before {
         content: attr(data-label);
-        /* Tampilkan label kolom */
         position: absolute;
-        left: 15px;
-        width: calc(50% - 30px);
+        left: 10px;
+        width: calc(50% - 20px);
         padding-right: 10px;
         white-space: nowrap;
         text-align: left;
@@ -1134,92 +741,50 @@ footer {
         color: #555;
     }
 
-    .admin-table td.actions {
-        text-align: center;
-        padding-left: 15px;
-        justify-content: center;
-        /* Tengahkan tombol */
-        padding-top: 15px;
-        padding-bottom: 15px;
-        border-top: 1px solid #eee;
-        /* Beri garis di atas tombol aksi */
-    }
-
-    .btn-edit,
-    .btn-delete {
-        flex: 1;
-        /* Agar tombol mengisi ruang di mobile */
-        max-width: 48%;
-        /* Batasi lebar tombol */
-        padding: 10px 12px;
-    }
-
-    .form-actions {
-        flex-direction: column;
-        gap: 15px;
-    }
-
-    .btn-submit-admin,
-    .btn-cancel-form {
+    .tour-image-thumb {
         width: 100%;
-        padding: 12px 20px;
-    }
-
-    .booking-form input[type="text"],
-    .booking-form input[type="email"],
-    .booking-form input[type="number"],
-    .booking-form input[type="date"],
-    .form-group input[type="text"],
-    .form-group input[type="number"],
-    .form-group input[type="file"],
-    .form-group textarea,
-    .login-form input[type="text"],
-    .login-form input[type="password"] {
-        padding: 10px;
-        width: calc(100% - 20px);
-        /* Adjust for padding */
-    }
-
-    .btn-confirm-booking,
-    .btn-login {
-        padding: 14px;
-        font-size: 1.1em;
-    }
-
-    .pagination .pagination-btn,
-    .pagination .current-page {
-        padding: 8px 12px;
-    }
-
-    footer {
-        padding: 20px 10px;
+        height: 150px;
+        margin-bottom: 10px;
     }
 }
 
 @media (max-width: 480px) {
-
-    /* Extra small devices */
-    header h1 {
-        font-size: 1.8em;
+    .main-header {
+        padding: 10px 0;
     }
 
-    .tour-detail-container h2 {
-        font-size: 1.6em;
+    .logo a {
+        font-size: 1.5em;
     }
 
-    .booking-form-container h2 {
-        font-size: 1.8em;
+    .main-nav ul li a {
+        padding: 5px 10px;
     }
 
-    .stat-card p {
-        font-size: 2.8em;
+    .hero-section {
+        height: 350px;
+        margin-top: 80px;
     }
 
-    .admin-table td::before {
-        width: 40%;
+    .hero-content h1 {
+        font-size: 2em;
+    }
+
+    .hero-content p {
         font-size: 0.9em;
     }
-}
 
-/* Font import for Poppins (add this at the very top of style.css) */
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+    .btn {
+        padding: 10px 20px;
+        font-size: 0.9em;
+    }
+
+    .tour-card .card-content {
+        padding: 15px;
+    }
+
+    .form-container {
+        padding: 20px;
+        margin: 20px auto;
+    }
+}
