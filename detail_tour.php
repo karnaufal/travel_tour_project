@@ -1,34 +1,14 @@
 <?php
-session_start();
-ob_start(); // Pastikan ob_start() ada jika kamu pakai header/redirect di tengah kode
+include 'db_connect.php'; // Path ke koneksi database (sesuaikan jika kamu pakai config.php dengan PDO)
 
-include_once 'config.php'; // Pastikan path ke config.php benar
+$tour = null;
+if (isset($_GET['id'])) {
+    $tour_id = intval($_GET['id']);
+    $sql = "SELECT * FROM tours WHERE id = $tour_id";
+    $result = $conn->query($sql);
 
-$tour = null; // Inisialisasi variabel tur
-$error_message = ''; // Variabel untuk pesan error
-
-// 1. Ambil ID Tur dari URL
-if (isset($_GET['id']) && is_numeric($_GET['id'])) {
-    $tour_id = (int)$_GET['id']; // Pastikan ID adalah integer
-} else {
-    // Jika ID tidak ada atau tidak valid, tampilkan pesan error
-    $error_message = "ID tur tidak valid atau tidak diberikan.";
-}
-
-if (empty($error_message)) { // Hanya jalankan query jika tidak ada masalah ID
-    try {
-        // 2. Query Database untuk Mengambil Detail Tur
-        $stmt = $pdo->prepare("SELECT * FROM tours WHERE id = ?");
-        $stmt->execute([$tour_id]);
-        $tour = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        if (!$tour) {
-            // Jika tur tidak ditemukan di database
-            $error_message = "Tur tidak ditemukan. Mungkin ID tur salah atau tur sudah dihapus.";
-        }
-    } catch (PDOException $e) {
-        // Tangani error database
-        $error_message = "Error saat mengambil data tur: " . htmlspecialchars($e->getMessage());
+    if ($result->num_rows > 0) {
+        $tour = $result->fetch_assoc();
     }
 }
 ?>
@@ -38,25 +18,100 @@ if (empty($error_message)) { // Hanya jalankan query jika tidak ada masalah ID
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?php echo $tour ? htmlspecialchars($tour['tour_name']) : 'Tur Tidak Ditemukan'; ?> - Travel Tour Gokil</title>
-    <link rel="stylesheet" href="css/style.css">
+    <title>Detail Tur Kita! 🗺️</title>
+    <link rel="stylesheet" href="style.css">
     <style>
-        /* Style tambahan jika diperlukan */
-        .message-container {
-            margin-top: 20px;
-            padding: 15px;
+        /* Perbaikan CSS untuk gambar agar responsif */
+        .tour-detail-card img {
+            max-width: 100%; /* Gambar akan mengikuti lebar parent */
+            height: auto; /* Tinggi akan menyesuaikan secara proporsional */
+            display: block; /* Menghilangkan spasi ekstra di bawah gambar */
+            border-radius: 8px; /* Sudut membulat */
+            margin-bottom: 20px; /* Jarak bawah gambar */
+        }
+        .tour-detail-card {
+            background-color: #fff;
+            padding: 25px;
             border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+            margin: 30px auto;
+            text-align: left;
+        }
+        .tour-detail-card h2 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .tour-detail-card p {
+            color: #555;
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+        .tour-detail-card .price {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #007bff;
+            margin-bottom: 10px;
+        }
+        .tour-detail-card .duration {
+            font-style: italic;
+            color: #777;
+            margin-bottom: 20px;
+        }
+        .booking-form h3 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        .booking-form .form-group {
+            margin-bottom: 15px;
+        }
+        .booking-form label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #444;
+        }
+        .booking-form input[type="text"],
+        .booking-form input[type="email"],
+        .booking-form input[type="number"],
+        .booking-form input[type="date"] {
+            width: calc(100% - 20px);
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1em;
+            box-sizing: border-box;
+        }
+        .booking-form button {
+            background-color: #28a745; /* Warna hijau */
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 20px;
+        }
+        .booking-form button:hover {
+            background-color: #218838;
+        }
+        .status-message {
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            font-size: 1em;
             text-align: center;
         }
-        .message-container.error {
-            background-color: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
-        }
-        .message-container.success {
+        .status-message.success {
             background-color: #d4edda;
             color: #155724;
             border: 1px solid #c3e6cb;
+        }
+        .status-message.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
         }
     </style>
 </head>
@@ -67,97 +122,79 @@ if (empty($error_message)) { // Hanya jalankan query jika tidak ada masalah ID
     </header>
 
     <main>
-        <?php
-        // Tampilkan pesan sukses dari pemesanan (jika ada)
-        if (isset($_GET['status']) && $_GET['status'] == 'success') {
-            $success_msg = htmlspecialchars($_GET['message'] ?? 'Pemesanan Anda berhasil!');
-            ?>
-            <div class="message-container success">
-                <p>🎉 Pemesanan Berhasil! 🎉</p>
-                <p><?php echo $success_msg; ?></p>
-            </div>
-            <?php
-        }
-
-        // Tampilkan pesan error jika tur tidak ditemukan atau ada masalah lain
-        if (!empty($error_message)): ?>
-            <div class="message-container error">
-                <p>Oops! Tur tidak ditemukan. 😞</p>
-                <p>Sepertinya kamu nyasar atau ID tur-nya gak valid. Yuk, kembali ke halaman <a href="index.php">Daftar Tur</a>.</p>
-                <?php if (isset($e)): // Tampilkan detail error database hanya untuk debug (jangan di production) ?>
-                    <p style="font-size: 0.8em; color: #a13;">Detail Error: <?php echo $error_message; ?></p>
+        <?php if ($tour) : ?>
+            <div class="tour-detail-card">
+                <?php if (!empty($tour['image']) && file_exists('uploads/' . $tour['image'])): ?>
+                    <img src="uploads/<?php echo htmlspecialchars($tour['image']); ?>" alt="<?php echo htmlspecialchars($tour['tour_name']); ?>">
+                <?php else: ?>
+                    <p style="text-align: center; color: #999;">Gambar tidak tersedia.</p>
                 <?php endif; ?>
-            </div>
-        <?php elseif ($tour): // Jika tur ditemukan, tampilkan detail tur dan form ?>
-            <section class="tour-detail-card">
-                <img src="<?php echo htmlspecialchars($tour['image_url']); ?>" alt="<?php echo htmlspecialchars($tour['tour_name']); ?>" class="tour-image">
+
                 <h2><?php echo htmlspecialchars($tour['tour_name']); ?></h2>
-                <p>Harga: Rp <?php echo number_format($tour['price'], 0, ',', '.'); ?></p>
-                <p>Durasi: <?php echo htmlspecialchars($tour['duration']); ?></p>
+                <p class="price">Harga: Rp <?php echo number_format($tour['price'], 0, ',', '.'); ?></p>
+                <p class="duration">Durasi: <?php echo htmlspecialchars($tour['duration']); ?></p>
                 <h3>Deskripsi:</h3>
                 <p><?php echo nl2br(htmlspecialchars($tour['description'])); ?></p>
 
-                <h3>Pesan Tur Ini!</h3>
-                <form action="process_booking.php" method="POST" class="booking-form" onsubmit="return validateForm()">
-                    <input type="hidden" name="tour_id" value="<?php echo htmlspecialchars($tour['id']); ?>">
-                    <label for="customer_name">Nama Lengkap:</label>
-                    <input type="text" id="customer_name" name="customer_name" required>
+                <hr>
 
-                    <label for="customer_email">Email:</label>
-                    <input type="email" id="customer_email" name="customer_email" required>
+                <div class="booking-form">
+                    <h3>Pesan Tur Ini!</h3>
+                    <?php
+                    // Ambil pesan status dari URL jika ada
+                    $message = '';
+                    $status_class = '';
+                    if (isset($_GET['status'])) {
+                        if ($_GET['status'] == 'success') {
+                            $message = htmlspecialchars($_GET['message'] ?? 'Pemesanan berhasil!');
+                            $status_class = 'success';
+                        } elseif ($_GET['status'] == 'error') {
+                            $message = htmlspecialchars($_GET['message'] ?? 'Terjadi kesalahan saat memesan!');
+                            $status_class = 'error';
+                        }
+                    }
+                    if (!empty($message)) : ?>
+                        <div class="status-message <?php echo $status_class; ?>">
+                            <?php echo $message; ?>
+                        </div>
+                    <?php endif; ?>
 
-                    <label for="num_participants">Jumlah Peserta:</label>
-                    <input type="number" id="num_participants" name="num_participants" min="1" value="1" required>
-
-                    <label for="booking_date">Tanggal Keberangkatan (YYYY-MM-DD):</label>
-                    <input type="date" id="booking_date" name="booking_date" required>
-
-                    <button type="submit" class="btn-confirm-booking">Konfirmasi Pemesanan</button>
-                </form>
-            </section>
+                    <form action="process_booking.php" method="POST">
+                        <input type="hidden" name="tour_id" value="<?php echo htmlspecialchars($tour['id']); ?>">
+                        <div class="form-group">
+                            <label for="customer_name">Nama Lengkap:</label>
+                            <input type="text" id="customer_name" name="customer_name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="customer_email">Email:</label>
+                            <input type="email" id="customer_email" name="customer_email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="num_participants">Jumlah Peserta:</label>
+                            <input type="number" id="num_participants" name="num_participants" min="1" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="booking_date">Tanggal Keberangkatan (YYYY-MM-DD):</label>
+                            <input type="date" id="booking_date" name="booking_date" required>
+                        </div>
+                        <button type="submit">Konfirmasi Pemesanan</button>
+                    </form>
+                </div>
+            </div>
+        <?php else : ?>
+            <div class="status-message error">
+                <h2>Oops! Tur tidak ditemukan. 😔</h2>
+                <p>Sepertinya kamu nyasar atau ID tur-nya gak valid. Yuk, kembali ke halaman <a href="index.php">Daftar Tur</a>.</p>
+            </div>
         <?php endif; ?>
-        
-        <div class="back-to-list-container">
-            <a href="index.php" class="btn-back-to-list">Kembali ke Daftar Tur</a>
-        </div>
+
+        <p style="text-align: center; margin-top: 30px;">
+            <a href="index.php" class="btn-back">Kembali Ke Daftar Tur</a>
+        </p>
     </main>
 
     <footer>
         <p>&copy; <?php echo date("Y"); ?> Travel Tour Gokil. Dijamin anti-bosan!</p>
     </footer>
-
-    <script>
-        function validateForm() {
-            let messages = [];
-            const name = document.getElementById('customer_name').value;
-            const email = document.getElementById('customer_email').value;
-            const participants = document.getElementById('num_participants').value;
-            const date = document.getElementById('booking_date').value;
-
-            if (name.trim() === '') {
-                messages.push('Nama Lengkap wajib diisi.');
-            }
-            if (email.trim() === '') {
-                messages.push('Email wajib diisi.');
-            } else if (!/\S+@\S+\.\S+/.test(email)) {
-                messages.push('Format Email tidak valid.');
-            }
-            if (participants <= 0) {
-                messages.push('Jumlah Peserta harus lebih dari 0.');
-            }
-            if (date.trim() === '') {
-                messages.push('Tanggal keberangkatan wajib diisi.');
-            }
-
-            if (messages.length > 0) {
-                alert('Mohon perbaiki kesalahan berikut:\n' + messages.join('\n'));
-                return false;
-            }
-            return true;
-        }
-    </script>
 </body>
 </html>
-<?php
-ob_end_flush();
-?>

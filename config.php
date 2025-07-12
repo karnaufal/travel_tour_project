@@ -1,20 +1,26 @@
 <?php
-// Konfigurasi Database
-$host = 'localhost'; // Biasanya localhost untuk development
-$dbname = 'db_travel_tour'; // Nama database yang kamu buat di phpMyAdmin
-$user = 'root'; // User default XAMPP/Laragon
-$password = ''; // Password default XAMPP/Laragon (kosong)
+$host = 'localhost';
+$db   = 'db_travel_tour'; // Ganti dengan nama database kamu
+$user = 'root'; // Ganti dengan username database kamu
+$pass = ''; // Ganti dengan password database kamu (kosong jika XAMPP default)
 
-// Buat koneksi PDO (PHP Data Objects)
+$dsn = "mysql:host=$host;dbname=$db;charset=utf8mb4";
+$options = [
+    PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION, // Aktifkan mode error untuk PDO (menampilkan exception)
+    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,     // Ambil hasil query sebagai array asosiatif
+    PDO::ATTR_EMULATE_PREPARES   => false,                // Matikan emulasi prepared statements untuk keamanan
+];
+
 try {
-    $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $user, $password);
-    // Set mode error PDO ke Exception agar error bisa ditangkap
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    // echo "Koneksi database berhasil!"; // Pesan ini bisa dihapus setelah testing
-    // Konfigurasi Pagination
-    define('ITEMS_PER_PAGE', 6); // Jumlah tur yang ditampilkan per halaman
-} catch (PDOException $e) {
-    // Jika koneksi gagal, tampilkan pesan error dan hentikan eksekusi script
-    die("Koneksi database gagal: " . $e->getMessage());
+    $pdo = new PDO($dsn, $user, $pass, $options);
+} catch (\PDOException $e) {
+    // Jika koneksi gagal, hentikan skrip dan tampilkan pesan error
+    // Di lingkungan produksi, log error ini dan berikan pesan user-friendly
+    throw new \PDOException($e->getMessage(), (int)$e->getCode());
 }
+
+// --- TAMBAHKAN BARIS INI UNTUK PAGINATION ---
+define('ITEMS_PER_PAGE', 6); // Definisikan berapa tur per halaman
+// --- AKHIR TAMBAHAN ---
+
 ?>
