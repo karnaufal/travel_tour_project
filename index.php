@@ -59,15 +59,16 @@ try {
                 ?>
                         <div class="swiper-slide hero-slide" style="background-image: url('images/<?php echo htmlspecialchars($tour['image']); ?>');">
                             <div class="hero-overlay"></div>
+                            <a href="detail_tour.php?id=<?php echo htmlspecialchars($tour['id']); ?>" class="hero-content-link">
                             <div class="hero-content">
                                 <h1><?php echo htmlspecialchars($tour['tour_name']); ?></h1>
-                                <p><?php echo htmlspecialchars(substr($tour['description'], 0, 150)); ?>...</p>
+                                <p><?php echo htmlspecialchars($tour['description']); ?></p>
                                 <div class="tour-meta">
                                     <span class="price">Rp <?php echo number_format($tour['price'], 0, ',', '.'); ?></span>
                                     <span class="duration"><i class="fas fa-clock"></i> <?php echo htmlspecialchars($tour['duration']); ?></span>
                                 </div>
-                                <a href="detail_tour.php?id=<?php echo htmlspecialchars($tour['id']); ?>" class="btn btn-primary">Lihat Detail & Pesan</a>
                             </div>
+                            <a>
                         </div>
                 <?php
                     }
