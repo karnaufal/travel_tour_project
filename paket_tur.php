@@ -62,7 +62,7 @@ try {
                         <div class="tour-card">
                             <?php
                             $image_name = $tour['image'] ?? '';
-                            $image_path = 'uploads/' . $image_name;
+                            $image_path = 'images/' . $image_name;
                             $actual_image_src = (file_exists($image_path) && !empty($image_name)) ? htmlspecialchars($image_path) : 'images/placeholder.jpg';
                             $tour_name_alt = htmlspecialchars($tour['tour_name'] ?? 'Gambar Tur');
                             ?>
