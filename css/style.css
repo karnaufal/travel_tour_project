@@ -1049,31 +1049,36 @@ footer {
     z-index: 1;
 }
 
-.hero-content {
+.hero-content-link {
     position: absolute;
-    /* Penting agar bisa diatur posisinya relatif terhadap parent */
-    top: 50%;
-    /* Posisikan ke tengah vertikal */
-    left: 50%;
-    /* Posisikan ke tengah horizontal */
-    transform: translate(-50%, -50%);
-    /* Geser kembali setengah lebar dan tinggi elemennya sendiri */
+    /* Penting untuk membuat link menutupi seluruh area hero-content */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    /* Gunakan flexbox untuk centering konten di dalamnya */
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+    /* Hilangkan garis bawah link */
+    color: inherit;
+    /* Warisan warna teks dari parent */
+}
+
+/* Pastikan .hero-content juga diupdate agar tidak double centering */
+.hero-content {
+    /* Hapus properti centering yang sebelumnya ada di sini,
+       karena sekarang .hero-content-link yang akan melakukan centering */
+    position: relative;
+    /* Ganti absolute ke relative jika flexbox di parent link */
     text-align: center;
-    /* Rata tengah teks di dalamnya */
     color: #fff;
-    /* Pastikan warna teks terlihat di atas gambar */
     z-index: 10;
-    /* Pastikan di atas overlay */
     width: 80%;
-    /* Atur lebar konten, bisa disesuaikan */
     max-width: 800px;
-    /* Batasi lebar maksimal */
     padding: 20px;
-    /* Tambahkan padding agar tidak terlalu mepet tepi */
-    /* display: flex; /* Alternatif: pakai flexbox */
-    /* flex-direction: column; */
-    /* justify-content: center; */
-    /* align-items: center; */
 }
 
 .hero-content h1 {
