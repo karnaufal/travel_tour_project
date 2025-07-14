@@ -892,3 +892,12 @@ footer {
         /* Add some padding to the sides */
     }
 }
+
+/* Styling untuk link navigasi yang aktif (halaman saat ini) */
+.main-nav ul li a.active {
+    font-weight: bold;
+    color: #007bff;
+    /* Warna biru, sesuaikan dengan warna utama desainmu */
+    border-bottom: 2px solid #007bff;
+    padding-bottom: 5px;
+}
