@@ -1005,3 +1005,424 @@ footer {
         height: 300px;
     }
 }
+
+/* ============================================== */
+/* CSS untuk Hero Section menjadi Swiper Slider */
+/* ============================================== */
+
+.hero-swiper-section {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    /* Sesuaikan tinggi sesuai keinginan, misal 80vh atau 600px */
+    overflow: hidden;
+    /* Penting untuk clipping Swiper */
+}
+
+.hero-main-slider {
+    width: 100%;
+    height: 100%;
+    /* Agar slider mengisi penuh parent */
+}
+
+.hero-slide {
+    position: relative;
+    /* Tambahan: Pastikan tinggi minimum untuk slide agar konten bisa terpusat */
+    min-height: 500px;
+    /* Sesuaikan sesuai kebutuhan desain lo */
+    display: flex;
+    /* Aktifkan flexbox untuk centering yang lebih baik jika diperlukan */
+    align-items: center;
+    /* Vertically center content */
+    justify-content: center;
+    /* Horizontally center content */
+}
+
+.hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    /* Overlay gelap agar teks lebih mudah dibaca */
+    z-index: 1;
+}
+
+.hero-content {
+    position: absolute;
+    /* Penting agar bisa diatur posisinya relatif terhadap parent */
+    top: 50%;
+    /* Posisikan ke tengah vertikal */
+    left: 50%;
+    /* Posisikan ke tengah horizontal */
+    transform: translate(-50%, -50%);
+    /* Geser kembali setengah lebar dan tinggi elemennya sendiri */
+    text-align: center;
+    /* Rata tengah teks di dalamnya */
+    color: #fff;
+    /* Pastikan warna teks terlihat di atas gambar */
+    z-index: 10;
+    /* Pastikan di atas overlay */
+    width: 80%;
+    /* Atur lebar konten, bisa disesuaikan */
+    max-width: 800px;
+    /* Batasi lebar maksimal */
+    padding: 20px;
+    /* Tambahkan padding agar tidak terlalu mepet tepi */
+    /* display: flex; /* Alternatif: pakai flexbox */
+    /* flex-direction: column; */
+    /* justify-content: center; */
+    /* align-items: center; */
+}
+
+.hero-content h1 {
+    font-size: 3.5em;
+    /* Ukuran font judul */
+    margin-bottom: 20px;
+    line-height: 1.2;
+}
+
+.hero-content p {
+    font-size: 1.2em;
+    /* Ukuran font deskripsi */
+    margin-bottom: 30px;
+}
+
+.hero-content .tour-meta {
+    display: flex;
+    justify-content: center;
+    gap: 25px;
+    /* Jarak antar info tur */
+    margin-bottom: 30px;
+    font-size: 1.1em;
+    font-weight: bold;
+}
+
+.hero-content .tour-meta .price {
+    color: var(--secondary-color);
+    /* Warna harga, misal kuning atau hijau terang */
+}
+
+.hero-content .tour-meta .duration,
+.hero-content .tour-meta .location {
+    color: #e0e0e0;
+    /* Warna info lain */
+}
+
+.hero-content .btn-primary {
+    /* Style tombol sudah ada di style.css, pastikan responsif */
+    padding: 15px 30px;
+    font-size: 1.1em;
+}
+
+
+/* Swiper Navigation (Panah) */
+.hero-main-slider .swiper-button-next,
+.hero-main-slider .swiper-button-prev {
+    color: white;
+    /* Warna panah */
+    background-color: rgba(0, 0, 0, 0.3);
+    /* Latar belakang panah transparan */
+    border-radius: 50%;
+    width: 50px;
+    /* Ukuran panah */
+    height: 50px;
+    top: 50%;
+    /* Posisi di tengah vertikal */
+    transform: translateY(-50%);
+    transition: background-color 0.3s ease;
+    z-index: 10;
+    /* Pastikan di atas konten */
+}
+
+.hero-main-slider .swiper-button-next:hover,
+.hero-main-slider .swiper-button-prev:hover {
+    background-color: rgba(0, 0, 0, 0.6);
+    /* Lebih gelap saat hover */
+}
+
+/* Swiper Pagination (Dot) */
+.hero-main-slider .hero-pagination.swiper-pagination-bullets {
+    bottom: 30px;
+    /* Posisi di bawah slider */
+    z-index: 10;
+}
+
+.hero-main-slider .hero-pagination .swiper-pagination-bullet {
+    background-color: rgba(255, 255, 255, 0.6);
+    /* Warna dot normal */
+    opacity: 1;
+    width: 12px;
+    /* Ukuran dot */
+    height: 12px;
+    margin: 0 6px;
+    transition: background-color 0.3s ease, width 0.3s ease;
+}
+
+.hero-main-slider .hero-pagination .swiper-pagination-bullet-active {
+    background-color: var(--primary-color);
+    /* Warna dot aktif */
+    width: 30px;
+    /* Efek memanjang saat aktif */
+    border-radius: 6px;
+    /* Agar ujungnya tumpul */
+}
+
+/* Responsif untuk ukuran layar lebih kecil */
+@media (max-width: 768px) {
+    .hero-content h1 {
+        font-size: 2.5em;
+    }
+
+    .hero-content p {
+        font-size: 1em;
+    }
+
+    .hero-content .tour-meta {
+        flex-direction: column;
+        /* Informasi tur jadi ke bawah */
+        gap: 10px;
+    }
+
+    .hero-main-slider .swiper-button-next,
+    .hero-main-slider .swiper-button-prev {
+        width: 35px;
+        height: 35px;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero-content h1 {
+        font-size: 2em;
+    }
+
+    .hero-content p {
+        font-size: 0.9em;
+    }
+
+    .hero-content .btn-primary {
+        padding: 12px 25px;
+        font-size: 1em;
+    }
+}
+
+/* ============================================== */
+/* FINAL FIX CSS untuk Hero Section menjadi Swiper Slider */
+/* ============================================== */
+
+.hero-swiper-section {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    /* Tinggi penuh viewport. Sesuaikan jika terlalu tinggi/pendek, misal 80vh atau 650px */
+    overflow: hidden;
+    /* Penting untuk clipping Swiper dan menghindari scrollbar tak diinginkan */
+}
+
+.hero-main-slider {
+    width: 100%;
+    height: 100%;
+    /* Agar slider mengisi penuh parent (.hero-swiper-section) */
+}
+
+.hero-slide {
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    /* Pastikan gambar mengisi seluruh area slide */
+    background-position: center;
+    /* Posisikan gambar di tengah */
+    display: flex;
+    align-items: center;
+    /* Pusatkan konten vertikal */
+    justify-content: center;
+    /* Pusatkan konten horizontal */
+    text-align: center;
+    position: relative;
+    color: white;
+    /* Warna teks agar terlihat di atas gambar gelap */
+}
+
+.hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    /* Overlay gelap agar teks lebih mudah dibaca */
+    z-index: 1;
+    /* Posisikan di bawah konten, di atas gambar */
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+    /* Pastikan konten di atas overlay */
+    max-width: 800px;
+    /* Lebar maksimal konten */
+    padding: 20px;
+    /* Padding di sekitar konten */
+}
+
+.hero-content h1 {
+    font-size: 3.5em;
+    /* Ukuran font judul */
+    margin-bottom: 20px;
+    line-height: 1.2;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+    /* Efek bayangan teks untuk keterbacaan */
+}
+
+.hero-content p {
+    font-size: 1.2em;
+    /* Ukuran font deskripsi */
+    margin-bottom: 30px;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
+    /* Efek bayangan teks */
+}
+
+.hero-content .tour-meta {
+    display: flex;
+    flex-wrap: wrap;
+    /* Izinkan wrap pada layar kecil */
+    justify-content: center;
+    gap: 25px;
+    /* Jarak antar info tur */
+    margin-bottom: 30px;
+    font-size: 1.1em;
+    font-weight: bold;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
+    /* Efek bayangan teks */
+}
+
+.hero-content .tour-meta .price {
+    color: #FFD700;
+    /* Warna harga yang menonjol (emas) */
+}
+
+.hero-content .tour-meta .duration,
+.hero-content .tour-meta .location {
+    color: #e0e0e0;
+    /* Warna info lain yang lebih terang */
+}
+
+/* Styling untuk tombol primer yang sudah ada di style.css lo, pastikan responsif */
+.hero-content .btn-primary {
+    padding: 15px 30px;
+    font-size: 1.1em;
+    border-radius: 5px;
+    /* Sedikit lengkungan pada tombol */
+    /* Pastikan warna latar dan teks sesuai dengan tema website lo */
+    /* background-color: var(--primary-color); */
+    /* color: white; */
+}
+
+
+/* Swiper Navigation (Panah Kanan/Kiri) */
+.hero-main-slider .swiper-button-next,
+.hero-main-slider .swiper-button-prev {
+    color: white;
+    /* Warna panah */
+    background-color: rgba(0, 0, 0, 0.4);
+    /* Latar belakang panah transparan */
+    border-radius: 50%;
+    /* Bentuk lingkaran */
+    width: 50px;
+    /* Ukuran panah */
+    height: 50px;
+    display: flex;
+    /* Untuk pusatkan ikon */
+    align-items: center;
+    justify-content: center;
+    top: 50%;
+    /* Posisi di tengah vertikal */
+    transform: translateY(-50%);
+    transition: background-color 0.3s ease;
+    z-index: 10;
+    /* Pastikan di atas konten dan overlay */
+}
+
+.hero-main-slider .swiper-button-next:hover,
+.hero-main-slider .swiper-button-prev:hover {
+    background-color: rgba(0, 0, 0, 0.7);
+    /* Lebih gelap saat hover */
+}
+
+/* Swiper Pagination (Titik-titik di bawah) */
+.hero-main-slider .hero-pagination.swiper-pagination-bullets {
+    bottom: 30px;
+    /* Posisi di bawah slider */
+    z-index: 10;
+}
+
+.hero-main-slider .hero-pagination .swiper-pagination-bullet {
+    background-color: rgba(255, 255, 255, 0.6);
+    /* Warna dot normal */
+    opacity: 1;
+    width: 12px;
+    /* Ukuran dot */
+    height: 12px;
+    margin: 0 6px;
+    /* Jarak antar dot */
+    transition: background-color 0.3s ease, width 0.3s ease, border-radius 0.3s ease;
+}
+
+.hero-main-slider .hero-pagination .swiper-pagination-bullet-active {
+    background-color: #007bff;
+    /* Warna dot aktif (biru, bisa disesuaikan dengan primary-color lo) */
+    width: 30px;
+    /* Efek memanjang saat aktif */
+    border-radius: 6px;
+    /* Agar ujungnya tumpul */
+}
+
+/* Responsif untuk ukuran layar lebih kecil */
+@media (max-width: 768px) {
+    .hero-content h1 {
+        font-size: 2.5em;
+    }
+
+    .hero-content p {
+        font-size: 1em;
+    }
+
+    .hero-content .tour-meta {
+        flex-direction: column;
+        /* Informasi tur jadi ke bawah */
+        gap: 10px;
+    }
+
+    .hero-main-slider .swiper-button-next,
+    .hero-main-slider .swiper-button-prev {
+        width: 40px;
+        height: 40px;
+    }
+
+    .hero-main-slider .swiper-button-next::after,
+    /* Mengurangi ukuran ikon panah di mobile */
+    .hero-main-slider .swiper-button-prev::after {
+        font-size: 1.5em;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero-content h1 {
+        font-size: 2em;
+    }
+
+    .hero-content p {
+        font-size: 0.9em;
+    }
+
+    .hero-content .btn-primary {
+        padding: 12px 25px;
+        font-size: 1em;
+    }
+
+    .hero-main-slider .hero-pagination {
+        bottom: 15px;
+        /* Pagination lebih ke atas sedikit di mobile */
+    }
+}
