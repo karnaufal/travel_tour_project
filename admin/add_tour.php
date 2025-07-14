@@ -5,7 +5,7 @@ if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== tru
     exit();
 }
 
-include_once '../config.php';
+include_once '../config.php'; // Pastikan path ke config.php benar
 
 $message = '';
 $message_type = '';
@@ -15,25 +15,86 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $description = trim($_POST['description']);
     $price = filter_var($_POST['price'], FILTER_VALIDATE_FLOAT);
     $duration = trim($_POST['duration']);
-    $image = trim($_POST['image']); // Untuk URL gambar
 
-    if (empty($tour_name) || empty($description) || $price === false || empty($duration)) {
-        $message = "Semua kolom harus diisi dengan benar.";
+    // --- BAGIAN BARU UNTUK UPLOAD GAMBAR ---
+    $image_filename = ''; // Default jika tidak ada upload atau ada masalah
+
+    // Cek apakah ada file gambar yang diupload dan tidak ada error
+    if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
+        $fileTmpPath = $_FILES['image']['tmp_name'];
+        $fileName = $_FILES['image']['name'];
+        // Pastikan nama file aman dari karakter aneh
+        $fileName = preg_replace("/[^a-zA-Z0-9.-]/", "_", $fileName);
+
+        $fileNameCmps = explode(".", $fileName);
+        $fileExtension = strtolower(end($fileNameCmps));
+
+        // Buat nama file unik untuk mencegah konflik
+        $newFileName = uniqid('tour_', true) . '.' . $fileExtension;
+
+        // Direktori tempat file akan disimpan, relatif dari add_tour.php (yang ada di folder admin/)
+        $uploadFileDir = '../images/'; 
+        $destPath = $uploadFileDir . $newFileName;
+
+        // Pastikan direktori upload ada dan bisa ditulis
+        if (!is_dir($uploadFileDir)) {
+            if (!mkdir($uploadFileDir, 0777, true)) { // Buat direktori jika tidak ada
+                $message = "Gagal membuat direktori upload: " . $uploadFileDir;
+                $message_type = "error";
+                goto end_process; // Langsung ke akhir jika gagal membuat direktori
+            }
+        }
+
+        // Pindahkan file yang diupload dari lokasi sementara ke lokasi tujuan
+        if (move_uploaded_file($fileTmpPath, $destPath)) {
+            $image_filename = $newFileName; // Simpan nama file yang berhasil diupload
+        } else {
+            $message = "Gagal mengunggah gambar. Pastikan folder 'images' memiliki izin tulis (write permissions).";
+            $message_type = "error";
+            goto end_process; // Langsung ke akhir jika upload gagal
+        }
+    } else if (isset($_FILES['image']) && $_FILES['image']['error'] !== UPLOAD_ERR_NO_FILE) {
+        // Tangani error upload selain 'tidak ada file' (misal: ukuran file terlalu besar)
+        $message = "Terjadi kesalahan saat mengunggah gambar. Kode error: " . $_FILES['image']['error'];
+        $message_type = "error";
+        goto end_process;
+    } else {
+        // Jika tidak ada file yang dipilih sama sekali, atau form disubmit tanpa file
+        // Karena gambar wajib, ini dianggap error
+        $message = "Gambar tur harus diunggah.";
+        $message_type = "error";
+        goto end_process;
+    }
+    // ----------------------------------------------------
+
+    // Validasi data input lainnya dan nama file gambar yang sudah didapat
+    if (empty($tour_name) || empty($description) || $price === false || empty($duration) || empty($image_filename)) {
+        $message = "Semua kolom harus diisi dengan benar, termasuk gambar.";
         $message_type = "error";
     } else {
         try {
+            // Persiapkan statement SQL untuk memasukkan data tur
             $stmt = $pdo->prepare("INSERT INTO tours (tour_name, description, price, duration, image) VALUES (?, ?, ?, ?, ?)");
-            $stmt->execute([$tour_name, $description, $price, $duration, $image]);
+            // Eksekusi statement dengan data yang sudah divalidasi dan nama file gambar
+            $stmt->execute([$tour_name, $description, $price, $duration, $image_filename]);
+
+            // Set pesan sukses dan redirect ke halaman index admin
             $_SESSION['status_message'] = "Tur baru berhasil ditambahkan!";
             $_SESSION['status_type'] = "success";
-            header("Location: index.php"); // Redirect ke halaman kelola tur
+            header("Location: index.php");
             exit();
         } catch (PDOException $e) {
+            // Tangani error database
             $message = "Gagal menambahkan tur: " . $e->getMessage();
             $message_type = "error";
+            // Opsional: Hapus file yang sudah diupload jika database error
+            if (!empty($image_filename) && file_exists($destPath)) {
+                unlink($destPath);
+            }
         }
     }
 }
+end_process: // Label untuk goto, digunakan untuk melompat jika ada error diawal
 ?>
 
 <!DOCTYPE html>
@@ -71,7 +132,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
         .form-group input[type="text"],
         .form-group input[type="number"],
-        .form-group textarea {
+        .form-group textarea,
+        .form-group input[type="file"] { /* Tambahkan input[type="file"] di sini */
             width: calc(100% - 22px); /* Kurangi padding dan border */
             padding: 10px;
             border: 1px solid #ddd;
@@ -138,7 +200,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <nav class="main-nav">
                 <ul>
                     <li><a href="dashboard.php">Dashboard</a></li>
-                    <li><a href="index.php" class="active">Kelola Tur</a></li> <li><a href="bookings.php">Kelola Pemesanan</a></li>
+                    <li><a href="index.php" class="active">Kelola Tur</a></li>
+                    <li><a href="bookings.php">Kelola Pemesanan</a></li>
                     <li><a href="logout.php" class="btn-login-admin">Logout</a></li>
                 </ul>
             </nav>
@@ -152,8 +215,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <?php echo htmlspecialchars($message); ?>
             </div>
         <?php endif; ?>
-        <form action="add_tour.php" method="POST">
-            <div class="form-group">
+        <form action="add_tour.php" method="POST" enctype="multipart/form-data"> <div class="form-group">
                 <label for="tour_name">Nama Tur:</label>
                 <input type="text" id="tour_name" name="tour_name" required>
             </div>
@@ -170,9 +232,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <input type="text" id="duration" name="duration" required>
             </div>
             <div class="form-group">
-                <label for="image">URL Gambar (contoh: komodo.jpg atau https://example.com/image.jpg):</label>
-                <input type="text" id="image" name="image" placeholder="nama_gambar.jpg atau link_gambar_online">
-            </div>
+                <label for="image">Gambar Tur:</label> <input type="file" id="image" name="image" accept="image/*" required> </div>
             <div class="form-actions">
                 <button type="submit" class="btn-primary">Simpan Tur</button>
                 <a href="index.php" class="btn-secondary">Batal</a>

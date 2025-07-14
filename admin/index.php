@@ -18,7 +18,22 @@ try {
 
 // Logic untuk menghapus tur
 if (isset($_GET['action']) && $_GET['action'] == 'delete' && isset($_GET['id'])) {
-    $tour_id = $_GET['id'];
+    $tour_id = intval($_GET['id']); // Pastikan ID adalah integer
+
+    // Opsional: Hapus file gambar terkait sebelum menghapus entri database
+    try {
+        $stmt_select_image = $pdo->prepare("SELECT image FROM tours WHERE id = ?");
+        $stmt_select_image->execute([$tour_id]);
+        $image_to_delete = $stmt_select_image->fetchColumn();
+
+        if ($image_to_delete && file_exists('../images/' . $image_to_delete) && $image_to_delete !== 'placeholder.jpg' && $image_to_delete !== 'default-hero-bg.jpg') {
+            unlink('../images/' . $image_to_delete);
+        }
+    } catch (PDOException $e) {
+        // Log error, tapi jangan hentikan proses delete tur di DB
+        error_log("Error deleting image file: " . $e->getMessage());
+    }
+
     try {
         $stmt = $pdo->prepare("DELETE FROM tours WHERE id = ?");
         $stmt->execute([$tour_id]);
@@ -196,8 +211,12 @@ if (isset($_GET['action']) && $_GET['action'] == 'delete' && isset($_GET['id']))
                     <tr>
                         <td><?php echo htmlspecialchars($tour['id']); ?></td>
                         <td>
-                            <?php if (!empty($tour['image']) && file_exists('../uploads/' . $tour['image'])): ?>
-                                <img src="../uploads/<?php echo htmlspecialchars($tour['image']); ?>" alt="<?php echo htmlspecialchars($tour['tour_name']); ?>">
+                            <?php 
+                            // Pastikan path ke gambar benar. Folder images/
+                            $imagePath = '../images/' . $tour['image']; 
+                            if (!empty($tour['image']) && file_exists($imagePath)): 
+                            ?>
+                                <img src="<?php echo htmlspecialchars($imagePath); ?>" alt="<?php echo htmlspecialchars($tour['tour_name']); ?>">
                             <?php else: ?>
                                 <img src="../images/placeholder.jpg" alt="No Image">
                             <?php endif; ?>
