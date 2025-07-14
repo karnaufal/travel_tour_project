@@ -1,10 +1,63 @@
+/* style.css */
+
+/* Definiis Variabel CSS untuk Warna dan Ukuran */
+:root {
+    /* ----- Warna Utama (sesuaikan agar kontras) ----- */
+    --primary-color: #007bff;
+    /* Biru untuk header, tombol utama, highlight. Disesuaikan dengan header awal. */
+    --primary-color-dark: #0056b3;
+    /* Biru lebih gelap untuk hover primary */
+    --secondary-color: #28a745;
+    /* Hijau untuk tombol sukses/utama lainnya (misal: tombol booking, btn-primary) */
+    --secondary-color-dark: #218838;
+    /* Hijau lebih gelap untuk hover secondary */
+    --accent-color: #FFC107;
+    /* Kuning cerah untuk penekanan (misal: harga) */
+
+    /* ----- Warna Background & Card (penting untuk kontras form) ----- */
+    --light-bg: #F4F7FC;
+    /* Warna background halaman keseluruhan yang sedikit kebiruan/dingin */
+    --card-bg: #FFFFFF;
+    /* Putih bersih untuk background card/konten utama */
+    --input-bg: #FFFFFF;
+    /* Putih bersih untuk background input fields */
+    --border-color: #E0E0E0;
+    /* Abu-abu terang untuk border elemen */
+    --hover-bg: #F0F0F0;
+    /* Background untuk hover pada elemen daftar */
+
+
+    /* ----- Warna Teks ----- */
+    --text-color: #333333;
+    /* Abu-abu gelap untuk teks utama */
+    --light-text-color: #666666;
+    /* Abu-abu lebih terang untuk teks sekunder */
+
+    /* ----- Shadow & Radius ----- */
+    --shadow-small: 0 2px 5px rgba(0, 0, 0, 0.1);
+    --shadow-medium: 0 4px 10px rgba(0, 0, 0, 0.08);
+    --shadow-large: 0 8px 20px rgba(0, 0, 0, 0.15);
+
+    --border-radius: 8px;
+    --border-radius-small: 5px;
+    --border-radius-large: 50px;
+    /* Untuk tombol pill/oval */
+
+    /* ----- Untuk efek rgba (jika digunakan, seperti shadow) ----- */
+    --primary-color-rgb: 0, 123, 255;
+    /* Nilai RGB dari --primary-color */
+}
+
+
 /* General Body Styles */
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f4f4f4;
-    color: #333;
+    background-color: var(--light-bg);
+    /* Menggunakan variabel */
+    color: var(--text-color);
+    /* Menggunakan variabel */
     line-height: 1.6;
 }
 
@@ -17,18 +70,16 @@ body {
 
 /* --- Header Section --- */
 .main-header {
-    background-color: #007bff;
-    /* Warna biru sesuai gambar */
+    background-color: var(--primary-color);
+    /* Menggunakan variabel */
     color: white;
     padding: 15px 0;
     position: fixed;
-    /* Header fixed di atas */
     width: 100%;
     top: 0;
     left: 0;
     z-index: 1000;
-    /* Pastikan di atas konten lain */
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    box-shadow: var(--shadow-small);
 }
 
 .header-content {
@@ -50,7 +101,6 @@ body {
     padding: 0;
     display: flex;
     gap: 25px;
-    /* Jarak antar menu */
     align-items: center;
 }
 
@@ -62,25 +112,27 @@ body {
     transition: color 0.3s ease;
 }
 
-.main-nav ul li a:hover {
-    color: #e0e0e0;
-    /* Warna sedikit lebih terang saat hover */
+.main-nav ul li a:hover,
+.main-nav ul li a.active {
+    /* Tambahan untuk active state */
+    color: var(--border-color);
+    /* Sedikit lebih terang saat hover/active */
 }
 
 .btn-login-admin {
-    background-color: #28a745;
-    /* Warna hijau */
+    background-color: var(--secondary-color);
+    /* Menggunakan variabel */
     color: white;
     padding: 8px 15px;
-    border-radius: 5px;
+    border-radius: var(--border-radius-small);
     text-decoration: none;
     font-weight: 600;
     transition: background-color 0.3s ease;
 }
 
 .btn-login-admin:hover {
-    background-color: #218838;
-    /* Hijau lebih gelap saat hover */
+    background-color: var(--secondary-color-dark);
+    /* Menggunakan variabel */
 }
 
 
@@ -89,17 +141,14 @@ body {
     position: relative;
     width: 100%;
     height: 600px;
-    /* Tinggi hero section */
     background: url('../images/hero-bg.jpg') no-repeat center center/cover;
-    /* Path gambar background */
     display: flex;
     justify-content: center;
     align-items: center;
     text-align: center;
     color: white;
     margin-top: 70px;
-    /* Sesuaikan dengan tinggi header fixed */
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    box-shadow: var(--shadow-large);
 }
 
 .hero-overlay {
@@ -109,7 +158,6 @@ body {
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.4);
-    /* Overlay gelap untuk teks lebih jelas */
     z-index: 1;
 }
 
@@ -136,8 +184,8 @@ body {
 .btn {
     display: inline-block;
     padding: 15px 30px;
-    border-radius: 50px;
-    /* Bentuk tombol pill/oval */
+    border-radius: var(--border-radius-large);
+    /* Menggunakan variabel */
     text-decoration: none;
     font-weight: bold;
     transition: background-color 0.3s ease, transform 0.2s ease;
@@ -146,19 +194,17 @@ body {
 }
 
 .btn-primary {
-    background-color: #28a745;
-    /* Warna hijau untuk tombol utama */
+    background-color: var(--secondary-color);
+    /* Menggunakan secondary_color untuk tombol hijau utama */
     color: white;
 }
 
 .btn-primary:hover {
-    background-color: #218838;
+    background-color: var(--secondary-color-dark);
     transform: translateY(-2px);
-    /* Efek hover sedikit naik */
 }
 
 .btn-secondary {
-    /* Untuk tombol Load More */
     background-color: #6c757d;
     color: white;
 }
@@ -176,7 +222,8 @@ body {
 
 .section-title {
     font-size: 2.5em;
-    color: #333;
+    color: var(--text-color);
+    /* Menggunakan variabel */
     margin-bottom: 10px;
     position: relative;
     display: inline-block;
@@ -187,46 +234,45 @@ body {
     display: block;
     width: 60px;
     height: 3px;
-    background-color: #007bff;
+    background-color: var(--primary-color);
+    /* Menggunakan variabel */
     margin: 10px auto 0;
     border-radius: 2px;
 }
 
 .section-subtitle {
     font-size: 1.1em;
-    color: #666;
+    color: var(--light-text-color);
+    /* Menggunakan variabel */
     margin-bottom: 40px;
 }
 
 .tour-cards-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    /* Responsif, min 300px per card */
     gap: 30px;
     margin-bottom: 40px;
 }
 
 .tour-card {
-    background-color: white;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    background-color: var(--card-bg);
+    /* Menggunakan variabel */
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-medium);
     overflow: hidden;
-    /* Penting agar gambar tidak keluar dari radius */
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     text-align: left;
 }
 
 .tour-card:hover {
     transform: translateY(-8px);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    box-shadow: var(--shadow-large);
 }
 
 .tour-card img {
     width: 100%;
     height: 220px;
-    /* Tinggi gambar card */
     object-fit: cover;
-    /* Penting untuk menjaga rasio dan mengisi area */
     display: block;
 }
 
@@ -236,53 +282,58 @@ body {
 
 .tour-card h3 {
     font-size: 1.5em;
-    color: #007bff;
+    color: var(--primary-color);
+    /* Menggunakan variabel */
     margin-top: 0;
     margin-bottom: 10px;
 }
 
 .tour-card .duration {
     font-size: 0.95em;
-    color: #666;
+    color: var(--light-text-color);
+    /* Menggunakan variabel */
     margin-bottom: 8px;
 }
 
 .tour-card .duration i {
     margin-right: 5px;
-    color: #007bff;
+    color: var(--primary-color);
+    /* Menggunakan variabel */
 }
 
 .tour-card .price {
     font-size: 1.2em;
     font-weight: bold;
-    color: #28a745;
-    /* Harga hijau */
+    color: var(--secondary-color);
+    /* Menggunakan variabel */
     margin-bottom: 15px;
 }
 
 .tour-card .description {
     font-size: 0.95em;
-    color: #777;
+    color: var(--light-text-color);
+    /* Menggunakan variabel */
     margin-bottom: 20px;
     min-height: 40px;
-    /* Pastikan deskripsi punya tinggi minimum */
 }
 
 .tour-card .btn-detail {
     display: block;
     width: 100%;
     padding: 10px;
-    background-color: #007bff;
+    background-color: var(--primary-color);
+    /* Menggunakan variabel */
     color: white;
     text-align: center;
-    border-radius: 5px;
+    border-radius: var(--border-radius-small);
     text-decoration: none;
     font-weight: bold;
     transition: background-color 0.3s ease;
 }
 
 .tour-card .btn-detail:hover {
-    background-color: #0056b3;
+    background-color: var(--primary-color-dark);
+    /* Menggunakan variabel */
 }
 
 .load-more-container {
@@ -295,15 +346,17 @@ body {
 .contact-section {
     padding: 60px 0;
     text-align: center;
-    background-color: #f9f9f9;
-    border-top: 1px solid #eee;
+    background-color: var(--hover-bg);
+    /* Menggunakan variabel */
+    border-top: 1px solid var(--border-color);
 }
 
 .about-section p,
 .contact-section p {
     max-width: 800px;
     margin: 15px auto;
-    color: #555;
+    color: var(--light-text-color);
+    /* Menggunakan variabel */
 }
 
 .contact-info {
@@ -317,17 +370,19 @@ body {
 }
 
 .contact-info i {
-    color: #007bff;
+    color: var(--primary-color);
+    /* Menggunakan variabel */
     margin-right: 10px;
 }
 
 .contact-form {
     max-width: 600px;
     margin: 0 auto;
-    background-color: #fff;
+    background-color: var(--card-bg);
+    /* Menggunakan variabel */
     padding: 30px;
-    border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-small);
     text-align: left;
 }
 
@@ -339,19 +394,22 @@ body {
     display: block;
     margin-bottom: 8px;
     font-weight: bold;
-    color: #444;
+    color: var(--text-color);
+    /* Menggunakan variabel */
 }
 
 .contact-form input[type="text"],
 .contact-form input[type="email"],
 .contact-form textarea {
     width: calc(100% - 22px);
-    /* Sesuaikan untuk padding/border */
     padding: 12px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
+    border: 1px solid var(--border-color);
+    /* Menggunakan variabel */
+    border-radius: var(--border-radius-small);
     font-size: 1em;
     box-sizing: border-box;
+    background-color: var(--input-bg);
+    /* Menggunakan variabel */
 }
 
 .contact-form textarea {
@@ -361,18 +419,20 @@ body {
 
 .contact-form button {
     display: inline-block;
-    background-color: #007bff;
+    background-color: var(--primary-color);
+    /* Menggunakan variabel */
     color: white;
     padding: 12px 25px;
     border: none;
-    border-radius: 5px;
+    border-radius: var(--border-radius-small);
     font-size: 1.1em;
     cursor: pointer;
     transition: background-color 0.3s ease;
 }
 
 .contact-form button:hover {
-    background-color: #0056b3;
+    background-color: var(--primary-color-dark);
+    /* Menggunakan variabel */
 }
 
 
@@ -392,7 +452,7 @@ footer {
     color: white;
     padding: 20px;
     text-align: center;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    box-shadow: var(--shadow-small);
     margin-bottom: 30px;
 }
 
@@ -427,14 +487,16 @@ footer {
     max-width: 1200px;
     margin: 20px auto;
     padding: 20px;
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    background-color: var(--card-bg);
+    /* Menggunakan variabel */
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-medium);
 }
 
 .admin-container h1 {
     text-align: center;
-    color: #333;
+    color: var(--text-color);
+    /* Menggunakan variabel */
     margin-bottom: 25px;
     font-size: 2em;
 }
@@ -442,13 +504,13 @@ footer {
 .admin-container h1 .subtitle {
     display: block;
     font-size: 0.6em;
-    color: #777;
+    color: var(--light-text-color);
+    /* Menggunakan variabel */
     margin-top: 5px;
 }
 
 .admin-table-wrapper {
     overflow-x: auto;
-    /* Untuk tabel responsif */
 }
 
 .admin-table {
@@ -460,22 +522,27 @@ footer {
 .admin-table th,
 .admin-table td {
     padding: 12px;
-    border: 1px solid #ddd;
+    border: 1px solid var(--border-color);
+    /* Menggunakan variabel */
     text-align: left;
 }
 
 .admin-table th {
-    background-color: #f2f2f2;
+    background-color: var(--hover-bg);
+    /* Menggunakan variabel */
     font-weight: bold;
-    color: #555;
+    color: var(--text-color);
+    /* Menggunakan variabel */
 }
 
 .admin-table tr:nth-child(even) {
-    background-color: #f9f9f9;
+    background-color: var(--light-bg);
+    /* Menggunakan variabel */
 }
 
 .admin-table tr:hover {
-    background-color: #f1f1f1;
+    background-color: var(--hover-bg);
+    /* Menggunakan variabel */
 }
 
 .admin-table .actions a {
@@ -486,7 +553,7 @@ footer {
 .btn-admin {
     display: inline-block;
     padding: 8px 15px;
-    border-radius: 5px;
+    border-radius: var(--border-radius-small);
     text-decoration: none;
     color: white;
     font-weight: bold;
@@ -497,20 +564,25 @@ footer {
 }
 
 .btn-admin.btn-primary {
-    background-color: #007bff;
+    background-color: var(--primary-color);
+    /* Menggunakan variabel */
 }
 
 .btn-admin.btn-primary:hover {
-    background-color: #0056b3;
+    background-color: var(--primary-color-dark);
+    /* Menggunakan variabel */
 }
 
 .btn-admin.btn-warning {
-    background-color: #ffc107;
-    color: #333;
+    background-color: var(--accent-color);
+    /* Menggunakan variabel */
+    color: var(--text-color);
+    /* Menggunakan variabel */
 }
 
 .btn-admin.btn-warning:hover {
     background-color: #e0a800;
+    /* Tetap pakai hardcode jika tidak ada dark version di variabel */
 }
 
 .btn-admin.btn-danger {
@@ -531,18 +603,15 @@ footer {
 
 .tour-image-thumb {
     width: 80px;
-    /* Atur lebar thumbnail */
     height: 60px;
-    /* Atur tinggi thumbnail */
     object-fit: cover;
-    /* Pastikan gambar tidak terdistorsi */
     border-radius: 4px;
 }
 
 .message-status {
     padding: 15px;
     margin-bottom: 20px;
-    border-radius: 5px;
+    border-radius: var(--border-radius-small);
     font-size: 1em;
     text-align: center;
 }
@@ -563,17 +632,20 @@ footer {
 .no-tour-message {
     text-align: center;
     padding: 30px;
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-    color: #555;
+    background-color: var(--card-bg);
+    /* Menggunakan variabel */
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-small);
+    color: var(--light-text-color);
+    /* Menggunakan variabel */
     font-size: 1.2em;
     margin-top: 40px;
 }
 
 .no-tours-message a,
 .no-tour-message a {
-    color: #007bff;
+    color: var(--primary-color);
+    /* Menggunakan variabel */
     text-decoration: none;
     font-weight: bold;
 }
@@ -585,17 +657,19 @@ footer {
 
 /* Form container specific styles (for add_tour.php, edit_tour.php, login.php) */
 .form-container {
-    background-color: #fff;
+    background-color: var(--card-bg);
+    /* Menggunakan variabel */
     padding: 30px;
-    border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-medium);
     max-width: 600px;
     margin: 30px auto;
 }
 
 .form-container h1 {
     text-align: center;
-    color: #333;
+    color: var(--text-color);
+    /* Menggunakan variabel */
     margin-bottom: 25px;
 }
 
@@ -607,7 +681,8 @@ footer {
     display: block;
     margin-bottom: 8px;
     font-weight: bold;
-    color: #555;
+    color: var(--text-color);
+    /* Menggunakan variabel */
 }
 
 .form-group input[type="text"],
@@ -618,13 +693,14 @@ footer {
 .form-group input[type="email"],
 .form-group input[type="date"] {
     width: calc(100% - 22px);
-    /* Sesuaikan padding/border */
     padding: 12px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
+    border: 1px solid var(--border-color);
+    /* Menggunakan variabel */
+    border-radius: var(--border-radius-small);
     font-size: 1em;
     box-sizing: border-box;
-    /* Penting agar padding tidak menambah lebar */
+    background-color: var(--input-bg);
+    /* Menggunakan variabel */
 }
 
 .form-group textarea {
@@ -640,11 +716,12 @@ footer {
 }
 
 .btn-submit {
-    background-color: #007bff;
+    background-color: var(--primary-color);
+    /* Menggunakan variabel */
     color: white;
     padding: 12px 25px;
     border: none;
-    border-radius: 5px;
+    border-radius: var(--border-radius-small);
     font-size: 1em;
     cursor: pointer;
     transition: background-color 0.3s ease;
@@ -653,7 +730,8 @@ footer {
 }
 
 .btn-submit:hover {
-    background-color: #0056b3;
+    background-color: var(--primary-color-dark);
+    /* Menggunakan variabel */
 }
 
 /* Responsive Adjustments */
@@ -672,7 +750,6 @@ footer {
     .hero-section {
         height: 450px;
         margin-top: 100px;
-        /* Sesuaikan untuk fixed header */
     }
 
     .hero-content h1 {
@@ -685,7 +762,6 @@ footer {
 
     .tour-cards-grid {
         grid-template-columns: 1fr;
-        /* Satu kolom di layar kecil */
     }
 
     .section-title {
@@ -704,7 +780,6 @@ footer {
 
     .admin-table thead {
         display: none;
-        /* Hide table headers on small screens */
     }
 
     .admin-table,
@@ -717,10 +792,11 @@ footer {
 
     .admin-table tr {
         margin-bottom: 15px;
-        border: 1px solid #ddd;
-        border-radius: 8px;
+        border: 1px solid var(--border-color);
+        /* Menggunakan variabel */
+        border-radius: var(--border-radius);
         overflow: hidden;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        box-shadow: var(--shadow-small);
     }
 
     .admin-table td {
@@ -738,7 +814,8 @@ footer {
         white-space: nowrap;
         text-align: left;
         font-weight: bold;
-        color: #555;
+        color: var(--text-color);
+        /* Menggunakan variabel */
     }
 
     .tour-image-thumb {
@@ -793,19 +870,21 @@ footer {
 .why-choose-us {
     padding: 60px 0;
     text-align: center;
-    background-color: #f8f8f8;
-    /* Warna latar belakang section */
+    background-color: var(--light-bg);
+    /* Menggunakan variabel */
 }
 
 .why-choose-us h2 {
     font-size: 3em;
     margin-bottom: 20px;
-    color: #333;
+    color: var(--text-color);
+    /* Menggunakan variabel */
 }
 
 .why-choose-us .section-description {
     font-size: 1.1em;
-    color: #666;
+    color: var(--light-text-color);
+    /* Menggunakan variabel */
     max-width: 800px;
     margin: 0 auto 50px auto;
     line-height: 1.6;
@@ -820,10 +899,11 @@ footer {
 }
 
 .benefit-card {
-    background-color: #fff;
+    background-color: var(--card-bg);
+    /* Menggunakan variabel */
     padding: 30px;
-    border-radius: 10px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-medium);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     display: flex;
     flex-direction: column;
@@ -833,7 +913,7 @@ footer {
 
 .benefit-card:hover {
     transform: translateY(-10px);
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+    box-shadow: var(--shadow-large);
 }
 
 .icon-circle {
@@ -849,29 +929,31 @@ footer {
 }
 
 .time-icon {
-    background-color: #007bff;
-    /* Biru */
+    background-color: var(--primary-color);
+    /* Menggunakan variabel */
 }
 
 .check-icon {
-    background-color: #28a745;
-    /* Hijau */
+    background-color: var(--secondary-color);
+    /* Menggunakan variabel */
 }
 
 .package-icon {
     background-color: #6f42c1;
-    /* Ungu */
+    /* Ungu (jika ini fixed color) */
 }
 
 .benefit-card h3 {
     font-size: 1.8em;
-    color: #333;
+    color: var(--text-color);
+    /* Menggunakan variabel */
     margin-bottom: 15px;
 }
 
 .benefit-card p {
     font-size: 1em;
-    color: #777;
+    color: var(--light-text-color);
+    /* Menggunakan variabel */
     line-height: 1.5;
 }
 
@@ -887,9 +969,7 @@ footer {
 
     .benefits-grid {
         grid-template-columns: 1fr;
-        /* Stack cards on small screens */
         padding: 0 20px;
-        /* Add some padding to the sides */
     }
 }
 
@@ -897,33 +977,31 @@ footer {
 .map-container {
     margin-top: 40px;
     margin-bottom: 40px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    /* Menggunakan variabel */
+    border-radius: var(--border-radius);
     overflow: hidden;
-    /* Penting untuk border-radius pada iframe */
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    box-shadow: var(--shadow-medium);
 }
 
 .map-container .map-title {
     text-align: center;
     margin-bottom: 20px;
-    color: #333;
+    color: var(--text-color);
+    /* Menggunakan variabel */
     font-size: 1.8em;
     font-weight: 600;
 }
 
 .map-container iframe {
     display: block;
-    /* Menghilangkan spasi ekstra di bawah iframe */
     width: 100%;
     height: 450px;
-    /* Atur tinggi sesuai kebutuhan */
 }
 
 /* Responsif untuk layar kecil */
 @media (max-width: 768px) {
     .map-container iframe {
         height: 300px;
-        /* Tinggi lebih kecil di perangkat mobile */
     }
 }
