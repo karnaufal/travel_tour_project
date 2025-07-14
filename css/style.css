@@ -255,13 +255,16 @@ body {
 }
 
 .tour-card {
+    display: flex;
+    flex-direction: column;
+    /* Susun elemen di dalam kartu secara vertikal */
+    /* ... jaga properti .tour-card lainnya yang sudah ada seperti background, border-radius, box-shadow, dll. ... */
     background-color: var(--card-bg);
-    /* Menggunakan variabel */
-    border-radius: var(--border-radius);
-    box-shadow: var(--shadow-medium);
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     overflow: hidden;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    text-align: left;
+    /* Penting agar border-radius berlaku pada gambar juga */
+    transition: transform 0.3s ease;
 }
 
 .tour-card:hover {
@@ -271,13 +274,25 @@ body {
 
 .tour-card img {
     width: 100%;
-    height: 220px;
+    height: 200px;
+    /* Atur tinggi gambar yang konsisten. Sesuaikan jika 200px terlalu tinggi/rendah */
     object-fit: cover;
-    display: block;
+    /* Pastikan gambar mengisi area tanpa terdistorsi */
+    border-radius: 8px 8px 0 0;
+    /* Jaga sudut atas tetap bulat */
 }
 
 .tour-card .card-content {
-    padding: 20px;
+    display: flex;
+    /* Jadikan card-content juga flex container */
+    flex-direction: column;
+    /* Susun elemen di dalamnya secara vertikal */
+    flex-grow: 1;
+    /* IZINKAN card-content untuk memenuhi sisa ruang vertikal yang tersedia */
+    padding: 15px;
+    /* Sesuaikan padding sesuai desain lo */
+    /* ... jaga properti card-content lainnya yang sudah ada seperti text-align, dll. ... */
+    text-align: center;
 }
 
 .tour-card h3 {
@@ -312,28 +327,31 @@ body {
 .tour-card .description {
     font-size: 0.95em;
     color: var(--light-text-color);
-    /* Menggunakan variabel */
     margin-bottom: 20px;
-    min-height: 40px;
+    min-height: 70px;
+    /* Ini penting agar 3 baris teks punya tempat yang sama. Sesuaikan jika perlu */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
 }
 
 .tour-card .btn-detail {
-    display: block;
-    width: 100%;
-    padding: 10px;
+    margin-top: auto;
+    /* Ini akan mendorong tombol ke dasar flex container */
+    /* ... jaga properti btn-detail lainnya yang sudah ada ... */
+    display: inline-block;
+    padding: 10px 20px;
     background-color: var(--primary-color);
-    /* Menggunakan variabel */
     color: white;
-    text-align: center;
-    border-radius: var(--border-radius-small);
     text-decoration: none;
-    font-weight: bold;
+    border-radius: 5px;
     transition: background-color 0.3s ease;
 }
 
 .tour-card .btn-detail:hover {
     background-color: var(--primary-color-dark);
-    /* Menggunakan variabel */
 }
 
 .load-more-container {
