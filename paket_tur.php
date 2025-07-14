@@ -28,7 +28,7 @@ try {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Paket Tur - JalanJalan Kuy!</title>
+    <title>Paket Tour - JalanJalan Kuy!</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 </head>
@@ -42,7 +42,7 @@ try {
             <nav class="main-nav">
                 <ul>
                     <li><a href="index.php">Home</a></li>
-                    <li><a href="paket_tur.php" class="active">Paket Tur</a></li>
+                    <li><a href="paket_tur.php" class="active">Paket Tour</a></li>
                     <li><a href="tentang_kami.php">Tentang Kami</a></li>
                     <li><a href="kontak.php">Kontak</a></li>
                     <li><a href="admin/login.php" class="btn-login-admin">Login Admin</a></li>
@@ -53,7 +53,7 @@ try {
 
     <main class="container">
         <section id="paket-tur" class="tour-listing-section" style="padding-top: 120px;">
-            <h2 class="section-title">Daftar Paket Tur Kami</h2>
+            <h2 class="section-title">Daftar Paket Tour Kami</h2>
             <p class="section-subtitle">Temukan destinasi favoritmu, mulai petualangan tak terlupakan!</p>
 
             <div class="tour-cards-grid" id="tour-grid">
@@ -77,18 +77,18 @@ try {
                                     echo htmlspecialchars(strlen($description) > 80 ? substr($description, 0, 80) . '...' : $description);
                                     ?>
                                 </p>
-                                <a href="detail_tour.php?id=<?php echo htmlspecialchars($tour['id'] ?? ''); ?>" class="btn btn-detail">Lihat Detail & Pesan</a>
+                                <a href="detail_tour.php?id=<?php echo htmlspecialchars($tour['id'] ?? ''); ?>" class="btn btn-detail">Lihat Details</a>
                             </div>
                         </div>
                     <?php endforeach; ?>
                 <?php else: ?>
-                    <p class="no-tour-message">Belum ada paket tur tersedia saat ini. Silakan tambahkan tur melalui halaman admin atau periksa koneksi database Anda.</p>
+                    <p class="no-tour-message">Belum ada paket tour tersedia saat ini. Silakan tambahkan tour melalui halaman admin atau periksa koneksi database Anda.</p>
                 <?php endif; ?>
             </div>
 
             <?php if (count($tours) < $total_tours): ?>
                 <div class="load-more-container">
-                    <button id="loadMoreBtn" class="btn btn-secondary">Muat Lebih Banyak Tur</button>
+                    <button id="loadMoreBtn" class="btn btn-secondary">Muat Lebih Banyak Tour</button>
                 </div>
             <?php endif; ?>
 
