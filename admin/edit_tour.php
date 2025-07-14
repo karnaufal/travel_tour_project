@@ -165,7 +165,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && $tour) {
                 <ul>
                     <li><a href="dashboard.php">Dashboard</a></li>
                     <li><a href="index.php" class="active">Kelola Tur</a></li> <li><a href="bookings.php">Kelola Pemesanan</a></li>
-                    <li><a href="reviews.php">Kelola Ulasan</a></li> <li><a href="logout.php" class="btn-login-admin">Logout</a></li>
                     <li><a href="logout.php" class="btn-login-admin">Logout</a></li>
                 </ul>
             </nav>
