@@ -9,7 +9,8 @@ include_once '../config.php';
 
 // Logic untuk mengambil dan menampilkan daftar pemesanan
 try {
-    $stmt = $pdo->query("SELECT b.*, t.tour_name FROM bookings b JOIN tours t ON b.tour_id = t.id ORDER BY b.id DESC");
+    // MENGAMBIL tour_price DARI TABEL tours DAN MEMBERIKAN ALIAS tour_price_from_tour
+    $stmt = $pdo->query("SELECT b.*, t.tour_name, t.price AS tour_price_from_tour FROM bookings b JOIN tours t ON b.tour_id = t.id ORDER BY b.id DESC");
     $bookings = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
     echo "Error: " . $e->getMessage();
@@ -142,7 +143,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'delete' && isset($_GET['id']))
         <h1>Kelola Pemesanan</h1>
         <?php if (isset($_SESSION['status_message'])): ?>
             <div class="status-message <?php echo $_SESSION['status_type']; ?>">
-                <?php echo $_SESSION['status_message']; ?>
+                <?php echo htmlspecialchars($_SESSION['status_message']); ?>
             </div>
             <?php
             unset($_SESSION['status_message']);
@@ -169,16 +170,16 @@ if (isset($_GET['action']) && $_GET['action'] == 'delete' && isset($_GET['id']))
                 <tbody>
                     <?php foreach ($bookings as $booking): ?>
                     <tr>
-                        <td><?php echo htmlspecialchars($booking['id']); ?></td>
-                        <td><?php echo htmlspecialchars($booking['customer_name']); ?></td>
-                        <td><?php echo htmlspecialchars($booking['customer_email']); ?></td>
-                        <td><?php echo htmlspecialchars($booking['tour_name']); ?></td>
-                        <td>Rp <?php echo number_format($booking['tour_price'], 0, ',', '.'); ?></td>
-                        <td><?php echo htmlspecialchars($booking['num_participants']); ?></td>
-                        <td><?php echo htmlspecialchars($booking['departure_date']); ?></td>
-                        <td><?php echo htmlspecialchars($booking['booking_time']); ?></td>
+                        <td><?php echo htmlspecialchars($booking['id'] ?? ''); ?></td>
+                        <td><?php echo htmlspecialchars($booking['customer_name'] ?? ''); ?></td>
+                        <td><?php echo htmlspecialchars($booking['customer_email'] ?? ''); ?></td>
+                        <td><?php echo htmlspecialchars($booking['tour_name'] ?? ''); ?></td>
+                        <td>Rp <?php echo number_format($booking['tour_price_from_tour'] ?? 0, 0, ',', '.'); ?></td>
+                        <td><?php echo htmlspecialchars($booking['num_participants'] ?? 0); ?></td>
+                        <td><?php echo htmlspecialchars($booking['departure_date'] ?? ''); ?></td>
+                        <td><?php echo htmlspecialchars($booking['booking_time'] ?? ''); ?></td>
                         <td class="action-buttons">
-                            <a href="bookings.php?action=delete&id=<?php echo htmlspecialchars($booking['id']); ?>" class="btn-delete" onclick="return confirm('Apakah Anda yakin ingin menghapus pemesanan ini?');">Hapus</a>
+                            <a href="bookings.php?action=delete&id=<?php echo htmlspecialchars($booking['id'] ?? ''); ?>" class="btn-delete" onclick="return confirm('Apakah Anda yakin ingin menghapus pemesanan ini?');">Hapus</a>
                         </td>
                     </tr>
                     <?php endforeach; ?>
