@@ -14,8 +14,9 @@ $options = [
 try {
     $pdo = new PDO($dsn, $user, $pass, $options);
 } catch (\PDOException $e) {
-    // Di lingkungan produksi, log error ini dan berikan pesan user-friendly
-    throw new \PDOException($e->getMessage(), (int)$e->getCode());
+    // Ini akan menampilkan pesan error koneksi database di browser
+    // Jika display_errors aktif di php.ini atau di index.php
+    die("Koneksi database gagal: " . $e->getMessage() . " (Kode: " . $e->getCode() . ")");
 }
 
 // Tidak lagi menggunakan ITEMS_PER_PAGE karena kita beralih ke "Load More"
