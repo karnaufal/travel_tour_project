@@ -64,7 +64,7 @@ try {
                                 <h1><?php echo htmlspecialchars($tour['tour_name']); ?></h1>
                                 <p><?php echo htmlspecialchars($tour['description']); ?></p>
                                 <div class="tour-meta">
-                                    <span class="price">Rp <?php echo number_format($tour['price'], 0, ',', '.'); ?></span>
+                                    <span class="price">Mulai dari IDR <?php echo number_format($tour['price'], 0, ',', '.'); ?></span>
                                     <span class="duration"><i class="fas fa-clock"></i> <?php echo htmlspecialchars($tour['duration']); ?></span>
                                 </div>
                             </div>

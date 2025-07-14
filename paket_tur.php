@@ -70,7 +70,7 @@ try {
                             <div class="card-content">
                                 <h3><?php echo htmlspecialchars($tour['tour_name'] ?? 'Nama Tur Tidak Tersedia'); ?></h3>
                                 <p class="duration"><i class="far fa-clock"></i> <?php echo htmlspecialchars($tour['duration'] ?? 'Durasi Tidak Tersedia'); ?></p>
-                                <p class="price">Harga: Rp <?php echo number_format($tour['price'] ?? 0, 0, ',', '.'); ?></p>
+                                <p class="price">Mulai dari IDR <?php echo number_format($tour['price'] ?? 0, 0, ',', '.'); ?></p>
                                 <p class="description">
                                     <?php
                                     $description = $tour['description'] ?? '';
