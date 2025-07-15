@@ -15,12 +15,14 @@ if ($tour_id > 0) {
         $tour = $stmt->fetch(PDO::FETCH_ASSOC);
     } catch (PDOException $e) {
         error_log("Database error fetching tour in booking_form.php: " . $e->getMessage());
+        // Jika ada error, set $tour menjadi null agar direfresh atau redirect
+        $tour = null;
     }
 }
 
 // Jika tur tidak ditemukan atau tour_id tidak valid, redirect ke daftar tur
 if (!$tour) {
-    header('Location: paket_tur.php');
+    header('Location: paket_tur.php'); // Atau ke halaman error/not found
     exit();
 }
 
@@ -29,35 +31,75 @@ $message_type = ''; // 'success' or 'error'
 
 // Logika pemrosesan form
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $customer_name = htmlspecialchars(trim($_POST['customer_name']));
-    $customer_email = htmlspecialchars(trim($_POST['customer_email']));
-    $num_participants = intval($_POST['num_participants']);
-    $booking_date = htmlspecialchars(trim($_POST['booking_date']));
-
-    // Validasi input
-    if (empty($customer_name) || empty($customer_email) || $num_participants <= 0 || empty($booking_date)) {
-        $message = 'Harap lengkapi semua bidang form dengan benar!';
-        $message_type = 'error';
-    } elseif (!filter_var($customer_email, FILTER_VALIDATE_EMAIL)) {
-        $message = 'Format email tidak valid.';
+    // Pastikan tour_id dari POST juga valid, atau ambil dari yang sudah di GET
+    $posted_tour_id = filter_var($_POST['tour_id'] ?? null, FILTER_VALIDATE_INT);
+    if ($posted_tour_id !== $tour_id) {
+        // Jika tour_id di POST tidak cocok dengan yang di GET/ditemukan, ada masalah
+        $message = 'Tour ID tidak valid untuk pemrosesan. Silakan coba lagi.';
         $message_type = 'error';
     } else {
-        try {
-            // Hitung total harga
-            $total_price = $tour['price'] * $num_participants;
+        $customer_name = htmlspecialchars(trim($_POST['customer_name']));
+        $customer_email = htmlspecialchars(trim($_POST['customer_email']));
+        $customer_phone = htmlspecialchars(trim($_POST['customer_phone'] ?? '')); // Ambil dari input baru
+        $num_participants = intval($_POST['num_participants']);
+        $preferred_date = htmlspecialchars(trim($_POST['preferred_date'] ?? '')); // Nama kolom disesuaikan
+        $customer_message = htmlspecialchars(trim($_POST['customer_message'] ?? '')); // Ambil dari input baru
 
-            $stmt = $pdo->prepare("INSERT INTO bookings (tour_id, customer_name, customer_email, num_participants, booking_date, total_price) VALUES (?, ?, ?, ?, ?, ?)");
-            $stmt->execute([$tour['id'], $customer_name, $customer_email, $num_participants, $booking_date, $total_price]);
-
-            $message = 'Pemesanan Anda berhasil! Total harga: Rp ' . number_format($total_price, 0, ',', '.');
-            $message_type = 'success';
-            
-            $_POST = array(); // Mengosongkan data POST untuk form
-
-        } catch (PDOException $e) {
-            error_log("Database error inserting booking in booking_form.php: " . $e->getMessage());
-            $message = 'Terjadi kesalahan saat memproses pemesanan Anda. Mohon coba lagi. Detail: ' . htmlspecialchars($e->getMessage());
+        // Validasi input
+        if (empty($customer_name) || empty($customer_email) || $num_participants <= 0 || empty($preferred_date)) {
+            $message = 'Harap lengkapi semua bidang form yang wajib (Nama, Email, Jumlah Peserta, Tanggal).';
             $message_type = 'error';
+        } elseif (!filter_var($customer_email, FILTER_VALIDATE_EMAIL)) {
+            $message = 'Format email tidak valid.';
+            $message_type = 'error';
+        } else {
+            try {
+                // Hitung total harga
+                $total_price = $tour['price'] * $num_participants;
+                
+                // Ambil tour_name dari $tour object yang sudah di-fetch
+                $fetched_tour_name = $tour['tour_name'];
+
+                // --- PENTING: Kueri INSERT ke tabel 'bookings' ---
+                // Sesuaikan nama kolom `preferred_date` dan `booking_date` (waktu saat ini)
+                // dan juga `customer_phone` dan `message` (pesan pelanggan)
+                $stmt = $pdo->prepare("INSERT INTO bookings (
+                                            tour_id, 
+                                            tour_name, 
+                                            customer_name, 
+                                            customer_email, 
+                                            customer_phone, 
+                                            num_participants, 
+                                            preferred_date, 
+                                            message, 
+                                            total_price, 
+                                            booking_date -- Ini akan menjadi waktu pemesanan sebenarnya
+                                        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())");
+                
+                $stmt->execute([
+                    $tour['id'],
+                    $fetched_tour_name, // Menggunakan tour_name yang sudah di-fetch
+                    $customer_name,
+                    $customer_email,
+                    $customer_phone,
+                    $num_participants,
+                    ($preferred_date === '' ? null : $preferred_date), // Simpan null jika kosong
+                    $customer_message,
+                    $total_price
+                ]);
+
+                $message = 'Pemesanan Anda berhasil! Total harga: Rp ' . number_format($total_price, 0, ',', '.');
+                $message_type = 'success';
+                
+                // Mengosongkan data POST agar form bersih setelah submit sukses
+                // Ini penting jika form tidak melakukan redirect penuh
+                $_POST = array(); 
+
+            } catch (PDOException $e) {
+                error_log("Database error inserting booking in booking_form.php: " . $e->getMessage());
+                $message = 'Terjadi kesalahan saat memproses pemesanan Anda. Mohon coba lagi. Detail: ' . htmlspecialchars($e->getMessage());
+                $message_type = 'error';
+            }
         }
     }
 }
@@ -72,7 +114,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
-        /* General form container and card styling */
+        /* General form container and card styling (keep as is, atau sesuaikan jika ada perubahan) */
         .booking-page-container {
             padding: 120px 0 60px 0;
             background-color: var(--light-bg);
@@ -84,20 +126,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         .booking-card-wrapper {
             display: flex;
-            flex-wrap: wrap; /* Allows wrapping on smaller screens */
+            flex-wrap: wrap;
             background-color: var(--card-bg);
             border-radius: var(--border-radius);
             box-shadow: var(--shadow-medium);
-            max-width: 900px; /* Adjust max width as needed */
+            max-width: 900px;
             width: 100%;
-            overflow: hidden; /* Ensures rounded corners */
+            overflow: hidden;
         }
 
         .booking-tour-summary {
             flex: 1;
-            min-width: 300px; /* Minimum width for the summary part */
+            min-width: 300px;
             padding: 30px;
-            background-color: var(--primary-color); /* Darker background for contrast */
+            background-color: var(--primary-color);
             color: white;
             display: flex;
             flex-direction: column;
@@ -115,7 +157,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.6)); /* Overlay for image */
+            background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.6));
             z-index: 1;
         }
 
@@ -131,7 +173,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         .booking-summary-content {
             position: relative;
-            z-index: 2; /* Ensure content is above overlay */
+            z-index: 2;
             width: 100%;
         }
 
@@ -150,7 +192,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             font-size: 1.8em;
             font-weight: 700;
             margin-top: 20px;
-            color: var(--accent-color); /* Use accent color for price */
+            color: var(--accent-color);
         }
         .booking-summary-content .info-item {
             display: flex;
@@ -165,8 +207,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         .booking-form-content {
-            flex: 1.5; /* Form takes more space */
-            min-width: 400px; /* Minimum width for the form part */
+            flex: 1.5;
+            min-width: 400px;
             padding: 40px;
         }
 
@@ -179,7 +221,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         .form-group {
             margin-bottom: 20px;
-            position: relative; /* For icon positioning */
+            position: relative;
         }
 
         .form-group label {
@@ -191,10 +233,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         .form-group input[type="text"],
         .form-group input[type="email"],
+        .form-group input[type="tel"], /* Added for phone number */
         .form-group input[type="number"],
-        .form-group input[type="date"] {
-            width: calc(100% - 40px); /* Adjust for padding and icon */
-            padding: 12px 12px 12px 40px; /* Left padding for icon */
+        .form-group input[type="date"],
+        .form-group textarea { /* Added for message */
+            width: calc(100% - 40px);
+            padding: 12px 12px 12px 40px;
             border: 1px solid var(--border-color);
             border-radius: var(--border-radius-small);
             font-size: 1em;
@@ -202,11 +246,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             background-color: var(--input-bg);
             transition: border-color 0.3s ease, box-shadow 0.3s ease;
         }
+        .form-group textarea {
+            padding-left: 12px; /* No icon for textarea */
+            width: calc(100% - 24px); /* Full width minus padding */
+            min-height: 80px;
+            resize: vertical;
+        }
+
 
         .form-group input[type="text"]:focus,
         .form-group input[type="email"]:focus,
+        .form-group input[type="tel"]:focus,
         .form-group input[type="number"]:focus,
-        .form-group input[type="date"]:focus {
+        .form-group input[type="date"]:focus,
+        .form-group textarea:focus {
             border-color: var(--primary-color);
             box-shadow: 0 0 0 3px rgba(var(--primary-color-rgb), 0.2);
             outline: none;
@@ -215,13 +268,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         .form-group .input-icon {
             position: absolute;
             left: 12px;
-            top: 42px; /* Adjust based on label height */
+            top: 42px;
             color: var(--secondary-color);
             font-size: 1.1em;
         }
-        /* Adjust for date input icon */
         .form-group input[type="date"] + .input-icon {
-            top: 42px; /* Consistent top position */
+            top: 42px;
         }
 
 
@@ -295,8 +347,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <li><a href="paket_tur.php" class="active">Paket Tour</a></li>
                     <li><a href="tentang_kami.php">Tentang Kami</a></li>
                     <li><a href="kontak.php">Kontak</a></li>
-                    <!-- <li><a href="admin/login.php" class="btn-login-admin">Login Admin</a></li> -->
-                </ul>
+                    </ul>
             </nav>
         </div>
     </header>
@@ -341,15 +392,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </div>
 
                     <div class="form-group">
+                        <label for="customer_phone">Nomor Telepon:</label>
+                        <i class="fas fa-phone input-icon"></i>
+                        <input type="tel" id="customer_phone" name="customer_phone" value="<?php echo htmlspecialchars($_POST['customer_phone'] ?? ''); ?>" required>
+                    </div>
+
+                    <div class="form-group">
                         <label for="num_participants">Jumlah Peserta:</label>
                         <i class="fas fa-users input-icon"></i>
                         <input type="number" id="num_participants" name="num_participants" min="1" value="<?php echo htmlspecialchars($_POST['num_participants'] ?? 1); ?>" required>
                     </div>
 
                     <div class="form-group">
-                        <label for="booking_date">Tanggal Keberangkatan:</label>
+                        <label for="preferred_date">Tanggal Keberangkatan:</label>
                         <i class="fas fa-calendar-alt input-icon"></i>
-                        <input type="date" id="booking_date" name="booking_date" value="<?php echo htmlspecialchars($_POST['booking_date'] ?? ''); ?>" required>
+                        <input type="date" id="preferred_date" name="preferred_date" value="<?php echo htmlspecialchars($_POST['preferred_date'] ?? ''); ?>" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="customer_message">Pesan Tambahan (Opsional):</label>
+                        <textarea id="customer_message" name="customer_message" rows="5"><?php echo htmlspecialchars($_POST['customer_message'] ?? ''); ?></textarea>
                     </div>
 
                     <input type="submit" value="Kirim Pemesanan">
@@ -366,7 +428,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script>
         $(document).ready(function() {
-            // Highlight navigasi aktif
             const currentPath = window.location.pathname.split('/').pop();
             $('nav.main-nav ul li a').removeClass('active');
             if (currentPath === '' || currentPath === 'index.php') {
