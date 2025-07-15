@@ -357,7 +357,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div class="booking-tour-summary">
                 <?php
                     $image_name_booking = $tour['image'] ?? '';
-                    $image_path_booking = 'uploads/' . $image_name_booking;
+                    $image_path_booking = 'images/' . $image_name_booking;
                     $actual_image_src_booking = (file_exists($image_path_booking) && !empty($image_name_booking)) ? htmlspecialchars($image_path_booking) : 'images/placeholder.jpg';
                 ?>
                 <img src="<?php echo $actual_image_src_booking; ?>" alt="<?php echo htmlspecialchars($tour['tour_name'] ?? 'Gambar Tur'); ?>">
