@@ -23,7 +23,7 @@ include_once 'config.php'; // Pastikan path ini benar untuk koneksi DB
                     <li><a href="paket_tur.php">Paket Tour</a></li>
                     <li><a href="tentang_kami.php">Tentang Kami</a></li>
                     <li><a href="kontak.php" class="active">Kontak</a></li>
-                    <li><a href="admin/login.php" class="btn-login-admin">Login Admin</a></li>
+                    <!-- <li><a href="admin/login.php" class="btn-login-admin">Login Admin</a></li> -->
                 </ul>
             </nav>
         </div>
