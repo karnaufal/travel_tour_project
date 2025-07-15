@@ -112,11 +112,25 @@ body {
     transition: color 0.3s ease;
 }
 
-.main-nav ul li a:hover,
-.main-nav ul li a.active {
-    /* Tambahan untuk active state */
+
+.main-nav ul li a:hover {
     color: var(--border-color);
-    /* Sedikit lebih terang saat hover/active */
+    /* Warna abu-abu terang saat di-hover */
+    background-color: transparent;
+    /* Pastikan tidak ada background di hover jika tidak diinginkan */
+    border-radius: 0;
+    /* Pastikan tidak ada border-radius di hover jika tidak diinginkan */
+}
+
+/* Active state (untuk link yang sedang aktif) */
+.main-nav ul li a.active {
+    background-color: var(--primary-color);
+    /* Warna biru dari variabel primary-color lo */
+    color: white;
+    /* Pastikan warna teks tetap putih di atas background biru */
+    border-radius: var(--border-radius-small);
+    /* Memberi sedikit lengkungan seperti tombol */
+    /* Hapus 'text-decoration: underline;' jika ada di sini */
 }
 
 .btn-login-admin {
@@ -853,7 +867,13 @@ footer {
     }
 
     .main-nav ul li a {
-        padding: 5px 10px;
+        color: white;
+        text-decoration: none;
+        font-weight: 600;
+        padding: 5px 12px;
+        /* Tambahkan padding horizontal agar ada ruang untuk background */
+        transition: color 0.3s ease, background-color 0.3s ease, border-radius 0.3s ease;
+        /* Tambah transisi untuk background */
     }
 
     .hero-section {
