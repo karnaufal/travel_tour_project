@@ -9,8 +9,13 @@ include_once '../config.php';
 
 // Logic untuk mengambil dan menampilkan daftar pemesanan
 try {
-    // MENGAMBIL tour_price DARI TABEL tours DAN MEMBERIKAN ALIAS tour_price_from_tour
-    $stmt = $pdo->query("SELECT b.*, t.tour_name, t.price AS tour_price_from_tour FROM bookings b JOIN tours t ON b.tour_id = t.id ORDER BY b.id DESC");
+    // Ambil SEMUA kolom dari tabel bookings (b.*)
+    // Sekarang tour_name, customer_phone, preferred_date, message, dan total_price
+    // sudah ada di tabel bookings.
+    // Kita TIDAK PERLU lagi JOIN ke tabel 'tours' hanya untuk tour_name dan price,
+    // karena semua data penting pemesanan (termasuk nama tour dan total harga)
+    // sudah tersimpan di tabel 'bookings'.
+    $stmt = $pdo->query("SELECT * FROM bookings ORDER BY booking_date DESC"); // Urutkan berdasarkan waktu pemesanan terbaru
     $bookings = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
     echo "Error: " . $e->getMessage();
@@ -45,7 +50,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'delete' && isset($_GET['id']))
     <link rel="stylesheet" href="../css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
-        /* Gaya khusus untuk tabel admin */
+        /* Gaya khusus untuk tabel admin (JANGAN DIHAPUS, ini penting) */
         .admin-table-container {
             max-width: 1200px;
             margin: 80px auto 40px auto; /* Margin atas disesuaikan untuk header */
@@ -73,6 +78,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'delete' && isset($_GET['id']))
             text-align: left;
             border-bottom: 1px solid #ddd;
             vertical-align: middle;
+            white-space: nowrap; /* Mencegah teks wrapping di kolom tertentu, sesuaikan jika perlu */
         }
         th {
             background-color: #f2f2f2;
@@ -101,7 +107,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'delete' && isset($_GET['id']))
             color: #666;
             font-style: italic;
         }
-         /* Status Message */
+        /* Status Message */
         .status-message {
             padding: 15px;
             margin-bottom: 20px;
@@ -132,8 +138,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'delete' && isset($_GET['id']))
                 <ul>
                     <li><a href="dashboard.php">Dashboard</a></li>
                     <li><a href="index.php">Kelola Tour</a></li>
-                    <li><a href="bookings.php" class="active">Kelola Pemesanan</a></li>        
-                    <li><a href="reviews.php">Kelola Ulasan</a></li> <li><a href="logout.php" class="btn-login-admin">Logout</a></li>
+                    <li><a href="bookings.php" class="active">Kelola Pemesanan</a></li> 
                     <li><a href="logout.php" class="btn-login-admin">Logout</a></li>
                 </ul>
             </nav>
@@ -160,11 +165,10 @@ if (isset($_GET['action']) && $_GET['action'] == 'delete' && isset($_GET['id']))
                         <th>ID Pemesanan</th>
                         <th>Nama Pelanggan</th>
                         <th>Email</th>
-                        <th>Nama Tour</th>
-                        <th>Harga Tour</th>
+                        <th>Telepon</th> <th>Nama Tour</th>
                         <th>Jumlah Peserta</th>
-                        <th>Tanggal Keberangkatan</th>
-                        <th>Waktu Pemesanan</th>
+                        <th>Total Harga</th> <th>Tanggal Keberangkatan</th>
+                        <th>Pesan Tambahan</th> <th>Waktu Pemesanan</th>
                         <th>Aksi</th>
                     </tr>
                 </thead>
@@ -174,12 +178,8 @@ if (isset($_GET['action']) && $_GET['action'] == 'delete' && isset($_GET['id']))
                         <td><?php echo htmlspecialchars($booking['id'] ?? ''); ?></td>
                         <td><?php echo htmlspecialchars($booking['customer_name'] ?? ''); ?></td>
                         <td><?php echo htmlspecialchars($booking['customer_email'] ?? ''); ?></td>
-                        <td><?php echo htmlspecialchars($booking['tour_name'] ?? ''); ?></td>
-                        <td>Rp <?php echo number_format($booking['tour_price_from_tour'] ?? 0, 0, ',', '.'); ?></td>
-                        <td><?php echo htmlspecialchars($booking['num_participants'] ?? 0); ?></td>
-                        <td><?php echo htmlspecialchars($booking['departure_date'] ?? ''); ?></td>
-                        <td><?php echo htmlspecialchars($booking['booking_time'] ?? ''); ?></td>
-                        <td class="action-buttons">
+                        <td><?php echo htmlspecialchars($booking['customer_phone'] ?? ''); ?></td> <td><?php echo htmlspecialchars($booking['tour_name'] ?? ''); ?></td> <td><?php echo htmlspecialchars($booking['num_participants'] ?? 0); ?></td>
+                        <td>Rp <?php echo number_format($booking['total_price'] ?? 0, 0, ',', '.'); ?></td> <td><?php echo htmlspecialchars($booking['preferred_date'] ?? ''); ?></td> <td><?php echo htmlspecialchars($booking['message'] ?? ''); ?></td> <td><?php echo htmlspecialchars($booking['booking_date'] ?? ''); ?></td> <td class="action-buttons">
                             <a href="bookings.php?action=delete&id=<?php echo htmlspecialchars($booking['id'] ?? ''); ?>" class="btn-delete" onclick="return confirm('Apakah Anda yakin ingin menghapus pemesanan ini?');">Hapus</a>
                         </td>
                     </tr>
