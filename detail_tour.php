@@ -92,18 +92,45 @@ if (!$tour) {
         }
         .tour-detail-info p {
             margin-top: 25px;
-            margin-bottom: 25px;
+            margin-bottom: 25px; /* Sesuaikan margin bawah agar ada jarak ke tombol */
             line-height: 1.7;
             font-size: 1.05em;
             color: var(--light-text);
         }
-        .tour-detail-info .btn-primary {
+        .tour-detail-info .btn-primary { /* Tambahkan style ini jika belum ada */
             display: inline-block;
             padding: 15px 30px;
             border-radius: 50px;
             font-size: 1.1em;
             font-weight: 600;
-            margin-top: 20px;
+            margin-top: 20px; /* Jarak dari deskripsi */
+            text-decoration: none; /* Pastikan tidak ada underline */
+            background-color: var(--primary-color); /* Warna tombol */
+            color: white; /* Warna teks tombol */
+            transition: background-color 0.3s ease;
+        }
+        .tour-detail-info .btn-primary:hover {
+            background-color: var(--secondary-color); /* Warna hover tombol */
+        }
+        /* Style untuk pesan status, pastikan ini ada di style.css juga */
+        .message-container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: bold;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .success-message {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .error-message {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
         }
     </style>
 </head>
@@ -119,7 +146,7 @@ if (!$tour) {
                     <li><a href="paket_tur.php" class="active">Paket Tour</a></li>
                     <li><a href="tentang_kami.php">Tentang Kami</a></li>
                     <li><a href="kontak.php">Kontak</a></li>
-                    </ul>
+                </ul>
             </nav>
         </div>
     </header>
@@ -127,6 +154,7 @@ if (!$tour) {
     <section class="tour-detail-section">
         <div class="container">
             <?php
+            // Menampilkan pesan status dari redirect (misalnya setelah booking berhasil)
             if (isset($_GET['status']) && isset($_GET['msg'])) {
                 $status_class = ($_GET['status'] == 'success') ? 'success-message' : 'error-message';
                 $message_text = htmlspecialchars($_GET['msg']);
@@ -148,53 +176,18 @@ if (!$tour) {
                     <div class="price">Rp <?php echo number_format($tour['price'] ?? 0, 0, ',', '.'); ?></div>
                     <div class="info-item"><i class="far fa-clock"></i> <span>Durasi: <?php echo htmlspecialchars($tour['duration'] ?? 'Tidak Tersedia'); ?></span></div>
                     <p><?php echo nl2br(htmlspecialchars($tour['description'] ?? 'Deskripsi tidak tersedia.')); ?></p>
-                    </div>
+                    
+                    <a href="booking_form.php?tour_id=<?php echo htmlspecialchars($tour['id'] ?? ''); ?>" class="btn-primary">Pesan Sekarang</a>
+                </div>
             </div>
 
-            <section class="inquiry-form-section">
-                <h2 style="text-align: center; color: var(--primary-color);">Form Pemesanan Paket Tour</h2>
-                <p style="text-align: center; margin-bottom: 30px; color: var(--light-text-color);">Isi detail Anda untuk melanjutkan pemesanan paket tour ini.</p>
-
-                <form action="process_inquiry.php" method="POST" class="inquiry-form">
-                    <input type="hidden" name="tour_name" value="<?php echo htmlspecialchars($tour['tour_name'] ?? 'Nama Tour Tidak Tersedia'); ?>">
-                    <input type="hidden" name="tour_id" value="<?php echo htmlspecialchars($tour['id'] ?? ''); ?>">
-
-
-                    <div class="form-group">
-                        <label for="name">Nama Lengkap:</label>
-                        <input type="text" id="name" name="name" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="email">Email:</label>
-                        <input type="email" id="email" name="email" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="phone">Nomor Telepon/WhatsApp:</label>
-                        <input type="tel" id="phone" name="phone" placeholder="Contoh: +6281234567890" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="preferred_date">Tanggal yang Diinginkan:</label>
-                        <input type="date" id="preferred_date" name="preferred_date">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="participants">Jumlah Peserta:</label>
-                        <input type="number" id="participants" name="participants" min="1" value="1" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="message">Additional Message:</label>
-                        <textarea id="message" name="message" rows="5"></textarea>
-                    </div>
-
-                    <button type="submit" class="btn btn-primary btn-submit">Send Booking</button>
-                </form>
-            </section>
             </div>
     </section>
+
+    <footer>
+        <p>&copy; <?php echo date("Y"); ?> JalanJalan Kuy!. All rights reserved.</p>
+        <p style="font-size: 0.8em; margin-top: 5px;">Dibuat Karnaufal</p>
+    </footer>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script>
