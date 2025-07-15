@@ -102,7 +102,7 @@ end_process: // Label untuk goto, digunakan untuk melompat jika ada error diawal
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tambah Tur Baru - Admin Panel</title>
+    <title>Tambah Tour Baru - Admin Panel</title>
     <link rel="stylesheet" href="../css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
@@ -200,7 +200,7 @@ end_process: // Label untuk goto, digunakan untuk melompat jika ada error diawal
             <nav class="main-nav">
                 <ul>
                     <li><a href="dashboard.php">Dashboard</a></li>
-                    <li><a href="index.php" class="active">Kelola Tur</a></li>
+                    <li><a href="index.php" class="active">Kelola Tour</a></li>
                     <li><a href="bookings.php">Kelola Pemesanan</a></li>
                     <li><a href="logout.php" class="btn-login-admin">Logout</a></li>
                 </ul>
@@ -209,14 +209,14 @@ end_process: // Label untuk goto, digunakan untuk melompat jika ada error diawal
     </header>
 
     <div class="admin-form-container">
-        <h1>Tambah Tur Baru</h1>
+        <h1>Tambah Tour Baru</h1>
         <?php if (!empty($message)): ?>
             <div class="message <?php echo $message_type; ?>">
                 <?php echo htmlspecialchars($message); ?>
             </div>
         <?php endif; ?>
         <form action="add_tour.php" method="POST" enctype="multipart/form-data"> <div class="form-group">
-                <label for="tour_name">Nama Tur:</label>
+                <label for="tour_name">Nama Tour:</label>
                 <input type="text" id="tour_name" name="tour_name" required>
             </div>
             <div class="form-group">
@@ -232,9 +232,9 @@ end_process: // Label untuk goto, digunakan untuk melompat jika ada error diawal
                 <input type="text" id="duration" name="duration" required>
             </div>
             <div class="form-group">
-                <label for="image">Gambar Tur:</label> <input type="file" id="image" name="image" accept="image/*" required> </div>
+                <label for="image">Gambar Tour:</label> <input type="file" id="image" name="image" accept="image/*" required> </div>
             <div class="form-actions">
-                <button type="submit" class="btn-primary">Simpan Tur</button>
+                <button type="submit" class="btn-primary">Simpan Tour</button>
                 <a href="index.php" class="btn-secondary">Batal</a>
             </div>
         </form>
@@ -242,7 +242,7 @@ end_process: // Label untuk goto, digunakan untuk melompat jika ada error diawal
 
     <footer>
         <p>&copy; <?php echo date("Y"); ?> JalanJalan Kuy! Admin Panel. All rights reserved.</p>
-        <p style="font-size: 0.8em; margin-top: 5px;">Dibuat Type-Spype</p>
+        <p style="font-size: 0.8em; margin-top: 5px;">Dibuat Karnaufal</p>
     </footer>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>

@@ -170,7 +170,7 @@ try {
             <nav class="main-nav">
                 <ul>
                     <li><a href="dashboard.php" class="active">Dashboard</a></li>
-                    <li><a href="index.php">Kelola Tur</a></li>
+                    <li><a href="index.php">Kelola Tour</a></li>
                     <li><a href="bookings.php">Kelola Pemesanan</a></li>
                     <li><a href="logout.php" class="btn-login-admin">Logout</a></li>
                 </ul>
@@ -188,7 +188,7 @@ try {
             <div class="stat-card">
                 <div class="icon"><i class="fas fa-plane-departure"></i></div>
                 <h3><?php echo $total_tours; ?></h3>
-                <p>Total Tur Aktif</p>
+                <p>Total Tour Aktif</p>
             </div>
             <div class="stat-card">
                 <div class="icon"><i class="fas fa-ticket-alt"></i></div>
@@ -204,8 +204,8 @@ try {
         <div class="dashboard-quick-links">
             <h2>Aksi Cepat</h2>
             <div class="quick-links-grid">
-                <a href="add_tour.php" class="quick-link-btn"><i class="fas fa-plus-circle"></i> Tambah Tur Baru</a>
-                <a href="index.php" class="quick-link-btn"><i class="fas fa-map-marked-alt"></i> Lihat Semua Tur</a>
+                <a href="add_tour.php" class="quick-link-btn"><i class="fas fa-plus-circle"></i> Tambah Tour Baru</a>
+                <a href="index.php" class="quick-link-btn"><i class="fas fa-map-marked-alt"></i> Lihat Semua Tour</a>
                 <a href="bookings.php" class="quick-link-btn"><i class="fas fa-book"></i> Lihat Pemesanan</a>
                 </div>
         </div>
@@ -213,7 +213,7 @@ try {
 
     <footer>
         <p>&copy; <?php echo date("Y"); ?> JalanJalan Kuy! Admin Panel. All rights reserved.</p>
-        <p style="font-size: 0.8em; margin-top: 5px;">Dibuat Type-Spype</p>
+        <p style="font-size: 0.8em; margin-top: 5px;">Dibuat Karnaufal</p>
     </footer>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>

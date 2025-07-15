@@ -23,7 +23,7 @@ try {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JalanJalan Kuy! - Jelajahi Dunia, Rasakan Petualangan!</title>
+    <title>Jalan-Jalan Kuy! - Jelajahi Dunia, Rasakan Petualangan!</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="css/swiper-bundle.min.css">
@@ -33,12 +33,12 @@ try {
     <header class="main-header">
         <div class="container header-content">
             <div class="logo">
-                <a href="index.php">JalanJalan Kuy!</a>
+                <a href="index.php">Jalan-Jalan Kuy!</a>
             </div>
             <nav class="main-nav">
                 <ul>
                     <li><a href="index.php">Home</a></li>
-                    <li><a href="paket_tur.php">Paket Tur</a></li>
+                    <li><a href="paket_tur.php">Paket Tour</a></li>
                     <li><a href="tentang_kami.php">Tentang Kami</a></li>
                     <li><a href="kontak.php">Kontak</a></li>
                     <li><a href="admin/login.php" class="btn-login-admin">Login Admin</a></li>
@@ -82,7 +82,7 @@ try {
                         <div class="hero-content">
                             <h1>Jelajahi Dunia, Rasakan Petualangan!</h1>
                             <p>Temukan petualangan impian Anda bersama kami!</p>
-                            <a href="paket_tur.php" class="btn btn-primary">Lihat Paket Tur Kami</a>
+                            <a href="paket_tur.php" class="btn btn-primary">Lihat Paket Tour Kami</a>
                         </div>
                     </div>
                 <?php
@@ -113,7 +113,7 @@ try {
                 <div class="benefit-card">
                     <div class="icon-circle package-icon"><i class="fas fa-box-open"></i></div>
                     <h3>Pilihan Paket Beragam</h3>
-                    <p>Temukan paket tur yang sesuai dengan minat dan anggaran Anda.</p>
+                    <p>Temukan paket tour yang sesuai dengan minat dan anggaran Anda.</p>
                 </div>
             </div>
         </div>
@@ -121,7 +121,7 @@ try {
 
     <footer>
         <p>&copy; <?php echo date("Y"); ?> JalanJalan Kuy!. All rights reserved.</p>
-        <p style="font-size: 0.8em; margin-top: 5px;">Dibuat Type-Spype</p>
+        <p style="font-size: 0.8em; margin-top: 5px;">Dibuat Karnaufal</p>
     </footer>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>

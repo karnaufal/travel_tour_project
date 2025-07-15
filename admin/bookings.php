@@ -131,7 +131,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'delete' && isset($_GET['id']))
             <nav class="main-nav">
                 <ul>
                     <li><a href="dashboard.php">Dashboard</a></li>
-                    <li><a href="index.php">Kelola Tur</a></li>
+                    <li><a href="index.php">Kelola Tour</a></li>
                     <li><a href="bookings.php" class="active">Kelola Pemesanan</a></li>        
                     <li><a href="reviews.php">Kelola Ulasan</a></li> <li><a href="logout.php" class="btn-login-admin">Logout</a></li>
                     <li><a href="logout.php" class="btn-login-admin">Logout</a></li>
@@ -160,8 +160,8 @@ if (isset($_GET['action']) && $_GET['action'] == 'delete' && isset($_GET['id']))
                         <th>ID Pemesanan</th>
                         <th>Nama Pelanggan</th>
                         <th>Email</th>
-                        <th>Nama Tur</th>
-                        <th>Harga Tur</th>
+                        <th>Nama Tour</th>
+                        <th>Harga Tour</th>
                         <th>Jumlah Peserta</th>
                         <th>Tanggal Keberangkatan</th>
                         <th>Waktu Pemesanan</th>
@@ -194,7 +194,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'delete' && isset($_GET['id']))
 
     <footer>
         <p>&copy; <?php echo date("Y"); ?> JalanJalan Kuy! Admin Panel. All rights reserved.</p>
-        <p style="font-size: 0.8em; margin-top: 5px;">Dibuat Type-Spype</p>
+        <p style="font-size: 0.8em; margin-top: 5px;">Dibuat Karnaufal</p>
     </footer>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>

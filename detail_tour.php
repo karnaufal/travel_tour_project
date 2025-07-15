@@ -32,7 +32,7 @@ if (!$tour) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?php echo htmlspecialchars($tour['tour_name'] ?? 'Detail Tur'); ?> - Detail Tur</title>
+    <title><?php echo htmlspecialchars($tour['tour_name'] ?? 'Detail Tur'); ?> - Detail Tour</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
@@ -117,7 +117,7 @@ if (!$tour) {
             <nav class="main-nav">
                 <ul>
                     <li><a href="index.php">Home</a></li>
-                    <li><a href="paket_tur.php" class="active">Paket Tur</a></li>
+                    <li><a href="paket_tur.php" class="active">Paket Tour</a></li>
                     <li><a href="tentang_kami.php">Tentang Kami</a></li>
                     <li><a href="kontak.php">Kontak</a></li>
                     <li><a href="admin/login.php" class="btn-login-admin">Login Admin</a></li>

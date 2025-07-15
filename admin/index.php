@@ -55,7 +55,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'delete' && isset($_GET['id']))
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kelola Tur - Admin Panel</title>
+    <title>Kelola Tour - Admin Panel</title>
     <link rel="stylesheet" href="../css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
@@ -170,7 +170,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'delete' && isset($_GET['id']))
             <nav class="main-nav">
                 <ul>
                     <li><a href="dashboard.php">Dashboard</a></li>
-                    <li><a href="index.php" class="active">Kelola Tur</a></li>
+                    <li><a href="index.php" class="active">Kelola Tour</a></li>
                     <li><a href="bookings.php">Kelola Pemesanan</a></li>
                     <li><a href="logout.php" class="btn-login-admin">Logout</a></li>
                 </ul>
@@ -179,8 +179,8 @@ if (isset($_GET['action']) && $_GET['action'] == 'delete' && isset($_GET['id']))
     </header>
 
     <div class="admin-table-container">
-        <h1>Daftar Tur</h1>
-        <a href="add_tour.php" class="add-new-btn"><i class="fas fa-plus"></i> Tambah Tur Baru</a>
+        <h1>Daftar Tour</h1>
+        <a href="add_tour.php" class="add-new-btn"><i class="fas fa-plus"></i> Tambah Tour Baru</a>
 
         <?php if (isset($_SESSION['status_message'])): ?>
             <div class="status-message <?php echo $_SESSION['status_type']; ?>">
@@ -199,7 +199,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'delete' && isset($_GET['id']))
                     <tr>
                         <th>ID</th>
                         <th>Gambar</th>
-                        <th>Nama Tur</th>
+                        <th>Nama Tour</th>
                         <th>Harga</th>
                         <th>Durasi</th>
                         <th>Deskripsi Singkat</th>
@@ -235,13 +235,13 @@ if (isset($_GET['action']) && $_GET['action'] == 'delete' && isset($_GET['id']))
             </table>
         </div>
         <?php else: ?>
-            <p class="no-tours">Belum ada tur yang ditambahkan.</p>
+            <p class="no-tours">Belum ada tour yang ditambahkan.</p>
         <?php endif; ?>
     </div>
 
     <footer>
         <p>&copy; <?php echo date("Y"); ?> JalanJalan Kuy! Admin Panel. All rights reserved.</p>
-        <p style="font-size: 0.8em; margin-top: 5px;">Dibuat Type-Spype</p>
+        <p style="font-size: 0.8em; margin-top: 5px;">Dibuat Karnaufal</p>
     </footer>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>

@@ -20,7 +20,7 @@ include_once 'config.php'; // Pastikan path ini benar untuk koneksi DB
             <nav class="main-nav">
                 <ul>
                     <li><a href="index.php">Home</a></li>
-                    <li><a href="paket_tur.php">Paket Tur</a></li>
+                    <li><a href="paket_tur.php">Paket Tour</a></li>
                     <li><a href="tentang_kami.php">Tentang Kami</a></li>
                     <li><a href="kontak.php" class="active">Kontak</a></li>
                     <li><a href="admin/login.php" class="btn-login-admin">Login Admin</a></li>
@@ -31,7 +31,7 @@ include_once 'config.php'; // Pastikan path ini benar untuk koneksi DB
     
     <section id="kontak" class="contact-section" style="padding-top: 120px;">
     <h2 class="section-title">Kontak Kami</h2>
-    <p>Punya pertanyaan atau ingin kustomisasi tur? Jangan ragu untuk menghubungi kami!</p>
+    <p>Punya pertanyaan atau ingin kustomisasi tour? Jangan ragu untuk menghubungi kami!</p>
     <div class="contact-info">
         <p><i class="fas fa-map-marker-alt"></i> Alamat: Jl. Contoh No. 123, Kota Bandung, Indonesia</p>
         <p><i class="fas fa-envelope"></i> Email: info@jalanjalankuy.com</p>
@@ -71,7 +71,7 @@ include_once 'config.php'; // Pastikan path ini benar untuk koneksi DB
     </main>
     <footer>
         <p>&copy; <?php echo date("Y"); ?> JalanJalan Kuy!. All rights reserved.</p>
-        <p style="font-size: 0.8em; margin-top: 5px;">Dibuat Type-Spype</p>
+        <p style="font-size: 0.8em; margin-top: 5px;">Dibuat Karnaufal</p>
     </footer>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
