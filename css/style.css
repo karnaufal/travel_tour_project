@@ -1469,3 +1469,208 @@ footer {
         /* Pagination lebih ke atas sedikit di mobile */
     }
 }
+
+/* --- CSS untuk Pesan Notifikasi (Sukses/Error) --- */
+.message-container {
+    margin-top: 20px;
+    /* Beri jarak dari atas parent (yaitu div.container) */
+    margin-bottom: 20px;
+    /* Jarak ke konten di bawahnya */
+    max-width: 800px;
+    /* Tetap pertahankan agar pesan tidak terlalu lebar */
+    margin-left: auto;
+    /* Untuk menengahkan pesan di dalam container */
+    margin-right: auto;
+    /* Untuk menengahkan pesan di dalam container */
+    /* HAPUS SEMUA: position: relative;, z-index: 990;, dan margin-top: calc(...) */
+}
+
+/* Ini tetap sama, tidak perlu diubah */
+.success-message,
+.error-message {
+    padding: 15px 20px;
+    border-radius: var(--border-radius-small);
+    font-weight: 600;
+    text-align: center;
+    /* margin-bottom: 20px; <-- jika ada, mungkin sudah di message-container */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.success-message {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.error-message {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+/* Opsional: Efek animasi muncul */
+.message-container {
+    animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* --- Form Inquiry Section (Pembungkus Form) --- */
+.inquiry-form-section {
+    background-color: var(--card-bg);
+    /* Warna latar belakang kartu */
+    padding: 40px;
+    /* Padding di dalam section */
+    border-radius: var(--border-radius);
+    /* Sudut membulat */
+    box-shadow: var(--shadow-medium);
+    /* Efek bayangan */
+    margin-top: 40px;
+    /* Jarak dari elemen di atasnya */
+    margin-bottom: 40px;
+    /* Jarak ke elemen di bawahnya */
+}
+
+.inquiry-form-section h2 {
+    font-size: 2.2em;
+    /* Ukuran judul form */
+    margin-bottom: 15px;
+    color: var(--primary-color);
+    text-align: center;
+}
+
+.inquiry-form-section p {
+    font-size: 1.1em;
+    color: var(--light-text-color);
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+/* --- Form Kontainer (Form itu sendiri) --- */
+.inquiry-form {
+    display: grid;
+    /* Menggunakan Grid untuk layout */
+    grid-template-columns: 1fr 1fr;
+    /* Dua kolom yang lebarnya sama */
+    gap: 25px;
+    /* Jarak antar item grid */
+}
+
+/* Untuk form-group yang membutuhkan lebar penuh (misal: pesan) */
+.inquiry-form .form-group:nth-child(6),
+/* Ini untuk 'Pesan/Permintaan Khusus' jika urutannya tetap */
+.inquiry-form .btn-submit {
+    grid-column: 1 / -1;
+    /* Membuat elemen ini mengambil seluruh lebar grid */
+}
+
+
+/* --- Grup Input (Label + Input/Textarea) --- */
+.form-group {
+    margin-bottom: 0;
+    /* Hapus margin-bottom default, karena sudah ada gap di grid */
+}
+
+.form-group label {
+    display: block;
+    /* Membuat label di atas input */
+    margin-bottom: 8px;
+    /* Jarak antara label dan input */
+    font-weight: 600;
+    /* Tebal font label */
+    color: var(--text-color);
+    /* Warna teks label */
+    font-size: 1em;
+}
+
+.form-group input[type="text"],
+.form-group input[type="email"],
+.form-group input[type="tel"],
+.form-group input[type="date"],
+.form-group input[type="number"],
+.form-group textarea {
+    width: 100%;
+    /* Lebar input dan textarea 100% dari parent-nya */
+    padding: 12px 15px;
+    /* Padding di dalam input */
+    border: 1px solid var(--border-color);
+    /* Border standar */
+    border-radius: var(--border-radius-small);
+    /* Sudut membulat */
+    font-size: 1em;
+    /* Ukuran font di dalam input */
+    color: var(--text-color);
+    background-color: var(--input-bg);
+    /* Warna latar belakang input */
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    /* Transisi halus untuk hover/focus */
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    border-color: var(--primary-color);
+    /* Warna border saat fokus */
+    box-shadow: 0 0 0 3px rgba(var(--primary-rgb), 0.2);
+    /* Efek bayangan saat fokus */
+    outline: none;
+    /* Hapus outline default browser */
+}
+
+.form-group textarea {
+    resize: vertical;
+    /* Hanya izinkan resize vertikal pada textarea */
+    min-height: 100px;
+    /* Tinggi minimum textarea */
+}
+
+/* --- Tombol Submit --- */
+.btn-submit {
+    background-color: var(--accent-color);
+    /* Warna latar belakang tombol */
+    color: var(--white);
+    /* Warna teks tombol */
+    padding: 15px 30px;
+    /* Padding tombol */
+    border: none;
+    /* Hapus border */
+    border-radius: 50px;
+    /* Bentuk tombol membulat */
+    font-size: 1.1em;
+    font-weight: 700;
+    cursor: pointer;
+    /* Kursor berubah jadi pointer saat di hover */
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    /* Transisi halus */
+    width: auto;
+    /* Lebar tombol menyesuaikan konten */
+    margin-top: 15px;
+    /* Jarak dari form group di atasnya */
+    justify-self: center;
+    /* Tengahkan tombol dalam grid */
+}
+
+.btn-submit:hover {
+    background-color: var(--dark-accent);
+    /* Warna lebih gelap saat hover */
+    transform: translateY(-2px);
+    /* Efek sedikit naik saat hover */
+    box-shadow: var(--shadow-medium);
+}
+
+/* --- Responsiveness untuk Form (Opsional tapi direkomendasikan) --- */
+@media (max-width: 768px) {
+    .inquiry-form {
+        grid-template-columns: 1fr;
+        /* Satu kolom untuk layar kecil */
+    }
+}
