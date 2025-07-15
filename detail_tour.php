@@ -132,7 +132,7 @@ if (!$tour) {
                 <div class="tour-detail-image">
                     <?php
                     $image_name_detail = $tour['image'] ?? '';
-                    $image_path_detail = 'uploads/' . $image_name_detail;
+                    $image_path_detail = 'images/' . $image_name_detail;
                     $actual_image_src_detail = (file_exists($image_path_detail) && !empty($image_name_detail)) ? htmlspecialchars($image_path_detail) : 'images/placeholder.jpg';
                     $tour_name_alt_detail = htmlspecialchars($tour['tour_name'] ?? 'Gambar Tur');
                     ?>
