@@ -17,7 +17,7 @@ if (isset($_GET['id'])) {
 if (!$tour) {
     // HTML untuk halaman "Tur Tidak Ditemukan"
     echo "<!DOCTYPE html><html lang='id'><head><meta charset='UTF-8'><meta name='viewport' content='width=device-width, initial-scale=1.0'><title>Tur Tidak Ditemukan</title><link rel='stylesheet' href='css/style.css'></head><body>";
-    echo "<header class='main-header'><div class='container header-content'><div class='logo'><a href='index.php'>JalanJalan Kuy!</a></div><nav class='main-nav'><ul><li><a href='index.php'>Home</a></li><li><a href='paket_tur.php' class='active'>Paket Tur</a></li><li><a href='tentang_kami.php'>Tentang Kami</a></li><li><a href='kontak.php'>Kontak</a></li><li><a href='admin/login.php' class='btn-login-admin'>Login Admin</a></li></ul></nav></div></header>";
+    echo "<header class='main-header'><div class='container header-content'><div class='logo'><a href='index.php'>JalanJalan Kuy!</a></div><nav class='main-nav'><ul><li><a href='index.php'>Home</a></li><li><a href='paket_tur.php' class='active'>Paket Tur</a></li><li><a href='tentang_kami.php'>Tentang Kami</a></li><li><a href='kontak.php'>Kontak</a></li></ul></nav></div></header>";
     echo "<section class='section-common' style='padding-top: 100px;'>";
     echo "<div class='container'><h1 style='text-align: center; color: var(--primary-color);'>Tur Tidak Ditemukan</h1><p style='text-align: center;'>Maaf, tur yang Anda cari tidak tersedia.</p><p style='text-align: center;'><a href='paket_tur.php' class='btn-primary'>Kembali ke Daftar Tur</a></p></div>";
     echo "</section>";
@@ -108,7 +108,6 @@ if (!$tour) {
     </style>
 </head>
 <body>
-
     <header class="main-header">
         <div class="container header-content">
             <div class="logo">
@@ -120,14 +119,20 @@ if (!$tour) {
                     <li><a href="paket_tur.php" class="active">Paket Tour</a></li>
                     <li><a href="tentang_kami.php">Tentang Kami</a></li>
                     <li><a href="kontak.php">Kontak</a></li>
-                    <!-- <li><a href="admin/login.php" class="btn-login-admin">Login Admin</a></li> -->
-                </ul>
+                    </ul>
             </nav>
         </div>
     </header>
 
     <section class="tour-detail-section">
         <div class="container">
+            <?php
+            if (isset($_GET['status']) && isset($_GET['msg'])) {
+                $status_class = ($_GET['status'] == 'success') ? 'success-message' : 'error-message';
+                $message_text = htmlspecialchars($_GET['msg']);
+                echo '<div class="container message-container"><div class="' . $status_class . '">' . $message_text . '</div></div>';
+            }
+            ?>
             <div class="tour-detail-content">
                 <div class="tour-detail-image">
                     <?php
@@ -143,10 +148,52 @@ if (!$tour) {
                     <div class="price">Rp <?php echo number_format($tour['price'] ?? 0, 0, ',', '.'); ?></div>
                     <div class="info-item"><i class="far fa-clock"></i> <span>Durasi: <?php echo htmlspecialchars($tour['duration'] ?? 'Tidak Tersedia'); ?></span></div>
                     <p><?php echo nl2br(htmlspecialchars($tour['description'] ?? 'Deskripsi tidak tersedia.')); ?></p>
-                    <a href="booking_form.php?tour_id=<?php echo htmlspecialchars($tour['id'] ?? ''); ?>" class="btn-primary">Pesan Sekarang</a>
-                </div>
+                    </div>
             </div>
-        </div>
+
+            <section class="inquiry-form-section">
+                <h2 style="text-align: center; color: var(--primary-color);">Form Pemesanan Paket Tour</h2>
+                <p style="text-align: center; margin-bottom: 30px; color: var(--light-text-color);">Isi detail Anda untuk melanjutkan pemesanan paket tour ini.</p>
+
+                <form action="process_inquiry.php" method="POST" class="inquiry-form">
+                    <input type="hidden" name="tour_name" value="<?php echo htmlspecialchars($tour['tour_name'] ?? 'Nama Tour Tidak Tersedia'); ?>">
+                    <input type="hidden" name="tour_id" value="<?php echo htmlspecialchars($tour['id'] ?? ''); ?>">
+
+
+                    <div class="form-group">
+                        <label for="name">Nama Lengkap:</label>
+                        <input type="text" id="name" name="name" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email:</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phone">Nomor Telepon/WhatsApp:</label>
+                        <input type="tel" id="phone" name="phone" placeholder="Contoh: +6281234567890" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="preferred_date">Tanggal yang Diinginkan:</label>
+                        <input type="date" id="preferred_date" name="preferred_date">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="participants">Jumlah Peserta:</label>
+                        <input type="number" id="participants" name="participants" min="1" value="1" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="message">Additional Message:</label>
+                        <textarea id="message" name="message" rows="5"></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-submit">Send Booking</button>
+                </form>
+            </section>
+            </div>
     </section>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
