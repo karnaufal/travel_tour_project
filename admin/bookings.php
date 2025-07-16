@@ -157,6 +157,12 @@ if (isset($_GET['action']) && $_GET['action'] == 'delete' && isset($_GET['id']))
             ?>
         <?php endif; ?>
 
+        <div style="text-align: right; margin-bottom: 20px;">
+            <a href="export_bookings.php" class="btn btn-success" style="background-color: #28a745; color: white; padding: 10px 15px; border-radius: 5px; text-decoration: none;">
+            <i class="fas fa-file-excel"></i> Export Data Pemesanan
+         </a>
+         </div>
+
         <?php if (!empty($bookings)): ?>
         <div class="table-responsive">
             <table>
