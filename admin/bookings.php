@@ -105,6 +105,9 @@
                             <td><?php echo htmlspecialchars($booking['booking_date'] ?? ''); ?></td>
                             <td class="action-buttons">
                                 <td class="action-buttons">
+                                    <a href="view_booking.php?id=<?php echo htmlspecialchars($booking['id'] ?? ''); ?>" class="btn-detail">
+                                        <i class="fas fa-eye"></i> <span class="btn-text">Detail</span>
+                                    </a>
                                     <a href="bookings.php?action=delete&id=<?php echo htmlspecialchars($booking['id'] ?? ''); ?>" class="btn-delete" onclick="return confirm('Apakah Anda yakin ingin menghapus pemesanan ini?');">
                                         <i class="fas fa-trash-alt"></i> <span class="btn-text">Hapus</span>
                                     </a>
