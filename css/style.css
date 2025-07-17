@@ -1674,3 +1674,234 @@ footer {
         /* Satu kolom untuk layar kecil */
     }
 }
+
+/* Lebar kolom spesifik agar rapi untuk tabel bookings (sesuaikan ini!) */
+/* Ini harus cocok dengan jumlah kolom di <thead> bookings.php */
+table th:nth-child(1),
+table td:nth-child(1) {
+    width: 4%;
+}
+
+/* ID: Sedikit lebih kecil */
+table th:nth-child(2),
+table td:nth-child(2) {
+    width: 12%;
+}
+
+/* Nama Pelanggan: Cukup untuk nama */
+table th:nth-child(3),
+table td:nth-child(3) {
+    width: 14%;
+}
+
+/* Email: Lebih lebar untuk alamat email panjang */
+table th:nth-child(4),
+table td:nth-child(4) {
+    width: 10%;
+}
+
+/* Telepon */
+table th:nth-child(5),
+table td:nth-child(5) {
+    width: 14%;
+}
+
+/* Nama Tour: Lebih lebar untuk nama tour panjang */
+table th:nth-child(6),
+table td:nth-child(6) {
+    width: 5%;
+}
+
+/* Peserta: Kecil saja */
+table th:nth-child(7),
+table td:nth-child(7) {
+    width: 9%;
+}
+
+/* Harga */
+table th:nth-child(8),
+table td:nth-child(8) {
+    width: 10%;
+}
+
+/* Tgl Keberangkatan */
+table th:nth-child(9),
+table td:nth-child(9) {
+    width: 8%;
+}
+
+/* Pesan: Sedikit lebih lebar */
+table th:nth-child(10),
+table td:nth-child(10) {
+    width: 8%;
+}
+
+/* Waktu Pemesanan: Cukup untuk format tanggal/waktu */
+table th:nth-child(11),
+table td:nth-child(11) {
+    width: 6%;
+    /* Aksi: Cukup untuk satu tombol Hapus dengan ikon dan teks */
+    white-space: nowrap;
+    /* Penting agar tombol tidak melipat baris */
+}
+
+/* Styling dasar untuk tombol aksi (edit/delete) */
+.action-buttons .btn-delete,
+.action-buttons .btn-edit {
+    /* Tambahkan .btn-edit jika Anda berencana menambahkannya */
+    display: inline-flex;
+    /* Gunakan flexbox agar ikon dan teks sejajar */
+    align-items: center;
+    /* Pusatkan secara vertikal */
+    gap: 5px;
+    /* Jarak antara ikon dan teks */
+    padding: 7px 12px;
+    /* Padding yang lebih baik untuk tombol */
+    border: none;
+    /* Hapus border default tombol */
+    border-radius: var(--border-radius-small);
+    /* Sudut sedikit membulat */
+    text-decoration: none;
+    /* Hapus underline */
+    font-size: 0.9em;
+    /* Ukuran font lebih kecil agar tidak terlalu besar */
+    font-weight: 500;
+    /* Ketebalan font */
+    color: white;
+    /* Warna teks putih */
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    /* Transisi halus */
+    white-space: nowrap;
+    /* Penting agar tombol tidak pecah */
+}
+
+/* Warna spesifik untuk tombol Delete */
+.action-buttons .btn-delete {
+    background-color: #dc3545;
+    /* Merah standar */
+}
+
+.action-buttons .btn-delete:hover {
+    background-color: #c82333;
+    /* Merah lebih gelap saat hover */
+    transform: translateY(-1px);
+    /* Efek angkat sedikit saat hover */
+}
+
+/* Jika Anda berencana menambah tombol Edit, gunakan ini: */
+.action-buttons .btn-edit {
+    background-color: var(--primary-color);
+    /* Misalnya, warna biru tema */
+    margin-right: 5px;
+    /* Jarak antar tombol jika ada lebih dari satu */
+}
+
+.action-buttons .btn-edit:hover {
+    background-color: var(--primary-color-dark);
+    transform: translateY(-1px);
+}
+
+/* Pastikan ikon dan teks di dalamnya terlihat */
+.action-buttons .btn-delete i,
+.action-buttons .btn-edit i {
+    font-size: 1.1em;
+    /* Ukuran ikon sedikit lebih besar */
+    /* Hapus posisi absolute dan transform jika ingin ikon mengikuti flexbox gap */
+    position: static;
+    /* Biarkan posisi statis agar ikut flow flexbox */
+    transform: none;
+    /* Hapus transform jika sebelumnya ada */
+}
+
+/* Pastikan teks tetap terlihat */
+.action-buttons .btn-delete .btn-text,
+.action-buttons .btn-edit .btn-text {
+    display: inline;
+    /* Pastikan teks terlihat */
+}
+
+/* Pastikan border kolaps */
+.table-responsive table {
+    border-collapse: collapse;
+    width: 100%;
+    min-width: 1000px;
+    /* Pertahankan ini agar ada scroll horizontal jika layar kecil */
+    /* Tambahan: berikan background, border-radius, dan shadow pada kontainer tabel */
+    background-color: var(--card-bg);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-small);
+    overflow: hidden;
+    /* Penting untuk menjaga border-radius di sudut tabel */
+}
+
+/* Styling untuk Header Tabel (THEAD) */
+.table-responsive table thead th {
+    background-color: var(--primary-color);
+    /* Menggunakan warna biru tema */
+    color: white;
+    /* Teks putih agar kontras */
+    font-weight: 600;
+    /* Sedikit lebih tebal */
+    padding: 15px 12px;
+    /* Padding yang lebih baik */
+    text-align: left;
+    /* Teks rata kiri */
+    text-transform: uppercase;
+    /* Huruf kapital semua */
+    letter-spacing: 0.5px;
+    /* Jarak antar huruf */
+    border-bottom: 2px solid var(--primary-color-dark);
+    /* Border bawah yang menonjol */
+    /* Hapus border kiri dan kanan untuk tampilan lebih bersih */
+    border-left: none;
+    border-right: none;
+}
+
+/* Styling untuk Sel Data (TD) */
+.table-responsive table td {
+    padding: 12px;
+    /* Padding konsisten */
+    text-align: left;
+    /* Teks rata kiri */
+    border-bottom: 1px solid var(--border-color);
+    /* Hanya border bawah */
+    border-left: none;
+    /* Hapus border kiri */
+    border-right: none;
+    /* Hapus border kanan */
+    color: var(--text-color);
+    /* Warna teks standar */
+    vertical-align: middle;
+    /* Pusatkan konten secara vertikal */
+}
+
+/* Efek Hover pada Baris (TR) */
+.table-responsive table tbody tr:hover {
+    background-color: var(--hover-bg);
+    /* Warna background saat hover */
+    cursor: pointer;
+    /* Kursor berubah menjadi pointer */
+}
+
+/* Zebra Striping (warna bergantian) */
+.table-responsive table tbody tr:nth-child(even) {
+    background-color: var(--light-bg);
+    /* Warna background untuk baris genap */
+}
+
+/* Pastikan border-radius pada baris pertama dan terakhir (opsional) */
+.table-responsive table tbody tr:first-child td:first-child {
+    border-top-left-radius: var(--border-radius);
+}
+
+.table-responsive table tbody tr:first-child td:last-child {
+    border-top-right-radius: var(--border-radius);
+}
+
+.table-responsive table tbody tr:last-child td:first-child {
+    border-bottom-left-radius: var(--border-radius);
+}
+
+.table-responsive table tbody tr:last-child td:last-child {
+    border-bottom-right-radius: var(--border-radius);
+}
