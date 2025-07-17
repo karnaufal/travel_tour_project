@@ -59,13 +59,13 @@ try {
     <style>
         /* CSS Khusus untuk Dashboard Admin - Direvisi untuk ukuran lebih standar */
     .dashboard-container {
-        max-width: 1200px;
-        margin: 120px auto 50px auto;
-        padding: 30px;
-        background-color: var(--card-bg);
-        border-radius: 12px;
-        box-shadow: var(--shadow-medium);
-        text-align: center;
+    max-width: 950px; /* Ubah nilai ini */
+    margin: 120px auto 50px auto;
+    padding: 30px;
+    background-color: var(--card-bg);
+    border-radius: 12px;
+    box-shadow: var(--shadow-medium);
+    text-align: center;
     }
     .dashboard-container h1 {
         color: var(--primary-color);
@@ -81,7 +81,7 @@ try {
         display: flex;
         flex-wrap: wrap;
         justify-content: center;
-        gap: 30px;
+        gap: 15px;
         margin-bottom: 60px;
     }
     .stat-card {
