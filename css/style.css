@@ -1820,6 +1820,33 @@ table td:nth-child(11) {
     /* Pastikan teks terlihat */
 }
 
+/* Tambahan untuk tombol Detail */
+.action-buttons .btn-detail {
+    background-color: var(--secondary-color);
+    /* Atau warna lain yang cocok, misal #17a2b8 (biru muda) */
+    margin-right: 5px;
+    /* Jarak antar tombol */
+    /* Properti lainnya sama dengan btn-delete */
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 7px 12px;
+    border: none;
+    border-radius: var(--border-radius-small);
+    text-decoration: none;
+    font-size: 0.9em;
+    font-weight: 500;
+    color: white;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    white-space: nowrap;
+}
+
+.action-buttons .btn-detail:hover {
+    background-color: var(--secondary-color-dark);
+    /* Warna lebih gelap saat hover */
+    transform: translateY(-1px);
+}
+
 /* Pastikan border kolaps */
 .table-responsive table {
     border-collapse: collapse;
