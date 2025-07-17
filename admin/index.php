@@ -226,8 +226,10 @@ if (isset($_GET['action']) && $_GET['action'] == 'delete' && isset($_GET['id']))
                         <td><?php echo htmlspecialchars($tour['duration']); ?></td>
                         <td><?php echo htmlspecialchars(substr($tour['description'], 0, 50)); ?>...</td>
                         <td class="action-buttons">
-                            <a href="edit_tour.php?id=<?php echo htmlspecialchars($tour['id']); ?>" class="btn-edit">Edit</a>
-                            <a href="index.php?action=delete&id=<?php echo htmlspecialchars($tour['id']); ?>" class="btn-delete" onclick="return confirm('Apakah Anda yakin ingin menghapus tur ini?');">Hapus</a>
+                            <a href="edit_tour.php?id=<?php echo htmlspecialchars($tour['id']); ?>" class="btn-edit">
+                                <i class="fas fa-edit"></i> <span class="btn-text">Edit</span> </a>
+                            <a href="index.php?action=delete&id=<?php echo htmlspecialchars($tour['id']); ?>" class="btn-delete" onclick="return confirm('Apakah Anda yakin ingin menghapus tur ini?');">
+                                <i class="fas fa-trash-alt"></i> <span class="btn-text">Hapus</span> </a>
                         </td>
                     </tr>
                     <?php endforeach; ?>
