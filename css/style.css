@@ -1986,14 +1986,17 @@ table td:nth-child(11) {
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
 }
 
-/* Vision & Mission Section */
+
+/* --- Vision & Mission Section --- */
 .vision-mission-section {
     padding: 60px 0;
     text-align: center;
     background-color: var(--card-bg);
+    /* Menggunakan variabel warna putih */
 }
 
 .section-title-wrapper {
+    /* Ini bisa digunakan untuk judul section lain juga */
     margin-bottom: 40px;
 }
 
@@ -2018,71 +2021,82 @@ table td:nth-child(11) {
 .section-title-wrapper .section-subtitle {
     font-size: 1.1em;
     color: var(--light-text-color);
-    margin-bottom: 0;
+    max-width: 800px;
+    margin: 0 auto;
 }
 
 .vm-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    /* Dua kolom */
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
     gap: 30px;
-    max-width: 900px;
+    max-width: 1000px;
     margin: 0 auto;
 }
 
 .vm-card {
     background-color: var(--light-bg);
+    /* Background kartu yang sedikit berbeda */
     padding: 30px;
     border-radius: var(--border-radius);
     box-shadow: var(--shadow-small);
     text-align: left;
-    /* Sesuaikan teks ke kiri dalam card */
+    display: flex;
+    flex-direction: column;
 }
 
 .vm-card h3 {
-    color: var(--primary-color);
     font-size: 1.8em;
+    color: var(--primary-color);
     margin-top: 0;
     margin-bottom: 15px;
     text-align: center;
-    /* Judul di tengah */
 }
 
 .vm-card p,
 .vm-card ul {
     font-size: 1em;
-    color: var(--text-color);
-    line-height: 1.7;
+    color: var(--light-text-color);
+    line-height: 1.6;
 }
 
 .vm-card ul {
     list-style: none;
-    /* Hapus bullet default */
-    padding-left: 0;
+    /* Hapus bullet point default */
+    padding: 0;
+    margin: 0;
 }
 
 .vm-card ul li {
-    margin-bottom: 10px;
     position: relative;
     padding-left: 25px;
     /* Ruang untuk ikon */
+    margin-bottom: 10px;
+}
+
+.vm-card ul li:last-child {
+    margin-bottom: 0;
 }
 
 .vm-card ul li::before {
     content: "\f00c";
-    /* Ikon centang */
+    /* Font Awesome checkmark icon */
     font-family: "Font Awesome 5 Free";
-    /* Pastikan font awesome di load */
+    /* Penting untuk Font Awesome */
     font-weight: 900;
     color: var(--secondary-color);
-    /* Warna ikon centang */
+    /* Warna hijau */
     position: absolute;
     left: 0;
-    top: 0;
+    top: 2px;
 }
 
-/* Responsive untuk halaman Tentang Kami */
+/* Responsive untuk Vision & Mission Section */
 @media (max-width: 768px) {
+    .vm-grid {
+        grid-template-columns: 1fr;
+        padding: 0 20px;
+    }
+
     .about-hero-section {
         height: 300px;
     }
@@ -2093,23 +2107,6 @@ table td:nth-child(11) {
 
     .about-hero-content p {
         font-size: 1em;
-    }
-
-    .vm-grid {
-        grid-template-columns: 1fr;
-        /* Satu kolom untuk layar kecil */
-    }
-
-    .vm-card {
-        text-align: center;
-        /* Tengahkan teks di card vm */
-    }
-
-    .vm-card ul {
-        text-align: left;
-        /* List item tetap ke kiri */
-        padding-left: 25px;
-        /* Jaga padding untuk ikon */
     }
 }
 
