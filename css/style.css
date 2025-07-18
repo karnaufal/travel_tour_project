@@ -2477,8 +2477,7 @@ table td:nth-child(11) {
 }
 
 .itinerary-list .itinerary-day {
-    font-weight: bold;
-    color: var(--primary-color);
+    color: var(--text-color);
     margin-top: 15px;
     margin-bottom: 5px;
     font-size: 1.1em;
@@ -2529,6 +2528,7 @@ table td:nth-child(11) {
     border-radius: var(--border-radius);
     box-shadow: var(--shadow-small);
     text-align: center;
+    align-self: flex-start;
 }
 
 .tour-action-sidebar .price-box {
@@ -2684,4 +2684,86 @@ table td:nth-child(11) {
         height: 250px;
         /* Sesuaikan tinggi gambar utama di mobile */
     }
+}
+
+/* --- Styles untuk Syarat & Ketentuan di Detail Tour (REVISED) --- */
+.terms-conditions-detail {
+    background-color: transparent;
+    /* Hapus background-color jika background parent sudah sesuai */
+    padding: 0;
+    /* Hapus padding agar border-bottom diatur oleh parent */
+    border-radius: 0;
+    /* Hapus border-radius */
+    margin-top: 30px;
+    /* Jarak dari bagian sebelumnya */
+    border: none;
+    /* Hapus border */
+    box-shadow: none;
+    /* Hapus shadow */
+    color: var(--text-color);
+    line-height: 1.7;
+    /* border-bottom akan diatur oleh selector umum di atas */
+}
+
+.terms-conditions-detail h3 {
+    color: var(--text-color);
+    margin-bottom: 15px;
+    font-size: 1.6em;
+    padding-bottom: 5px;
+    border-bottom: none;
+    /* Hapus border-bottom di h3, karena sudah ada di parent div */
+    margin-top: 0;
+}
+
+.terms-conditions-detail ul {
+    list-style: disc;
+    margin-left: 25px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    /* Jarak dari daftar ke garis putus-putus */
+}
+
+.terms-conditions-detail ul li {
+    margin-bottom: 8px;
+}
+
+/* --- Styles untuk Skedul Pembayaran & Penerbitan Tiket (REVISED) --- */
+.payment-ticket-schedule {
+    background-color: transparent;
+    /* Hapus background-color jika background parent sudah sesuai */
+    padding: 0;
+    /* Hapus padding agar border-bottom diatur oleh parent */
+    border-radius: 0;
+    /* Hapus border-radius */
+    margin-top: 30px;
+    /* Jarak dari bagian sebelumnya */
+    border: none;
+    /* Hapus border */
+    box-shadow: none;
+    /* Hapus shadow */
+    color: var(--text-color);
+    line-height: 1.7;
+    /* border-bottom akan diatur oleh selector umum di atas */
+}
+
+.payment-ticket-schedule h3 {
+    color: var(--text-color);
+    margin-bottom: 15px;
+    font-size: 1.6em;
+    padding-bottom: 5px;
+    border-bottom: none;
+    /* Hapus border-bottom di h3, karena sudah ada di parent div */
+    margin-top: 0;
+}
+
+.payment-ticket-schedule ul {
+    list-style: disc;
+    margin-left: 25px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    /* Jarak dari daftar ke garis putus-putus */
+}
+
+.payment-ticket-schedule ul li {
+    margin-bottom: 8px;
 }
