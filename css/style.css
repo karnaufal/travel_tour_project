@@ -1932,3 +1932,202 @@ table td:nth-child(11) {
 .table-responsive table tbody tr:last-child td:last-child {
     border-bottom-right-radius: var(--border-radius);
 }
+
+/* ========================================= */
+/* ABOUT US PAGE SPECIFIC STYLES           */
+/* ========================================= */
+
+/* About Hero Section */
+.about-hero-section {
+    position: relative;
+    width: 100%;
+    height: 400px;
+    /* Tinggi banner, sesuaikan */
+    background: url('../images/about-hero-bg.jpg') no-repeat center center/cover;
+    /* Ganti dengan gambar latar belakang yang sesuai */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: white;
+    margin-top: 70px;
+    /* Sesuaikan dengan tinggi header Anda */
+    box-shadow: var(--shadow-medium);
+}
+
+.about-hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    /* Overlay gelap */
+    z-index: 1;
+}
+
+.about-hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 800px;
+    padding: 20px;
+}
+
+.about-hero-content h1 {
+    font-size: 3em;
+    margin-bottom: 15px;
+    font-weight: bold;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.about-hero-content p {
+    font-size: 1.2em;
+    line-height: 1.5;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+/* Vision & Mission Section */
+.vision-mission-section {
+    padding: 60px 0;
+    text-align: center;
+    background-color: var(--card-bg);
+}
+
+.section-title-wrapper {
+    margin-bottom: 40px;
+}
+
+.section-title-wrapper .section-title {
+    font-size: 2.5em;
+    color: var(--text-color);
+    margin-bottom: 10px;
+    position: relative;
+    display: inline-block;
+}
+
+.section-title-wrapper .section-title::after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 3px;
+    background-color: var(--primary-color);
+    margin: 10px auto 0;
+    border-radius: 2px;
+}
+
+.section-title-wrapper .section-subtitle {
+    font-size: 1.1em;
+    color: var(--light-text-color);
+    margin-bottom: 0;
+}
+
+.vm-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    /* Dua kolom */
+    gap: 30px;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.vm-card {
+    background-color: var(--light-bg);
+    padding: 30px;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-small);
+    text-align: left;
+    /* Sesuaikan teks ke kiri dalam card */
+}
+
+.vm-card h3 {
+    color: var(--primary-color);
+    font-size: 1.8em;
+    margin-top: 0;
+    margin-bottom: 15px;
+    text-align: center;
+    /* Judul di tengah */
+}
+
+.vm-card p,
+.vm-card ul {
+    font-size: 1em;
+    color: var(--text-color);
+    line-height: 1.7;
+}
+
+.vm-card ul {
+    list-style: none;
+    /* Hapus bullet default */
+    padding-left: 0;
+}
+
+.vm-card ul li {
+    margin-bottom: 10px;
+    position: relative;
+    padding-left: 25px;
+    /* Ruang untuk ikon */
+}
+
+.vm-card ul li::before {
+    content: "\f00c";
+    /* Ikon centang */
+    font-family: "Font Awesome 5 Free";
+    /* Pastikan font awesome di load */
+    font-weight: 900;
+    color: var(--secondary-color);
+    /* Warna ikon centang */
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+/* Responsive untuk halaman Tentang Kami */
+@media (max-width: 768px) {
+    .about-hero-section {
+        height: 300px;
+    }
+
+    .about-hero-content h1 {
+        font-size: 2.2em;
+    }
+
+    .about-hero-content p {
+        font-size: 1em;
+    }
+
+    .vm-grid {
+        grid-template-columns: 1fr;
+        /* Satu kolom untuk layar kecil */
+    }
+
+    .vm-card {
+        text-align: center;
+        /* Tengahkan teks di card vm */
+    }
+
+    .vm-card ul {
+        text-align: left;
+        /* List item tetap ke kiri */
+        padding-left: 25px;
+        /* Jaga padding untuk ikon */
+    }
+}
+
+@media (max-width: 480px) {
+    .about-hero-section {
+        height: 250px;
+        margin-top: 60px;
+    }
+
+    .about-hero-content h1 {
+        font-size: 1.8em;
+    }
+
+    .about-hero-content p {
+        font-size: 0.9em;
+    }
+
+    .section-title-wrapper .section-title {
+        font-size: 2em;
+    }
+}
