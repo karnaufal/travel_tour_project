@@ -5,19 +5,26 @@ $tour = null;
 if (isset($_GET['id'])) {
     $tour_id = $_GET['id'];
     try {
-        // Query TANPA memilih kolom 'location'
-        $stmt = $pdo->prepare("SELECT id, tour_name, description, price, duration, image FROM tours WHERE id = ?");
+        // Mengambil semua kolom yang diperlukan, termasuk yang baru ditambahkan
+        $stmt = $pdo->prepare("SELECT id, tour_name, description, price, duration, image, location, itinerary, included, excluded FROM tours WHERE id = ?");
         $stmt->execute([$tour_id]);
         $tour = $stmt->fetch(PDO::FETCH_ASSOC);
     } catch (PDOException $e) {
         error_log("Database error in detail_tour.php: " . $e->getMessage());
     }
+    // Bagian ini yang krusial untuk menentukan path gambar
+    $actual_image_src_detail = 'images/default_tour.jpg'; // Default jika tidak ada gambar atau data kosong
+if ($tour && !empty($tour['image'])) {
+    $image_filename = htmlspecialchars($tour['image']);
+    // Ini adalah path yang harus benar! Pastikan 'images/' adalah path relatif yang tepat.
+    $actual_image_src_detail = 'images/' . $image_filename;
+}
 }
 
 if (!$tour) {
     // HTML untuk halaman "Tur Tidak Ditemukan"
     echo "<!DOCTYPE html><html lang='id'><head><meta charset='UTF-8'><meta name='viewport' content='width=device-width, initial-scale=1.0'><title>Tur Tidak Ditemukan</title><link rel='stylesheet' href='css/style.css'></head><body>";
-    echo "<header class='main-header'><div class='container header-content'><div class='logo'><a href='index.php'>JalanJalan Kuy!</a></div><nav class='main-nav'><ul><li><a href='index.php'>Home</a></li><li><a href='paket_tur.php' class='active'>Paket Tur</a></li><li><a href='tentang_kami.php'>Tentang Kami</a></li><li><a href='kontak.php'>Kontak</a></li></ul></nav></div></header>";
+    echo "<header class='main-header'><div class='container header-content'><div class='logo'><a href='index.php'>JalanJalan Kuy!</a></div><nav class='main-nav'><ul><li><a href='index.php'>Home</a></li><li><a href='paket_tur.php' class='active'>Paket Tour</a></li><li><a href='tentang_kami.php'>Tentang Kami</a></li><li><a href='kontak.php'>Kontak</a></li></ul></nav></div></header>";
     echo "<section class='section-common' style='padding-top: 100px;'>";
     echo "<div class='container'><h1 style='text-align: center; color: var(--primary-color);'>Tur Tidak Ditemukan</h1><p style='text-align: center;'>Maaf, tur yang Anda cari tidak tersedia.</p><p style='text-align: center;'><a href='paket_tur.php' class='btn-primary'>Kembali ke Daftar Tur</a></p></div>";
     echo "</section>";
@@ -25,6 +32,10 @@ if (!$tour) {
     exit();
 }
 
+// Pastikan session dimulai untuk header
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
 ?>
 
 <!DOCTYPE html>
@@ -32,109 +43,12 @@ if (!$tour) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?php echo htmlspecialchars($tour['tour_name'] ?? 'Detail Tur'); ?> - Detail Tour</title>
+    <title><?php echo htmlspecialchars($tour['tour_name']); ?> - Detail Tour</title>
     <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <style>
-        .tour-detail-section {
-            padding: 100px 0 60px 0;
-            background-color: var(--light-bg);
-        }
-        .tour-detail-content {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 40px;
-            background-color: var(--card-bg);
-            padding: 30px;
-            border-radius: var(--border-radius);
-            box-shadow: var(--shadow-medium);
-        }
-        .tour-detail-image {
-            flex: 1;
-            min-width: 350px;
-            text-align: center;
-        }
-        .tour-detail-image img {
-            max-width: 100%;
-            height: 350px;
-            object-fit: cover;
-            border-radius: var(--border-radius);
-            box-shadow: var(--shadow-light);
-        }
-        .tour-detail-info {
-            flex: 2;
-            min-width: 450px;
-        }
-        .tour-detail-info h1 {
-            font-size: 2.8em;
-            color: var(--primary-color);
-            margin-bottom: 15px;
-        }
-        .tour-detail-info .price {
-            font-size: 2em;
-            font-weight: 700;
-            color: var(--accent-color);
-            margin-bottom: 20px;
-        }
-        .tour-detail-info .info-item {
-            display: flex;
-            align-items: center;
-            margin-bottom: 10px;
-            color: var(--text-color);
-            font-size: 1.1em;
-        }
-        .tour-detail-info .info-item i {
-            margin-right: 15px;
-            color: var(--secondary-color);
-            font-size: 1.3em;
-            width: 25px;
-            text-align: center;
-        }
-        .tour-detail-info p {
-            margin-top: 25px;
-            margin-bottom: 25px; /* Sesuaikan margin bawah agar ada jarak ke tombol */
-            line-height: 1.7;
-            font-size: 1.05em;
-            color: var(--light-text);
-        }
-        .tour-detail-info .btn-primary { /* Tambahkan style ini jika belum ada */
-            display: inline-block;
-            padding: 15px 30px;
-            border-radius: 50px;
-            font-size: 1.1em;
-            font-weight: 600;
-            margin-top: 20px; /* Jarak dari deskripsi */
-            text-decoration: none; /* Pastikan tidak ada underline */
-            background-color: var(--primary-color); /* Warna tombol */
-            color: white; /* Warna teks tombol */
-            transition: background-color 0.3s ease;
-        }
-        .tour-detail-info .btn-primary:hover {
-            background-color: var(--secondary-color); /* Warna hover tombol */
-        }
-        /* Style untuk pesan status, pastikan ini ada di style.css juga */
-        .message-container {
-            max-width: 800px;
-            margin: 20px auto;
-            padding: 15px;
-            border-radius: 8px;
-            text-align: center;
-            font-weight: bold;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-        .success-message {
-            background-color: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
-        }
-        .error-message {
-            background-color: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
-        }
-    </style>
-</head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    </head>
 <body>
+
     <header class="main-header">
         <div class="container header-content">
             <div class="logo">
@@ -151,46 +65,103 @@ if (!$tour) {
         </div>
     </header>
 
-    <section class="tour-detail-section">
-        <div class="container">
-            <?php
-            // Menampilkan pesan status dari redirect (misalnya setelah booking berhasil)
-            if (isset($_GET['status']) && isset($_GET['msg'])) {
-                $status_class = ($_GET['status'] == 'success') ? 'success-message' : 'error-message';
-                $message_text = htmlspecialchars($_GET['msg']);
-                echo '<div class="container message-container"><div class="' . $status_class . '">' . $message_text . '</div></div>';
-            }
-            ?>
-            <div class="tour-detail-content">
-                <div class="tour-detail-image">
-                    <?php
-                    $image_name_detail = $tour['image'] ?? '';
-                    $image_path_detail = 'images/' . $image_name_detail;
-                    $actual_image_src_detail = (file_exists($image_path_detail) && !empty($image_name_detail)) ? htmlspecialchars($image_path_detail) : 'images/placeholder.jpg';
-                    $tour_name_alt_detail = htmlspecialchars($tour['tour_name'] ?? 'Gambar Tur');
-                    ?>
-                    <img src="<?php echo $actual_image_src_detail; ?>" alt="<?php echo $tour_name_alt_detail; ?>">
-                </div>
-                <div class="tour-detail-info">
-                    <h1><?php echo htmlspecialchars($tour['tour_name'] ?? 'Nama Tur Tidak Ditemukan'); ?></h1>
-                    <div class="price">Rp <?php echo number_format($tour['price'] ?? 0, 0, ',', '.'); ?></div>
-                    <div class="info-item"><i class="far fa-clock"></i> <span>Durasi: <?php echo htmlspecialchars($tour['duration'] ?? 'Tidak Tersedia'); ?></span></div>
-                    <p><?php echo nl2br(htmlspecialchars($tour['description'] ?? 'Deskripsi tidak tersedia.')); ?></p>
-                    
-                    <a href="booking_form.php?tour_id=<?php echo htmlspecialchars($tour['id'] ?? ''); ?>" class="btn-primary">Pesan Sekarang</a>
-                </div>
-            </div>
+    <div class="container content">
 
+        <?php
+        // Menampilkan pesan status dari redirect (misalnya setelah booking berhasil)
+        if (isset($_GET['status']) && isset($_GET['msg'])) {
+            $status_class = ($_GET['status'] == 'success') ? 'success-message' : 'error-message';
+            $message_text = htmlspecialchars(urldecode($_GET['msg'])); // Tambahkan urldecode
+            echo '<div class="message-container ' . $status_class . '">' . $message_text . '</div>';
+        }
+        ?>
+
+       <section class="tour-detail-hero">
+            <div class="hero-image-container">
+                <img src="<?php echo $actual_image_src_detail; ?>" alt="<?php echo htmlspecialchars($tour['tour_name']); ?>" class="tour-image-main">
+                <div class="tour-info-overlay">
+                <h1><?php echo htmlspecialchars($tour['tour_name']); ?></h1>
+            <div class="tour-meta">
+                <span><i class="fas fa-map-marker-alt"></i> <?php echo htmlspecialchars($tour['location']); ?></span>
+                <span><i class="fas fa-clock"></i> <?php echo htmlspecialchars($tour['duration']); ?></span>
             </div>
+                <p class="short-description"><?php echo nl2br(htmlspecialchars($tour['description'])); ?></p>
+            </div>
+        </div>
     </section>
+        <section class="tour-details-section">
+            <div class="detail-content-wrapper">
+                <div class="main-detail-info">
+                    <?php if (!empty($tour['itinerary'])): ?>
+                        <h3>Tour Itinerary</h3>
+                        <div class="itinerary-list">
+                            <?php
+                            $itinerary_lines = explode("\n", $tour['itinerary']);
+                            foreach ($itinerary_lines as $line) {
+                                $line = trim($line);
+                                if (!empty($line)) {
+                                    // Cek apakah baris dimulai dengan "Day X:" atau serupa untuk styling khusus
+                                    if (preg_match('/^Hari \d+:/i', $line) || preg_match('/^Day \d+:/i', $line)) {
+                                        echo "<p class='itinerary-day'>" . htmlspecialchars($line) . "</p>";
+                                    } else {
+                                        echo "<p class='itinerary-item'>" . htmlspecialchars($line) . "</p>";
+                                    }
+                                }
+                            }
+                            ?>
+                        </div>
+                    <?php endif; ?>
 
-    <footer>
+                    <?php if (!empty($tour['included'])): ?>
+                        <h3>Termasuk</h3>
+                        <ul class="included-list">
+                            <?php
+                            $included_items = explode("\n", $tour['included']);
+                            foreach ($included_items as $item) {
+                                if (!empty(trim($item))) {
+                                    echo "<li><i class='fas fa-check-circle'></i> " . htmlspecialchars(trim($item)) . "</li>";
+                                }
+                            }
+                            ?>
+                        </ul>
+                    <?php endif; ?>
+
+                    <?php if (!empty($tour['excluded'])): ?>
+                        <h3>Tidak Termasuk</h3>
+                        <ul class="excluded-list">
+                            <?php
+                            $excluded_items = explode("\n", $tour['excluded']);
+                            foreach ($excluded_items as $item) {
+                                if (!empty(trim($item))) {
+                                    echo "<li><i class='fas fa-times-circle'></i> " . htmlspecialchars(trim($item)) . "</li>";
+                                }
+                            }
+                            ?>
+                        </ul>
+                    <?php endif; ?>
+                </div>
+
+                <aside class="tour-action-sidebar">
+                    <div class="price-box">
+                        Harga Mulai Dari:
+                        <span class="price-amount">Rp <?php echo number_format($tour['price'], 0, ',', '.'); ?></span>
+                        <span class="per-person">/ orang</span>
+                    </div>
+                    <a href="booking_form.php?tour_id=<?php echo htmlspecialchars($tour['id']); ?>" class="btn-primary btn-book-now">Pesan Sekarang</a>
+                    <p class="sidebar-info">Punya pertanyaan lebih lanjut? Hubungi kami!</p>
+                    <a href="kontak.php" class="btn-secondary btn-contact">Hubungi Kami</a>
+                </aside>
+            </div>
+        </section>
+
+    </div> <footer>
         <p>&copy; <?php echo date("Y"); ?> JalanJalan Kuy!. All rights reserved.</p>
         <p style="font-size: 0.8em; margin-top: 5px;">Dibuat Karnaufal</p>
     </footer>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script>
+        // Skrip untuk highlight navigasi aktif
         $(document).ready(function() {
             const currentPath = window.location.pathname.split('/').pop();
             $('nav.main-nav ul li a').removeClass('active');
