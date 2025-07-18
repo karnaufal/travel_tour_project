@@ -16,7 +16,7 @@
             <nav class="main-nav">
                 <ul>
                     <li><a href="index.php">Home</a></li>
-                    <li><a href="paket_tour.php">Paket Tour</a></li>
+                    <li><a href="paket_tur.php">Paket Tour</a></li>
                     <li><a href="tentang_kami.php" class="active">Tentang Kami</a></li>
                     <li><a href="kontak.php">Kontak</a></li>
                 </ul>
