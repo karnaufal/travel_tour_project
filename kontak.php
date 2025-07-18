@@ -22,14 +22,6 @@ include_once 'config.php'; // Path ini tetap kita pertahankan ya, Bray!
                     <li><a href="index.php">Home</a></li>
                     <li><a href="paket_tur.php">Paket Tour</a></li> <li><a href="tentang_kami.php">Tentang Kami</a></li>
                     <li><a href="kontak.php" class="active">Kontak</a></li>
-                    <?php
-                    // Pastikan session dimulai jika Anda menggunakan ini untuk login admin
-                    if (session_status() == PHP_SESSION_NONE) {
-                        session_start();
-                    }
-                    if (isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === true): ?>
-                        <li><a href="admin/dashboard.php">Admin Panel</a></li>
-                    <?php endif; ?>
                 </ul>
             </nav>
         </div>
