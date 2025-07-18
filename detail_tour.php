@@ -158,7 +158,7 @@ if ($tour && !empty($tour['image'])) {
                     </div>
 
                     <div class="payment-ticket-schedule">
-                        <h3>Skedul Pembayaran & Penerbitan Tiket</h3>
+                        <h3>Jadwal Pembayaran & Penerbitan Tiket</h3>
                         <ul>
                             <li>Dp1: 50% dan nama beserta KTP harus di-infokan.</li>
                             <li>Balance bisa di-angsur sebanyak 3x, 30 Hari Setelah pembayaran dp1 dan dibayarkan per bulan.</li>
