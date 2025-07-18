@@ -2128,6 +2128,7 @@ table td:nth-child(11) {
         font-size: 2em;
     }
 }
+
 /* ========================================= */
 /* CONTACT PAGE SPECIFIC STYLES            */
 /* ========================================= */
@@ -2136,14 +2137,17 @@ table td:nth-child(11) {
 .contact-hero-section {
     position: relative;
     width: 100%;
-    height: 350px; /* Tinggi banner, sesuaikan */
-    background: url('../images/contact-hero-bg.jpg') no-repeat center center/cover; /* Ganti dengan gambar latar belakang yang sesuai */
+    height: 350px;
+    /* Tinggi banner, sesuaikan */
+    background: url('../images/contact-hero-bg.jpg') no-repeat center center/cover;
+    /* Ganti dengan gambar latar belakang yang sesuai */
     display: flex;
     justify-content: center;
     align-items: center;
     text-align: center;
     color: white;
-    margin-top: 70px; /* Sesuaikan dengan tinggi header kamu */
+    margin-top: 70px;
+    /* Sesuaikan dengan tinggi header kamu */
     box-shadow: var(--shadow-medium);
 }
 
@@ -2153,7 +2157,8 @@ table td:nth-child(11) {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.5); /* Overlay gelap */
+    background-color: rgba(0, 0, 0, 0.5);
+    /* Overlay gelap */
     z-index: 1;
 }
 
@@ -2257,11 +2262,13 @@ table td:nth-child(11) {
 
 .map-container {
     position: relative;
-    padding-bottom: 56.25%; /* Rasio 16:9 */
+    padding-bottom: 56.25%;
+    /* Rasio 16:9 */
     height: 0;
     overflow: hidden;
     max-width: 100%;
-    background: #e0e0e0; /* Warna placeholder */
+    background: #e0e0e0;
+    /* Warna placeholder */
     border-radius: var(--border-radius);
     box-shadow: var(--shadow-medium);
     margin-top: 40px;
@@ -2281,16 +2288,20 @@ table td:nth-child(11) {
     .contact-hero-section {
         height: 280px;
     }
+
     .contact-hero-content h1 {
         font-size: 2.5em;
     }
+
     .contact-hero-content p {
         font-size: 1.1em;
     }
+
     .info-grid {
         grid-template-columns: 1fr;
         padding: 0 20px;
     }
+
     .contact-form {
         margin: 40px 20px 0;
         padding: 20px;
@@ -2302,18 +2313,375 @@ table td:nth-child(11) {
         height: 220px;
         margin-top: 60px;
     }
+
     .contact-hero-content h1 {
         font-size: 2em;
     }
+
     .contact-hero-content p {
         font-size: 0.9em;
     }
+
     .info-card {
         padding: 20px;
     }
+
     .info-card .icon-wrapper {
         width: 60px;
         height: 60px;
         font-size: 1.8em;
+    }
+}
+
+/* --- DETAIL TOUR PAGE SPECIFIC STYLES --- */
+
+.tour-detail-hero {
+    margin-top: 90px;
+    /* Sesuaikan dengan tinggi header + sedikit padding */
+    margin-bottom: 40px;
+    position: relative;
+    /* PENTING! ini induk untuk hero-image-container */
+    overflow: hidden;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    width: 100%;
+}
+
+.hero-image-container {
+    position: relative;
+    /* PENTING! Ini induk untuk gambar dan overlay */
+    width: 100%;
+    min-height: 300px;
+    /* Minimal tinggi kalau gambar tidak load */
+}
+
+.tour-image-main {
+    display: block;
+    width: 100%;
+    height: 500px;
+    /* TINGGI FIXED atau pakai max-height */
+    /* max-height: 500px; */
+    /* MAKSIMAL TINGGI GAMBAR. Coba naikkan ini kalau gambar terlalu kecil */
+    object-fit: cover;
+    border-radius: var(--border-radius);
+}
+
+.tour-info-overlay {
+    position: absolute;
+    /* PENTING! */
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: linear-gradient(0deg, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0) 100%);
+    color: white;
+    padding: 30px;
+    border-radius: 0 0 var(--border-radius) var(--border-radius);
+    z-index: 2;
+    box-sizing: border-box;
+    /* Untuk tombol kelewat batas */
+}
+
+.tour-info-overlay h1 {
+    font-size: 2.5em;
+    margin-bottom: 8px;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+.tour-info-overlay .tour-meta {
+    margin-bottom: 15px;
+    font-size: 1em;
+    opacity: 0.9;
+}
+
+.tour-info-overlay .tour-meta span {
+    display: inline-block;
+    margin-right: 20px;
+}
+
+.tour-info-overlay .tour-meta i {
+    margin-right: 8px;
+    color: var(--secondary-color);
+}
+
+.tour-info-overlay .short-description {
+    font-size: 1em;
+    /* Ukuran font standar */
+    line-height: 1.6;
+    /* Jarak antar baris untuk keterbacaan */
+    margin-top: 15px;
+    /* Jarak dari elemen di atasnya */
+    opacity: 0.9;
+    /* Sedikit transparan */
+    text-align: left;
+    /* Biar rata kiri, gak senter lagi kayak judul */
+    /* Pastikan properti ini TIDAK ADA: */
+    /* max-height: ...; */
+    /* overflow-y: auto; */
+    /* display: none; (kecuali di media query untuk mobile, kalau mau disembunyikan di HP) */
+}
+
+/* --- Konten Utama di Bawah Hero (Deskripsi, Itinerary, Sidebar) --- */
+.tour-details-section {
+    padding-bottom: 50px;
+}
+
+.detail-content-wrapper {
+    display: flex;
+    /* Ganti grid jadi flex biar lebih fleksibel dan sesuai contoh */
+    flex-wrap: wrap;
+    gap: 30px;
+    /* Hapus background-color, padding, box-shadow dari sini */
+    /* Biar main-detail-info dan tour-action-sidebar yang punya background/shadow sendiri */
+}
+
+.main-detail-info {
+    flex: 2;
+    min-width: 300px;
+    background-color: #fff;
+    /* Pindah background, padding, shadow ke sini */
+    padding: 25px;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+}
+
+.main-detail-info h2 {
+    font-size: 1.8em;
+    /* Turunin dikit dari 2em biar gak terlalu gede */
+    color: var(--primary-color);
+    margin-bottom: 15px;
+    border-bottom: 1px solid var(--light-gray);
+    /* Ganti border-color ke light-gray */
+    padding-bottom: 10px;
+}
+
+.main-detail-info h3 {
+    font-size: 1.4em;
+    /* Turunin dikit dari 1.6em */
+    color: var(--text-color);
+    margin-top: 25px;
+    margin-bottom: 10px;
+    border-bottom: none;
+    /* Hapus border bottom karena sudah ada di h2 */
+    padding-bottom: 0;
+}
+
+.main-detail-info p {
+    line-height: 1.7;
+    margin-bottom: 15px;
+    color: var(--text-color);
+    /* Ganti light-text-color ke text-color */
+}
+
+.itinerary-list {
+    margin-bottom: 20px;
+}
+
+.itinerary-list .itinerary-day {
+    font-weight: bold;
+    color: var(--primary-color);
+    margin-top: 15px;
+    margin-bottom: 5px;
+    font-size: 1.1em;
+}
+
+.itinerary-list .itinerary-item {
+    padding-left: 20px;
+    border-left: 3px solid var(--accent-color);
+    margin-bottom: 8px;
+    color: var(--light-text-color);
+}
+
+.included-list,
+.excluded-list {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 20px;
+}
+
+.included-list li,
+.excluded-list li {
+    margin-bottom: 10px;
+    color: var(--light-text-color);
+    font-size: 1em;
+}
+
+.included-list li i.fas.fa-check-circle {
+    color: var(--secondary-color);
+    /* Hijau untuk yang termasuk */
+    margin-right: 8px;
+}
+
+.excluded-list li i.fas.fa-times-circle {
+    color: var(--error-color);
+    /* Misalnya merah untuk yang tidak termasuk */
+    margin-right: 8px;
+}
+
+/* Tour Action Sidebar (untuk tombol booking dan kontak) */
+.tour-action-sidebar {
+    position: sticky;
+    /* Bikin sidebar nempel saat discroll */
+    top: 90px;
+    /* Jarak dari atas (sesuaikan dengan tinggi header) */
+    padding: 25px;
+    background-color: var(--light-bg);
+    /* Warna latar belakang sidebar */
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-small);
+    text-align: center;
+}
+
+.tour-action-sidebar .price-box {
+    font-size: 1.1em;
+    color: var(--text-color);
+    margin-bottom: 20px;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 15px;
+}
+
+.tour-action-sidebar .price-amount {
+    display: block;
+    font-size: 2.2em;
+    font-weight: bold;
+    color: var(--primary-color);
+    margin-top: 5px;
+}
+
+.tour-action-sidebar .per-person {
+    font-size: 0.9em;
+    color: var(--light-text-color);
+}
+
+.tour-action-sidebar .btn-primary,
+.tour-action-sidebar .btn-secondary {
+    display: block;
+    /* Tombol jadi full width di sidebar */
+    width: 100%;
+    padding: 15px 25px;
+    border-radius: var(--border-radius);
+    /* Atau 50px jika ingin pil */
+    font-size: 1.1em;
+    font-weight: 600;
+    text-align: center;
+    text-decoration: none;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    margin-bottom: 15px;
+    box-sizing: border-box;
+}
+
+.tour-action-sidebar .btn-primary {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.tour-action-sidebar .btn-primary:hover {
+    background-color: var(--secondary-color);
+    transform: translateY(-2px);
+}
+
+.tour-action-sidebar .btn-secondary {
+    background-color: var(--accent-color);
+    /* Atau warna lain yang cocok */
+    color: white;
+    border: 1px solid var(--accent-color);
+}
+
+.tour-action-sidebar .btn-secondary:hover {
+    background-color: darken(var(--accent-color), 10%);
+    /* Ganti dengan warna hover yang cocok */
+    transform: translateY(-2px);
+}
+
+.tour-action-sidebar .sidebar-info {
+    color: var(--light-text-color);
+    font-size: 0.9em;
+    margin-top: 15px;
+    margin-bottom: 10px;
+}
+
+
+/* Style untuk pesan status, pastikan ini ada di style.css juga */
+.message-container {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 15px;
+    border-radius: 8px;
+    text-align: center;
+    font-weight: bold;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.message-container.success-message {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.message-container.error-message {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+
+/* Responsive untuk Halaman Detail Tour */
+@media (max-width: 992px) {
+    .detail-content-wrapper {
+        grid-template-columns: 1fr;
+        /* Jadi satu kolom di layar kecil */
+    }
+
+    .tour-action-sidebar {
+        position: static;
+        /* Nonaktifkan sticky di mobile */
+        margin-top: 40px;
+    }
+
+    .tour-header h1 {
+        font-size: 2.5em;
+    }
+
+    .tour-image-main img {
+        max-height: 400px;
+        /* Sesuaikan tinggi gambar utama di tablet */
+    }
+}
+
+@media (max-width: 768px) {
+    .tour-header h1 {
+        font-size: 2em;
+    }
+
+    .tour-meta span {
+        display: block;
+        margin: 5px 0;
+    }
+
+    .detail-content-wrapper {
+        padding: 20px;
+    }
+
+    .main-detail-info h2,
+    .main-detail-info h3 {
+        font-size: 1.8em;
+    }
+
+    .tour-action-sidebar {
+        padding: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .tour-header h1 {
+        font-size: 1.8em;
+    }
+
+    .tour-meta span {
+        font-size: 0.9em;
+    }
+
+    .tour-image-main img {
+        height: 250px;
+        /* Sesuaikan tinggi gambar utama di mobile */
     }
 }
